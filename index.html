@@ -1,0 +1,1006 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#071014">
+<meta name="color-scheme" content="dark">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta property="og:type" content="website">
+<meta property="og:title" content="INCURABLE.AI — Autonomous Wet Lab">
+<meta property="og:description" content="Interactive autonomous biotech wet-lab environment with robotic execution, AI orchestration and machine-readable provenance.">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23061014'/%3E%3Cpath d='M18 46V18h8v28zm20 0-9-14 9-14h9L38 32l9 14z' fill='%2355f2c2'/%3E%3C/svg%3E">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<meta name="application-name" content="INCURABLE.AI Autonomous Wet Lab">
+<meta name="build-id" content="2026.07.11.6">
+<title>INCURABLE.AI — Autonomous Wet Lab</title>
+<meta name="description" content="Interactive autonomous biotech wet-lab environment with robotic liquid handling, centrifugation, incubation, plate reading, cold storage and bioreactor systems.">
+<style>
+  :root{
+    --bg:#061014;
+    --panel:rgba(8,20,25,.82);
+    --panel-strong:rgba(7,17,22,.94);
+    --line:#1d343a;
+    --line-soft:#12272d;
+    --ink:#ebf8f7;
+    --dim:#819ca0;
+    --mint:#55f2c2;
+    --mint-2:#a3ffe3;
+    --cyan:#55cffa;
+    --violet:#9b8cff;
+    --amber:#ffb45e;
+    --ok:#62eba1;
+    --bad:#ff7f83;
+    --mono:ui-monospace,"SFMono-Regular","SF Mono",Menlo,Consolas,monospace;
+    --sans:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;width:100%;height:100%;height:100dvh;overflow:hidden;background:var(--bg);color:var(--ink);font-family:var(--sans)}
+  body{overscroll-behavior:none;min-height:100svh}
+  button,select,input{font:inherit}
+  button:focus-visible,select:focus-visible,input:focus-visible{outline:2px solid var(--mint);outline-offset:2px}
+  #app{position:fixed;inset:0}
+  canvas{display:block;touch-action:none}
+  .vignette{position:fixed;inset:0;pointer-events:none;z-index:2;box-shadow:inset 0 0 250px 45px rgba(0,0,0,.58)}
+  .scanline{position:fixed;inset:0;pointer-events:none;z-index:3;opacity:.055;background:repeating-linear-gradient(180deg,transparent 0,transparent 3px,rgba(255,255,255,.08) 4px)}
+
+  .topbar{position:absolute;z-index:10;left:0;right:0;top:0;display:flex;justify-content:space-between;align-items:flex-start;padding:max(16px,env(safe-area-inset-top)) max(18px,env(safe-area-inset-right)) 16px max(18px,env(safe-area-inset-left));pointer-events:none;gap:16px}
+  .brand{min-width:205px}
+  .brand h1{margin:0;font-size:13px;letter-spacing:.28em;font-weight:750;text-transform:uppercase}
+  .brand .dot{color:var(--mint)}
+  .brand p{margin:5px 0 0;font:9.5px/1.45 var(--mono);color:var(--dim);letter-spacing:.12em;text-transform:uppercase}
+  .brand p b{color:var(--mint-2);font-weight:600}
+  .stats{display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap}
+  .chip{min-width:80px;padding:7px 10px;border:1px solid var(--line);border-radius:9px;background:var(--panel);backdrop-filter:blur(12px);box-shadow:0 8px 30px rgba(0,0,0,.16)}
+  .chip .label{font:8px/1.2 var(--mono);letter-spacing:.13em;text-transform:uppercase;color:var(--dim)}
+  .chip .value{margin-top:3px;font:600 13px/1.1 var(--mono);color:var(--ink)}
+
+  .left-tools{position:absolute;left:max(16px,env(safe-area-inset-left));top:94px;bottom:145px;z-index:12;display:flex;flex-direction:column;justify-content:center;gap:8px}
+  .tool{position:relative;width:42px;height:42px;border:1px solid var(--line);border-radius:11px;background:var(--panel);color:var(--dim);display:grid;place-items:center;cursor:pointer;backdrop-filter:blur(12px);transition:.18s ease}
+  .tool:hover{color:var(--ink);border-color:#35545b;transform:translateX(1px)}
+  .tool.active{color:#022019;background:var(--mint);border-color:var(--mint);box-shadow:0 0 24px -8px var(--mint)}
+  .tool svg{width:19px;height:19px}
+  .tool[data-tip]:hover:after{content:attr(data-tip);position:absolute;left:52px;top:50%;transform:translateY(-50%);white-space:nowrap;padding:6px 9px;border-radius:7px;background:#081216;border:1px solid var(--line);color:var(--ink);font:10px var(--mono);letter-spacing:.03em}
+  .tool-divider{height:1px;margin:2px 6px;background:var(--line)}
+
+  .telemetry{position:absolute;right:max(18px,env(safe-area-inset-right));top:94px;bottom:145px;z-index:11;width:216px;overflow-y:auto;scrollbar-width:none;display:flex;flex-direction:column;gap:10px}
+  .telemetry::-webkit-scrollbar{display:none}
+  .panel{position:relative;padding:13px 14px;border-radius:12px;border:1px solid var(--line);background:linear-gradient(180deg,rgba(11,27,32,.93),rgba(6,16,20,.93));box-shadow:0 14px 40px rgba(0,0,0,.22),inset 0 0 28px -20px var(--cyan);font-family:var(--mono);overflow:hidden}
+  .panel:before{content:"";position:absolute;left:0;top:0;bottom:0;width:2px;background:linear-gradient(180deg,var(--mint),transparent 70%);opacity:.72}
+  .panel.amber:before{background:linear-gradient(180deg,var(--amber),transparent 70%)}
+  .panel.violet:before{background:linear-gradient(180deg,var(--violet),transparent 70%)}
+  .panel .head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:9px;color:#78a9ac;font:9px/1.2 var(--mono);letter-spacing:.16em;text-transform:uppercase}
+  .panel .head strong{color:var(--mint-2);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:138px}
+  .row{display:flex;justify-content:space-between;align-items:baseline;gap:10px;font:11.5px/1.85 var(--mono)}
+  .row .k{color:#66878b;letter-spacing:.035em}
+  .row .v{color:#d6f9f4;font-weight:600;text-align:right}
+  .status{display:flex;align-items:center;gap:7px;margin-top:8px;padding-top:8px;border-top:1px solid var(--line-soft);font:10px var(--mono);letter-spacing:.08em;color:var(--mint)}
+  .led{width:8px;height:8px;border-radius:50%;background:#25443f;box-shadow:0 0 0 2px #071416}
+  .panel.running .led{background:var(--ok);box-shadow:0 0 10px var(--ok)}
+  .progress{height:5px;margin-top:9px;border-radius:6px;background:#10262b;overflow:hidden}
+  .progress span{display:block;width:0;height:100%;background:linear-gradient(90deg,var(--mint),var(--cyan));box-shadow:0 0 12px var(--mint);transition:width .25s linear}
+  .quality{margin-top:9px;padding:7px 8px;border:1px solid #245541;border-radius:8px;background:rgba(42,139,92,.12);color:#9ef3c1;font:9.5px/1.4 var(--mono)}
+  .mini-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:8px}
+  .metric{padding:7px;border:1px solid var(--line-soft);border-radius:8px;background:rgba(255,255,255,.018)}
+  .metric b{display:block;color:#dffcf7;font:600 12px var(--mono)}
+  .metric span{display:block;margin-top:2px;color:#62858a;font:8px var(--mono);letter-spacing:.08em;text-transform:uppercase}
+
+  .dock{position:absolute;z-index:12;left:50%;bottom:max(17px,env(safe-area-inset-bottom));transform:translateX(-50%);width:min(1120px,97vw);max-height:39dvh;border:1px solid var(--line);border-radius:16px;background:var(--panel);backdrop-filter:blur(14px);box-shadow:0 20px 65px rgba(0,0,0,.3);overflow:hidden}
+  .controls{display:flex;align-items:center;justify-content:center;gap:9px;flex-wrap:wrap;padding:11px 13px;max-height:39dvh;overflow-y:auto}
+  button.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;white-space:nowrap;padding:9px 12px;border-radius:9px;border:1px solid var(--line);background:#14252a;color:var(--ink);font:600 12.5px var(--sans);cursor:pointer;transition:.16s}
+  button.btn:hover{border-color:#3e6169;background:#193037}
+  button.btn:active{transform:translateY(1px)}
+  button.btn.primary{min-width:126px;background:var(--mint);border-color:var(--mint);color:#03241b;box-shadow:0 0 22px -10px var(--mint)}
+  button.btn.primary:hover{background:var(--mint-2)}
+  button.btn svg{width:15px;height:15px}
+  .sep{width:1px;align-self:stretch;background:var(--line-soft)}
+  label.ctl{display:flex;flex-direction:column;gap:4px;color:var(--dim);font:8.5px var(--mono);letter-spacing:.1em;text-transform:uppercase}
+  select,input[type=range]{cursor:pointer}
+  select{max-width:170px;padding:7px 9px;border:1px solid var(--line);border-radius:8px;background:#122329;color:var(--ink);font:12px var(--sans)}
+  input[type=range]{width:90px;accent-color:var(--mint)}
+  .toggle{display:inline-flex;align-items:center;gap:7px;color:var(--dim);font:8.5px var(--mono);letter-spacing:.1em;text-transform:uppercase;cursor:pointer;user-select:none}
+  .toggle input{position:absolute;opacity:0}
+  .switch{position:relative;width:35px;height:20px;border:1px solid var(--line);border-radius:12px;background:#102126}
+  .switch:after{content:"";position:absolute;top:2px;left:2px;width:14px;height:14px;border-radius:50%;background:#6f878a;transition:.16s}
+  .toggle input:checked + .switch{background:rgba(85,242,194,.25);border-color:var(--mint)}
+  .toggle input:checked + .switch:after{left:17px;background:var(--mint);box-shadow:0 0 8px var(--mint)}
+
+  .hint{display:none;position:absolute;left:17px;bottom:17px;z-index:9;color:#607a7e;font:9.5px var(--mono);letter-spacing:.04em;pointer-events:none}
+  .machine-tag{position:absolute;z-index:8;pointer-events:none;transform:translate(-50%,-50%);display:none;min-width:120px;padding:7px 9px;border-radius:8px;border:1px solid rgba(85,242,194,.34);background:rgba(4,15,18,.8);backdrop-filter:blur(8px);font:9px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:#baffea;text-align:center;box-shadow:0 8px 28px rgba(0,0,0,.28)}
+  .machine-tag span{display:block;margin-top:3px;color:#6e9698;font-size:8px;letter-spacing:.04em;text-transform:none}
+
+
+  .workflow-hud{position:absolute;z-index:11;left:50%;top:72px;transform:translateX(-50%);width:min(760px,calc(100vw - 520px));min-width:440px;padding:11px 13px 10px;border:1px solid var(--line);border-radius:13px;background:linear-gradient(180deg,rgba(7,21,25,.94),rgba(5,15,19,.88));backdrop-filter:blur(14px);box-shadow:0 18px 55px rgba(0,0,0,.28),inset 0 0 28px -22px var(--mint);pointer-events:auto}
+  .workflow-top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:8px;font-family:var(--mono)}
+  .workflow-title{min-width:0}.workflow-title span{display:block;color:#6f9498;font-size:8px;letter-spacing:.16em;text-transform:uppercase}.workflow-title strong{display:block;margin-top:3px;color:var(--mint-2);font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .workflow-meta{display:flex;align-items:center;gap:10px;color:#78979b;font-size:8.5px;letter-spacing:.07em;white-space:nowrap}.workflow-meta b{color:#d7fff5;font-weight:600}
+  .workflow-steps{display:flex;align-items:stretch;gap:5px;overflow-x:auto;scrollbar-width:none}.workflow-steps::-webkit-scrollbar{display:none}
+  .workflow-step{position:relative;flex:1 0 88px;min-width:0;padding:7px 7px 6px;border:1px solid #173138;border-radius:8px;background:rgba(255,255,255,.018);opacity:.52;transition:.2s ease;overflow:hidden}
+  .workflow-step:after{content:"";position:absolute;left:0;right:100%;bottom:0;height:2px;background:linear-gradient(90deg,var(--mint),var(--cyan));transition:right .2s linear}
+  .workflow-step b{display:block;color:#58797d;font:600 8px var(--mono);letter-spacing:.12em}.workflow-step span{display:block;margin-top:3px;color:#a5c0c2;font:600 8.5px/1.25 var(--mono);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.workflow-step small{display:block;margin-top:3px;color:#58777b;font:7.5px/1.2 var(--mono);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .workflow-step.complete{opacity:.78;border-color:#285248;background:rgba(72,194,148,.06)}.workflow-step.complete:after{right:0}.workflow-step.active{opacity:1;border-color:var(--mint);background:rgba(85,242,194,.11);box-shadow:0 0 20px -9px var(--mint);transform:translateY(-1px)}.workflow-step.active b,.workflow-step.active span{color:var(--mint-2)}.workflow-step.active:after{right:var(--step-remaining,100%)}
+  .workflow-bottom{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:8px;padding-top:7px;border-top:1px solid var(--line-soft);font:8.5px/1.2 var(--mono);letter-spacing:.05em}.workflow-current{min-width:0;color:#bceee5;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.workflow-queue{color:#68888c;white-space:nowrap}
+
+  .modal{position:fixed;inset:0;z-index:30;display:none;place-items:center;padding:20px;background:rgba(2,8,10,.72);backdrop-filter:blur(6px)}
+  .modal.show{display:grid}
+  .modal-card{width:min(760px,96vw);max-height:86vh;overflow:auto;padding:22px;border:1px solid var(--line);border-radius:15px;background:#08161a;box-shadow:0 30px 90px rgba(0,0,0,.55)}
+  .modal-card h2{margin:0 0 5px;font-size:14px;letter-spacing:.18em;text-transform:uppercase}
+  .modal-card .sub{margin:0 0 15px;color:var(--dim);font:10px/1.5 var(--mono)}
+  .manifest{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+  .manifest article{padding:12px;border:1px solid var(--line-soft);border-radius:10px;background:rgba(255,255,255,.018)}
+  .manifest h3{margin:0 0 5px;font-size:12px;color:var(--mint-2)}
+  .manifest p{margin:0;color:#7f999d;font:10px/1.5 var(--mono)}
+  .modal-foot{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:16px;color:var(--dim);font:9px var(--mono)}
+
+
+
+  /* ---------- commercial navigation ---------- */
+  .site-nav{display:flex;align-items:center;gap:4px;padding:4px;border:1px solid rgba(38,68,74,.75);border-radius:11px;background:rgba(6,17,21,.62);backdrop-filter:blur(12px);pointer-events:auto;box-shadow:0 10px 32px rgba(0,0,0,.16)}
+  .site-nav button{border:0;border-radius:7px;padding:7px 9px;background:transparent;color:#78969a;font:600 8.5px var(--mono);letter-spacing:.11em;text-transform:uppercase;cursor:pointer;transition:.17s}
+  .site-nav button:hover,.site-nav button.active{background:rgba(85,242,194,.11);color:var(--mint-2)}
+  .site-nav button.cta{background:var(--mint);color:#03231b}.site-nav button.cta:hover{background:var(--mint-2)}
+
+  /* ---------- AI orchestration ---------- */
+  .ai-panel .head strong{color:#d9d4ff}.ai-decision{padding:9px;border:1px solid rgba(155,140,255,.23);border-radius:9px;background:linear-gradient(135deg,rgba(155,140,255,.09),rgba(85,207,250,.04));color:#d8e8ff;font:9.5px/1.48 var(--mono)}
+  .ai-decision b{display:block;margin-bottom:4px;color:#a89cff;font:600 8px var(--mono);letter-spacing:.13em;text-transform:uppercase}
+  .ai-kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;margin-top:7px}.ai-kpi{padding:6px 5px;border:1px solid var(--line-soft);border-radius:7px;text-align:center;background:rgba(255,255,255,.018)}.ai-kpi b{display:block;color:#e6e3ff;font:600 10px var(--mono)}.ai-kpi span{display:block;margin-top:2px;color:#647f84;font:7px var(--mono);letter-spacing:.08em;text-transform:uppercase}
+  .ai-util{margin-top:8px}.ai-util-row{display:grid;grid-template-columns:54px 1fr 29px;align-items:center;gap:6px;margin-top:5px;color:#66858a;font:7.5px var(--mono);letter-spacing:.04em}.ai-util-row i{height:4px;border-radius:4px;background:#10272c;overflow:hidden}.ai-util-row i span{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--violet),var(--cyan));transition:width .3s ease}.ai-util-row em{font-style:normal;text-align:right;color:#a8c4c6}
+  .decision-feed{display:flex;flex-direction:column;gap:5px;margin-top:8px}.decision-event{position:relative;padding-left:11px;color:#749398;font:7.8px/1.35 var(--mono)}.decision-event:before{content:"";position:absolute;left:0;top:4px;width:4px;height:4px;border-radius:50%;background:var(--violet);box-shadow:0 0 7px var(--violet)}.decision-event strong{color:#b9b1ff;font-weight:600}
+
+  /* ---------- improved camera guidance ---------- */
+  .camera-guide{position:absolute;left:72px;bottom:142px;max-width:210px;flex-wrap:wrap;z-index:9;display:flex;align-items:center;gap:8px;padding:7px 9px;border:1px solid rgba(29,52,58,.7);border-radius:9px;background:rgba(5,15,18,.58);backdrop-filter:blur(8px);color:#648084;font:8px var(--mono);letter-spacing:.04em;pointer-events:none}.camera-guide b{color:#a7d2cf;font-weight:600}.camera-guide .key{display:inline-grid;place-items:center;min-width:18px;height:18px;padding:0 4px;border:1px solid #29444a;border-bottom-color:#172c31;border-radius:5px;background:#102126;color:#9bb9b9;font:7px var(--mono)}
+  canvas{cursor:grab}canvas.dragging{cursor:grabbing}
+  .left-tools{overflow-y:auto;overflow-x:visible;scrollbar-width:none}.left-tools::-webkit-scrollbar{display:none}
+
+  /* ---------- inspection drawer ---------- */
+  .drawer-backdrop{position:fixed;inset:0;z-index:34;background:rgba(2,8,10,.48);backdrop-filter:blur(3px);opacity:0;visibility:hidden;transition:opacity .25s,visibility .25s}.drawer-backdrop.show{opacity:1;visibility:visible}
+  .inspection-drawer{position:fixed;z-index:35;right:0;top:0;bottom:0;width:min(470px,96vw);display:flex;flex-direction:column;border-left:1px solid #264047;background:linear-gradient(180deg,rgba(8,22,27,.985),rgba(4,13,16,.99));box-shadow:-30px 0 90px rgba(0,0,0,.5);transform:translateX(104%);transition:transform .34s cubic-bezier(.2,.8,.2,1);overflow:hidden}.inspection-drawer.show{transform:translateX(0)}
+  .inspect-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding:18px 18px 14px;border-bottom:1px solid var(--line)}.inspect-eyebrow{color:#6f9295;font:8px var(--mono);letter-spacing:.17em;text-transform:uppercase}.inspect-head h2{margin:4px 0 0;font-size:18px;letter-spacing:-.015em}.inspect-head p{margin:5px 0 0;color:#78989b;font:9px/1.45 var(--mono)}.icon-close{flex:0 0 auto;width:36px;height:36px;border:1px solid var(--line);border-radius:9px;background:#102127;color:#8da8aa;font-size:19px;cursor:pointer}.icon-close:hover{color:#fff;border-color:#3d6068}
+  .inspect-scroll{overflow:auto;padding:15px 18px 28px}.inspect-statusline{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 11px;border:1px solid rgba(85,242,194,.2);border-radius:10px;background:rgba(85,242,194,.055);font:8px var(--mono);letter-spacing:.09em;text-transform:uppercase}.inspect-statusline b{color:var(--mint-2)}.inspect-statusline span:last-child{color:#719397}
+  .inspect-hero-grid{display:grid;grid-template-columns:1.2fr .8fr;gap:8px;margin-top:9px}.inspect-card{padding:11px;border:1px solid var(--line-soft);border-radius:10px;background:rgba(255,255,255,.018)}.inspect-card label{display:block;color:#607f83;font:7.5px var(--mono);letter-spacing:.12em;text-transform:uppercase}.inspect-card strong{display:block;margin-top:5px;color:#e2fffa;font:600 12px var(--mono)}.inspect-card small{display:block;margin-top:4px;color:#6d898d;font:8px/1.4 var(--mono)}
+  .inspect-section{margin-top:15px}.inspect-section-title{display:flex;align-items:center;justify-content:space-between;margin-bottom:7px;color:#78989b;font:8px var(--mono);letter-spacing:.14em;text-transform:uppercase}.inspect-section-title b{color:#9ab8b9;font-weight:500;letter-spacing:.04em;text-transform:none}
+  .subsystem-map{position:relative;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;padding:11px;border:1px solid var(--line-soft);border-radius:11px;background:radial-gradient(circle at 50% 50%,rgba(85,207,250,.07),transparent 68%),rgba(255,255,255,.014);overflow:hidden}.subsystem-map:before{content:"";position:absolute;left:50%;top:13%;bottom:13%;width:1px;background:linear-gradient(transparent,var(--cyan),transparent);opacity:.22}.subsystem-node{position:relative;z-index:1;padding:8px;border:1px solid #1e3b42;border-radius:8px;background:#0b1c21}.subsystem-node b{display:block;color:#bcefe7;font:600 8.5px var(--mono)}.subsystem-node span{display:flex;align-items:center;gap:5px;margin-top:4px;color:#65878b;font:7.5px var(--mono)}.subsystem-node span:before{content:"";width:5px;height:5px;border-radius:50%;background:var(--ok);box-shadow:0 0 7px var(--ok)}
+  .spec-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}.spec{padding:8px 9px;border:1px solid var(--line-soft);border-radius:8px;background:rgba(255,255,255,.014)}.spec span{display:block;color:#607f83;font:7px var(--mono);letter-spacing:.1em;text-transform:uppercase}.spec b{display:block;margin-top:4px;color:#cce8e6;font:600 9px/1.35 var(--mono)}
+  .live-table{border:1px solid var(--line-soft);border-radius:10px;overflow:hidden}.live-row{display:flex;justify-content:space-between;gap:12px;padding:8px 10px;border-bottom:1px solid var(--line-soft);font:8.5px var(--mono)}.live-row:last-child{border-bottom:0}.live-row span{color:#6d8d91}.live-row b{color:#d8f8f3;font-weight:600;text-align:right}
+  .health-track{height:7px;margin-top:7px;border-radius:8px;background:#10272c;overflow:hidden}.health-track span{display:block;height:100%;background:linear-gradient(90deg,var(--mint),var(--cyan));box-shadow:0 0 12px var(--mint)}
+  .inspect-log{display:flex;flex-direction:column;gap:6px}.inspect-log article{padding:8px 9px;border-left:2px solid var(--violet);border-radius:0 8px 8px 0;background:rgba(155,140,255,.055);color:#78989c;font:8px/1.45 var(--mono)}.inspect-log article b{color:#bbb4ff;font-weight:600}
+
+  /* ---------- commercial platform overlay ---------- */
+  .commercial{position:fixed;inset:0;z-index:40;display:block;background:#061014;color:var(--ink);overflow:auto;opacity:0;visibility:hidden;transform:translateY(12px);transition:opacity .28s,visibility .28s,transform .28s}.commercial.show{opacity:1;visibility:visible;transform:none}
+  .commercial-top{position:sticky;z-index:4;top:0;display:flex;align-items:center;justify-content:space-between;gap:18px;padding:14px max(20px,4vw);border-bottom:1px solid rgba(39,66,72,.8);background:rgba(5,15,18,.88);backdrop-filter:blur(16px)}.commercial-logo{font-size:12px;font-weight:750;letter-spacing:.25em;text-transform:uppercase}.commercial-logo span{color:var(--mint)}.commercial-top nav{display:flex;align-items:center;gap:5px}.commercial-top nav button,.commercial-top nav a{padding:8px 10px;border:0;border-radius:8px;background:transparent;color:#78979a;text-decoration:none;font:600 8px var(--mono);letter-spacing:.1em;text-transform:uppercase;cursor:pointer}.commercial-top nav button:hover,.commercial-top nav a:hover{background:rgba(85,242,194,.1);color:#cffff1}.commercial-top nav a{background:var(--mint);color:#03231b}
+  .commercial-main{max-width:1240px;margin:0 auto;padding:0 max(20px,4vw) 70px}.commercial-hero{min-height:75vh;display:grid;grid-template-columns:1.1fr .9fr;align-items:center;gap:7vw;padding:90px 0 70px}.commercial-kicker{display:inline-flex;align-items:center;gap:8px;color:#84acae;font:8.5px var(--mono);letter-spacing:.16em;text-transform:uppercase}.commercial-kicker:before{content:"";width:28px;height:1px;background:var(--mint)}.commercial-hero h1{max-width:760px;margin:16px 0 18px;font-size:clamp(45px,7vw,98px);line-height:.92;letter-spacing:-.055em;font-weight:700}.commercial-hero h1 em{font-style:normal;color:var(--mint)}.commercial-hero p{max-width:650px;margin:0;color:#88a3a6;font:clamp(14px,1.4vw,18px)/1.65 var(--sans)}.commercial-actions{display:flex;gap:9px;margin-top:28px;flex-wrap:wrap}.commercial-actions button,.commercial-actions a{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:0 17px;border:1px solid var(--line);border-radius:10px;background:#11252a;color:#eafffa;text-decoration:none;font:650 12px var(--sans);cursor:pointer}.commercial-actions .primary{border-color:var(--mint);background:var(--mint);color:#03231b}.commercial-visual{position:relative;min-height:440px;border:1px solid #214047;border-radius:24px;background:radial-gradient(circle at 55% 38%,rgba(85,242,194,.13),transparent 35%),linear-gradient(145deg,#0b2025,#061115);box-shadow:0 35px 90px rgba(0,0,0,.35);overflow:hidden}.commercial-visual:before{content:"";position:absolute;inset:8%;border:1px solid rgba(85,242,194,.18);border-radius:50%;box-shadow:0 0 80px rgba(85,242,194,.08)}.orbit-ring{position:absolute;left:50%;top:50%;width:72%;aspect-ratio:1;border:1px solid rgba(85,207,250,.22);border-radius:50%;transform:translate(-50%,-50%) rotateX(62deg);animation:orbitSpin 13s linear infinite}.orbit-ring:nth-child(2){width:50%;animation-direction:reverse;animation-duration:9s;border-color:rgba(155,140,255,.28)}.commercial-core{position:absolute;left:50%;top:50%;width:110px;height:110px;border:1px solid rgba(85,242,194,.45);border-radius:24px;transform:translate(-50%,-50%) rotate(45deg);background:rgba(85,242,194,.08);box-shadow:0 0 60px rgba(85,242,194,.16),inset 0 0 35px rgba(85,242,194,.08)}.commercial-core:after{content:"AI";position:absolute;inset:0;display:grid;place-items:center;transform:rotate(-45deg);color:var(--mint-2);font:700 21px var(--mono);letter-spacing:.14em}.visual-node{position:absolute;padding:8px 10px;border:1px solid #24434a;border-radius:9px;background:rgba(5,17,20,.9);color:#98b7b7;font:8px var(--mono);letter-spacing:.08em;text-transform:uppercase}.visual-node b{display:block;margin-top:3px;color:#d9fff5;font-size:10px}.visual-node.n1{left:8%;top:18%}.visual-node.n2{right:7%;top:25%}.visual-node.n3{left:11%;bottom:18%}.visual-node.n4{right:10%;bottom:14%}@keyframes orbitSpin{to{transform:translate(-50%,-50%) rotateX(62deg) rotateZ(360deg)}}
+  .proof-grid{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--line);border-radius:16px;overflow:hidden;background:#08191d}.proof-grid article{padding:22px;border-right:1px solid var(--line)}.proof-grid article:last-child{border-right:0}.proof-grid b{display:block;color:var(--mint-2);font:650 clamp(20px,2.5vw,34px) var(--mono)}.proof-grid span{display:block;margin-top:6px;color:#729093;font:8px/1.5 var(--mono);letter-spacing:.11em;text-transform:uppercase}
+  .commercial-section{padding:100px 0 20px;scroll-margin-top:70px}.section-label{color:#6c9193;font:8px var(--mono);letter-spacing:.17em;text-transform:uppercase}.commercial-section h2{max-width:790px;margin:12px 0 35px;font-size:clamp(32px,5vw,64px);line-height:1;letter-spacing:-.045em}.platform-grid,.use-grid,.trust-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.platform-grid article,.use-grid article,.trust-grid article{min-height:205px;padding:20px;border:1px solid var(--line);border-radius:14px;background:linear-gradient(145deg,rgba(14,34,39,.8),rgba(6,17,21,.84))}.platform-grid b,.use-grid b,.trust-grid b{display:block;color:#dffff7;font-size:14px}.platform-grid p,.use-grid p,.trust-grid p{margin:9px 0 0;color:#769396;font:11px/1.65 var(--mono)}.card-index{margin-bottom:26px;color:var(--mint);font:8px var(--mono);letter-spacing:.13em}
+  .commercial-cta{margin-top:100px;padding:clamp(30px,6vw,75px);border:1px solid rgba(85,242,194,.28);border-radius:22px;background:radial-gradient(circle at 75% 40%,rgba(85,242,194,.12),transparent 38%),#081b20;text-align:center}.commercial-cta h2{max-width:800px;margin:0 auto;font-size:clamp(34px,5vw,66px);letter-spacing:-.045em}.commercial-cta p{max-width:650px;margin:16px auto 0;color:#82a0a2;line-height:1.65}.commercial-footer{display:flex;align-items:center;justify-content:space-between;gap:15px;margin-top:45px;padding-top:18px;border-top:1px solid var(--line);color:#607c80;font:8px var(--mono);letter-spacing:.08em;text-transform:uppercase}
+  .toast{position:fixed;z-index:60;left:50%;bottom:24px;transform:translate(-50%,20px);padding:9px 12px;border:1px solid #285249;border-radius:9px;background:#0a1f20;color:#caffef;font:9px var(--mono);opacity:0;visibility:hidden;transition:.2s}.toast.show{opacity:1;visibility:visible;transform:translate(-50%,0)}
+
+  .loading{position:fixed;inset:0;z-index:50;display:grid;place-items:center;background:radial-gradient(circle at 50% 38%,#102228,#04090b);text-align:center}
+  .loading .box{padding:24px;max-width:360px}
+  .spinner{width:34px;height:34px;margin:0 auto 17px;border:3px solid #173239;border-top-color:var(--mint);border-radius:50%;animation:spin 1s linear infinite}
+  .loading h2{margin:0 0 7px;font-size:14px;letter-spacing:.18em;text-transform:uppercase}
+  .loading p{margin:0;color:var(--dim);font:10.5px/1.7 var(--mono)}
+  @keyframes spin{to{transform:rotate(360deg)}}
+
+  @media (max-width:900px){
+    .workflow-hud{top:70px;left:62px;right:208px;transform:none;width:auto;min-width:0}.telemetry{top:178px;width:190px;right:10px}.topbar{padding:12px}.stats{max-width:48vw}.chip{min-width:70px;padding:6px 8px}
+    .panel{padding:11px 12px}.dock{bottom:10px}.hint{display:none}
+  }
+  @media (max-width:640px){
+    .workflow-hud{top:58px;left:50px;right:8px;padding:8px 9px}.workflow-top{margin-bottom:6px}.workflow-title strong{font-size:9px}.workflow-meta span:first-child{display:none}.workflow-meta{font-size:7.5px}.workflow-step{flex-basis:78px;padding:6px}.workflow-step small{display:none}.workflow-bottom{font-size:7.5px;margin-top:6px;padding-top:5px}.workflow-queue{display:none}
+    .brand p{display:none}.brand{min-width:auto}.stats .chip:nth-child(n+3){display:none}.topbar{align-items:center}
+    .telemetry{top:158px;bottom:176px;width:145px;gap:7px}.panel{padding:9px 10px;border-radius:10px}.panel .head{font-size:8px;margin-bottom:6px}.row{font-size:9.5px;line-height:1.7}.quality,.mini-grid{display:none}
+    .left-tools{left:8px;top:158px;bottom:176px;gap:6px}.tool{width:36px;height:36px;border-radius:9px}.tool svg{width:16px;height:16px}.tool[data-tip]:hover:after{display:none}
+    .dock{width:calc(100vw - 12px);max-height:31dvh}.controls{padding:8px;gap:7px;max-height:31dvh}button.btn{font-size:11px;padding:8px 10px}select{font-size:11px;max-width:128px}input[type=range]{width:68px}.sep{display:none}
+    .manifest{grid-template-columns:1fr}
+  }
+
+  @media (max-width:1120px){.site-nav{display:none}.commercial-hero{grid-template-columns:1fr}.commercial-visual{min-height:380px}.proof-grid{grid-template-columns:repeat(2,1fr)}.proof-grid article:nth-child(2){border-right:0}.proof-grid article:nth-child(-n+2){border-bottom:1px solid var(--line)}}
+  @media (max-width:780px){.camera-guide{display:none}.inspection-drawer{width:100vw}.commercial-top nav button:not(:last-child){display:none}.commercial-hero{min-height:auto;padding-top:65px}.commercial-visual{min-height:320px}.platform-grid,.use-grid,.trust-grid{grid-template-columns:1fr}.commercial-section{padding-top:70px}.commercial-footer{align-items:flex-start;flex-direction:column}.inspect-hero-grid{grid-template-columns:1fr}}
+  @media (max-width:540px){
+  .ai-panel .ai-kpi:nth-child(3){display:none;}
+  .ai-panel .ai-kpis{grid-template-columns:1fr 1fr;}.proof-grid{grid-template-columns:1fr}.proof-grid article{border-right:0;border-bottom:1px solid var(--line)}.proof-grid article:last-child{border-bottom:0}.commercial-hero h1{font-size:43px}.commercial-visual{min-height:280px}.visual-node{font-size:7px}.inspect-scroll{padding-left:12px;padding-right:12px}.spec-grid{grid-template-columns:1fr}.subsystem-map{grid-template-columns:1fr}.subsystem-map:before{display:none}.ai-panel .decision-feed,.ai-panel .ai-util{display:none}}
+  @media (max-height:700px) and (min-width:641px){.telemetry{top:88px;bottom:140px}.panel{padding:9px 11px}.row{line-height:1.55}.ai-panel .decision-feed{display:none}.dock{bottom:8px}.controls{padding:8px}.camera-guide{display:none}}
+
+  
+@media (max-width:640px) and (max-height:700px){
+  .left-tools{top:132px;bottom:205px;transform:none;max-height:none;}
+  .telemetry{bottom:205px;}
+  .camera-guide{display:none;}
+}
+
+@media (max-width:380px){
+  .topbar{padding-left:8px;padding-right:8px}.brand h1{font-size:11px}.stats{gap:4px}.chip{min-width:61px;padding:5px 6px}.chip .label{font-size:7px}.chip .value{font-size:10.5px}
+  .workflow-hud{left:47px;right:5px}.workflow-meta{display:none}.workflow-step{flex-basis:67px}.telemetry{width:128px;right:5px}.telemetry .panel:nth-child(n+3){display:none}
+  .dock{width:calc(100vw - 8px)}.controls{justify-content:flex-start;flex-wrap:nowrap;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x proximity}.controls>*{flex:0 0 auto}select{max-width:116px}
+}
+@media (max-height:520px){
+  .workflow-hud{top:52px;left:54px;right:158px;padding:6px 8px}.workflow-steps{display:none}.workflow-bottom{margin-top:4px;padding-top:4px}.telemetry{top:52px;bottom:82px;width:146px}.telemetry .panel:not(:first-child){display:none}
+  .left-tools{top:52px;bottom:82px;transform:none;max-height:none}.dock{bottom:max(4px,env(safe-area-inset-bottom));max-height:72px}.controls{flex-wrap:nowrap;justify-content:flex-start;overflow-x:auto;overflow-y:hidden;max-height:72px;padding:6px}.camera-guide{display:none}
+}
+@media (prefers-reduced-motion:reduce){.spinner,.orbit-ring{animation:none}*{scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<div class="vignette"></div>
+<div class="scanline"></div>
+
+<header class="topbar">
+  <div class="brand">
+    <h1>INCURABLE<span class="dot">.</span>AI</h1>
+    <p>Autonomous wet lab · <b>closed-loop biology</b><br>Incubated at Harvard Innovation Labs</p>
+  </div>
+  <nav class="site-nav" aria-label="Website navigation">
+    <button class="active" data-site="lab">Live Lab</button>
+    <button data-site="platform">Platform</button>
+    <button data-site="use-cases">Use Cases</button>
+    <button class="cta" data-site="request-access">Request Access</button>
+  </nav>
+  <div class="stats">
+    <div class="chip"><div class="label">Systems</div><div class="value" id="sSystems">6 online</div></div>
+    <div class="chip"><div class="label">Samples</div><div class="value" id="sSamples">0</div></div>
+    <div class="chip"><div class="label">Throughput</div><div class="value" id="sRate">0 / hr</div></div>
+    <div class="chip"><div class="label">Uptime</div><div class="value" id="sUptime">99.97%</div></div>
+  </div>
+</header>
+
+
+<section class="workflow-hud" id="workflowHud" aria-label="Protocol execution plan">
+  <div class="workflow-top">
+    <div class="workflow-title"><span>Autonomous protocol</span><strong id="workflowName">High-throughput screen</strong></div>
+    <div class="workflow-meta"><span>Batch <b id="workflowBatch">SCR-001</b></span><span>ETA <b id="workflowEta">00:42</b></span></div>
+  </div>
+  <div class="workflow-steps" id="workflowSteps"></div>
+  <div class="workflow-bottom"><span class="workflow-current" id="workflowCurrent">Ready to release sample carrier</span><span class="workflow-queue" id="workflowQueue">0 active batches · 5 instruments assigned</span></div>
+</section>
+
+<nav class="left-tools" aria-label="View controls">
+  <button class="tool active" id="viewLab" data-tip="Full laboratory" aria-label="Full laboratory view"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 20h18M5 20V7l7-4 7 4v13M8 10h2M14 10h2M8 14h2M14 14h2"/></svg></button>
+  <button class="tool" id="viewCell" data-tip="Focused workcell" aria-label="Focused workcell"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 7h16v12H4zM8 7V4h8v3M8 12h8M12 9v6"/></svg></button>
+  <button class="tool" id="viewTop" data-tip="Top view" aria-label="Top view"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="4" width="16" height="16" rx="2"/><circle cx="12" cy="12" r="4"/><path d="M12 4v4M12 16v4M4 12h4M16 12h4"/></svg></button>
+  <button class="tool" id="fitView" data-tip="Fit entire laboratory" aria-label="Fit entire laboratory"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M8 3H3v5M16 3h5v5M8 21H3v-5M16 21h5v-5"/><path d="M3 8l5-5M21 8l-5-5M3 16l5 5M21 16l-5 5"/></svg></button>
+  <div class="tool-divider"></div>
+  <button class="tool" id="autoOrbit" data-tip="Auto orbit" aria-label="Toggle auto orbit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M21 12a9 9 0 1 1-2.6-6.4"/><path d="M21 4v5h-5"/></svg></button>
+  <button class="tool active" id="labelsBtn" data-tip="Equipment labels" aria-label="Toggle equipment labels"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 5h10l6 7-6 7H4z"/><circle cx="8" cy="12" r="1.4"/></svg></button>
+  <button class="tool" id="manifestBtn" data-tip="Equipment manifest" aria-label="Open equipment manifest"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 3h9l3 3v15H6z"/><path d="M9 9h6M9 13h6M9 17h4"/></svg></button>
+  <button class="tool" id="platformBtn" data-tip="Platform overview" aria-label="Open platform overview"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.2 4.4 6.2 4.4 9S15 17.8 12 21c-3-3.2-4.4-6.2-4.4-9S9 6.2 12 3z"/></svg></button>
+  <div class="tool-divider"></div>
+  <button class="tool" id="soundBtn" data-tip="Sound" aria-label="Toggle sound"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M16 9a4 4 0 0 1 0 6"/></svg></button>
+  <button class="tool" id="shotBtn" data-tip="Screenshot" aria-label="Take screenshot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 8h3l1.5-2h7L17 8h3v11H4z"/><circle cx="12" cy="13" r="3.2"/></svg></button>
+</nav>
+
+<aside class="telemetry">
+  <section class="panel" id="systemPanel">
+    <div class="head"><span>Selected system</span><strong id="machineName">Liquid Handler</strong></div>
+    <div class="row"><span class="k">PROCESS</span><span class="v" id="tProcess">Dispense</span></div>
+    <div class="row"><span class="k">CYCLE</span><span class="v" id="tCycle">00:00</span></div>
+    <div class="row"><span class="k">BATCH</span><span class="v" id="tBatch">A-260711</span></div>
+    <div class="row"><span class="k">STATE</span><span class="v" id="tState">READY</span></div>
+    <div class="status"><span class="led"></span><span id="statusText">STERILE · NOMINAL</span></div>
+    <div class="progress"><span id="progressBar"></span></div>
+  </section>
+  <section class="panel violet ai-panel" id="aiPanel">
+    <div class="head"><span>AI Orchestrator</span><strong id="aiState">planning</strong></div>
+    <div class="ai-decision"><b>Current decision</b><span id="aiDecision">Protocol graph validated. Awaiting batch release.</span></div>
+    <div class="ai-kpis">
+      <div class="ai-kpi"><b id="aiConfidence">99.2%</b><span>confidence</span></div>
+      <div class="ai-kpi"><b id="aiRisk">low</b><span>risk</span></div>
+      <div class="ai-kpi"><b id="aiLatency">18 ms</b><span>latency</span></div>
+    </div>
+    <div class="ai-util">
+      <div class="ai-util-row"><span>Robotics</span><i><span id="aiRobotBar"></span></i><em id="aiRobotText">0%</em></div>
+      <div class="ai-util-row"><span>Instruments</span><i><span id="aiInstrumentBar"></span></i><em id="aiInstrumentText">0%</em></div>
+      <div class="ai-util-row"><span>Capacity</span><i><span id="aiCapacityBar"></span></i><em id="aiCapacityText">0%</em></div>
+    </div>
+    <div class="decision-feed" id="aiFeed">
+      <div class="decision-event"><strong>GRAPH</strong> Six instrument dependencies resolved.</div>
+      <div class="decision-event"><strong>QC</strong> Environmental windows are nominal.</div>
+      <div class="decision-event"><strong>QUEUE</strong> Carrier lane reserved.</div>
+    </div>
+  </section>
+  <section class="panel violet">
+    <div class="head"><span>Live assay</span><strong>QC stream</strong></div>
+    <div class="row"><span class="k">VOLUME CV</span><span class="v" id="qCV">0.72%</span></div>
+    <div class="row"><span class="k">TEMP</span><span class="v" id="qTemp">22.0 °C</span></div>
+    <div class="row"><span class="k">CO₂</span><span class="v" id="qCO2">5.00%</span></div>
+    <div class="row"><span class="k">PRESSURE</span><span class="v" id="qPressure">+12 Pa</span></div>
+    <div class="quality" id="qualityText">All environmental and process windows pass.</div>
+  </section>
+  <section class="panel amber">
+    <div class="head"><span>Laboratory</span><strong>closed loop</strong></div>
+    <div class="mini-grid">
+      <div class="metric"><b id="mPlates">0</b><span>plates</span></div>
+      <div class="metric"><b id="mWells">0</b><span>wells</span></div>
+      <div class="metric"><b id="mRuns">0</b><span>runs</span></div>
+      <div class="metric"><b id="mYield">99.4%</b><span>yield</span></div>
+    </div>
+  </section>
+</aside>
+
+<div class="dock">
+  <div class="controls">
+    <button class="btn primary" id="runBtn"><svg id="runIcon" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg><span id="runLabel">Run Protocol</span></button>
+    <button class="btn" id="resetBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg>Reset</button>
+    <div class="sep"></div>
+    <label class="ctl">Protocol
+      <select id="protocolSel">
+        <option value="screen">High-throughput screen</option>
+        <option value="culture">Cell culture expansion</option>
+        <option value="crispr">CRISPR validation</option>
+        <option value="protein">Protein expression</option>
+      </select>
+    </label>
+    <label class="ctl">Focus
+      <select id="focusSel">
+        <option value="0">Liquid Handler</option>
+        <option value="1">Robotic Arm</option>
+        <option value="2">Centrifuge</option>
+        <option value="3">Incubator Stack</option>
+        <option value="4">Plate Reader</option>
+        <option value="5">Bioreactor</option>
+      </select>
+    </label>
+    <label class="ctl">Speed <input type="range" id="speedRange" min="0.35" max="2.5" step="0.05" value="1"></label>
+    <label class="toggle"><input type="checkbox" id="sterileToggle" checked><span class="switch"></span>Sterile mode</label>
+    <label class="toggle"><input type="checkbox" id="lightsToggle" checked><span class="switch"></span>Task lights</label>
+    <label class="toggle"><input type="checkbox" id="followToggle"><span class="switch"></span>Follow batch</label>
+    <div class="sep"></div>
+    <button class="btn" id="inspectBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><circle cx="11" cy="11" r="6"/><path d="M16 16l4 4M11 8v6M8 11h6"/></svg>Inspect</button>
+  </div>
+</div>
+
+<div class="hint">drag orbit · shift/right-drag pan · scroll/pinch zoom · click a machine</div>
+<div class="camera-guide"><span class="key">Drag</span><b>orbit</b><span class="key">⇧</span><b>pan</b><span class="key">Wheel</span><b>zoom</b><span class="key">0</span><b>fit</b></div>
+<div id="tag0" class="machine-tag">Liquid Handler<span>96/384-well precision dispense</span></div>
+<div id="tag1" class="machine-tag">Robotic Arm<span>plate and tube logistics</span></div>
+<div id="tag2" class="machine-tag">Refrigerated Centrifuge<span>sealed high-speed separation</span></div>
+<div id="tag3" class="machine-tag">Incubator Stack<span>CO₂ · humidity · imaging</span></div>
+<div id="tag4" class="machine-tag">Multimode Reader<span>absorbance · fluorescence</span></div>
+<div id="tag5" class="machine-tag">Bioreactor<span>closed-loop cell culture</span></div>
+
+
+<div class="drawer-backdrop" id="drawerBackdrop" aria-hidden="true"></div>
+<aside class="inspection-drawer" id="inspectionDrawer" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="inspectTitle">
+  <header class="inspect-head">
+    <div><div class="inspect-eyebrow" id="inspectEyebrow">SYSTEM 01 · DIGITAL TWIN</div><h2 id="inspectTitle">Liquid Handler</h2><p id="inspectSubtitle">Precision liquid handling and reagent dispense.</p></div>
+    <button class="icon-close" id="closeInspection" aria-label="Close machine inspection">×</button>
+  </header>
+  <div class="inspect-scroll">
+    <div class="inspect-statusline"><span><b id="inspectState">READY</b> · <span id="inspectOperation">Available for scheduling</span></span><span id="inspectAsset">LH-01</span></div>
+    <div class="inspect-hero-grid">
+      <div class="inspect-card"><label>Sample custody</label><strong id="inspectBatch">No active batch</strong><small id="inspectCustody">Barcode, deck position and protocol state are continuously reconciled.</small></div>
+      <div class="inspect-card"><label>Machine health</label><strong id="inspectHealth">99.1%</strong><div class="health-track"><span id="inspectHealthBar" style="width:99.1%"></span></div><small id="inspectMaintenance">Calibration current</small></div>
+    </div>
+    <section class="inspect-section"><div class="inspect-section-title"><span>Internal systems</span><b>live subsystem state</b></div><div class="subsystem-map" id="inspectSubsystems"></div></section>
+    <section class="inspect-section"><div class="inspect-section-title"><span>Engineering specification</span><b id="inspectSpecRevision">rev 4.2</b></div><div class="spec-grid" id="inspectSpecs"></div></section>
+    <section class="inspect-section"><div class="inspect-section-title"><span>Live telemetry</span><b>digital twin</b></div><div class="live-table" id="inspectTelemetry"></div></section>
+    <section class="inspect-section"><div class="inspect-section-title"><span>AI decision trace</span><b>explainable execution</b></div><div class="inspect-log" id="inspectLog"></div></section>
+  </div>
+</aside>
+
+<div class="commercial" id="commercialPanel" role="dialog" aria-modal="true" aria-label="INCURABLE.AI platform overview" aria-hidden="true">
+  <header class="commercial-top"><div class="commercial-logo">INCURABLE<span>.</span>AI</div><nav><button data-scroll="platform">Platform</button><button data-scroll="use-cases">Use cases</button><button data-scroll="trust">Trust</button><a href="mailto:hello@incurable.ai?subject=INCURABLE.AI%20Access%20Request">Request access</a><button id="closeCommercial" aria-label="Close platform overview">Close</button></nav></header>
+  <main class="commercial-main">
+    <section class="commercial-hero">
+      <div><div class="commercial-kicker">Autonomous experimental infrastructure</div><h1>Science that can <em>run itself.</em></h1><p>INCURABLE.AI unifies experimental planning, robotics, wet-lab instruments and machine-readable provenance into one continuously operating biological discovery system.</p><div class="commercial-actions"><button class="primary" id="enterLabBtn">Enter the live lab</button><button id="openInspectionFromCommercial">Inspect the machines</button></div></div>
+      <div class="commercial-visual" aria-hidden="true"><div class="orbit-ring"></div><div class="orbit-ring"></div><div class="commercial-core"></div><div class="visual-node n1">Protocol<b>Decomposed</b></div><div class="visual-node n2">Robotics<b>Scheduled</b></div><div class="visual-node n3">Quality<b>Verified</b></div><div class="visual-node n4">Results<b>Learned</b></div></div>
+    </section>
+    <div class="proof-grid"><article><b>01</b><span>Unified control plane</span></article><article><b>06</b><span>Integrated instrument classes</span></article><article><b>24/7</b><span>Continuous-operation architecture</span></article><article><b>100%</b><span>Machine-readable experiment lineage</span></article></div>
+    <section class="commercial-section" id="platform"><div class="section-label">The platform</div><h2>From experimental intent to deployed biological reality.</h2><div class="platform-grid"><article><div class="card-index">01 · PLAN</div><b>AI protocol orchestration</b><p>Decompose scientific objectives into validated steps, machine assignments, resource constraints and quality gates.</p></article><article><div class="card-index">02 · EXECUTE</div><b>Autonomous wet-lab operations</b><p>Coordinate liquid handling, sample logistics, centrifugation, incubation, analytical reads and bioprocess control.</p></article><article><div class="card-index">03 · LEARN</div><b>Closed-loop optimization</b><p>Use instrument telemetry and assay outcomes to detect anomalies, schedule confirmation runs and improve the next experiment.</p></article></div></section>
+    <section class="commercial-section" id="use-cases"><div class="section-label">Use cases</div><h2>A programmable laboratory for the highest-value biological workflows.</h2><div class="use-grid"><article><div class="card-index">DISCOVERY</div><b>High-throughput screening</b><p>Compound dosing, controlled incubation, multimode readout and automatic confirmatory testing with complete sample lineage.</p></article><article><div class="card-index">ENGINEERING</div><b>Cell and gene workflows</b><p>CRISPR validation, cell culture expansion and phenotype measurement executed through auditable protocol graphs.</p></article><article><div class="card-index">BIOPROCESS</div><b>Protein expression</b><p>Closed-loop cultivation, separation and analytical characterization with environmental and process telemetry.</p></article></div></section>
+    <section class="commercial-section" id="trust"><div class="section-label">Trust and control</div><h2>Autonomy without surrendering scientific control.</h2><div class="trust-grid"><article><div class="card-index">PROVENANCE</div><b>Every action is attributable</b><p>Protocol version, sample identity, machine state, operator override and AI decision traces remain connected to every result.</p></article><article><div class="card-index">SAFETY</div><b>Quality gates by design</b><p>Sterility, environmental windows, calibration status and instrument interlocks are evaluated before the next action is released.</p></article><article><div class="card-index">ORIGIN</div><b>Incubated at Harvard Innovation Labs</b><p>Built around an ambitious thesis: scientific progress can be made faster when software, robotics and biology operate as one system.</p></article></div></section>
+    <section class="commercial-cta" id="request-access"><div class="section-label">Build the autonomous laboratory</div><h2>Turn experimental throughput into a compounding advantage.</h2><p>Partner with INCURABLE.AI to design, deploy or operate a closed-loop biological discovery environment.</p><div class="commercial-actions" style="justify-content:center"><a class="primary" href="mailto:hello@incurable.ai?subject=INCURABLE.AI%20Partnership">Request access</a><button id="ctaEnterLab">Explore the digital twin</button></div></section>
+    <footer class="commercial-footer"><span>INCURABLE.AI · Autonomous wet-lab infrastructure</span><span>Incubated at Harvard Innovation Labs</span></footer>
+  </main>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<div class="modal" id="manifestModal" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="manifestTitle">
+  <div class="modal-card">
+    <h2 id="manifestTitle">Autonomous Laboratory Systems</h2>
+    <p class="sub">A fully integrated wet-lab workcell designed for closed-loop experimentation, sample custody and machine-readable provenance.</p>
+    <div class="manifest">
+      <article><h3>01 · Liquid Handler</h3><p>Eight-channel pipetting head, disposable tip racks, reagent cooling, barcode verification and sub-microliter motion simulation.</p></article>
+      <article><h3>02 · Robotic Sample Arm</h3><p>Six-axis transfer robot with adaptive gripper, collision-safe joint trajectories and plate handoff across every instrument.</p></article>
+      <article><h3>03 · Refrigerated Centrifuge</h3><p>Enclosed rotor, animated lid interlock, sealed buckets, active cooling and programmable acceleration profiles.</p></article>
+      <article><h3>04 · Incubator Stack</h3><p>Four independent culture chambers with CO₂, humidity, temperature and internal imaging status indicators.</p></article>
+      <article><h3>05 · Multimode Plate Reader</h3><p>Motorized tray, optical excitation head and continuous fluorescence / absorbance quality-control stream.</p></article>
+      <article><h3>06 · Instrumented Bioreactor</h3><p>Jacketed vessel, impeller drive, gas sparging, sensor manifold and real-time process-control visualization.</p></article>
+    </div>
+    <div class="modal-foot"><span>Static deployment · no build step · WebGL required</span><button class="btn" id="closeManifest">Close</button></div>
+  </div>
+</div>
+
+<div class="loading" id="loading"><div class="box"><div class="spinner"></div><h2>Commissioning Autonomous Lab</h2><p id="loadingText">Initializing robotics, sterile airflow and instrument telemetry…</p></div></div>
+
+<script>
+window.__startIncurableBiolab=function(){
+'use strict';
+const BUILD_ID='2026.07.11.6';
+(function validateBuild(){
+  if(location.protocol==='file:')return;
+  const refreshKey='incurable-build-refresh-count';
+  const safeSession={
+    get(){try{return Number(sessionStorage.getItem(refreshKey)||0);}catch(_){return 0;}},
+    set(value){try{sessionStorage.setItem(refreshKey,String(value));}catch(_){}},
+    clear(){try{sessionStorage.removeItem(refreshKey);}catch(_){}}
+  };
+  fetch('./version.json?build='+encodeURIComponent(BUILD_ID)+'&ts='+Date.now(),{cache:'no-store'}).then(r=>r.ok?r.json():null).then(v=>{
+    if(!v||!v.build)return;
+    if(v.build===BUILD_ID){safeSession.clear();return;}
+    const attempts=safeSession.get();
+    if(attempts>=2){console.warn('A newer deployment exists, but the host is still returning a cached page.',v.build);return;}
+    safeSession.set(attempts+1);
+    const u=new URL(location.href);u.searchParams.set('build',v.build);u.searchParams.set('_refresh',String(Date.now()));location.replace(u.href);
+  }).catch(()=>{});
+})();
+const loading=document.getElementById('loading');
+const loadingText=document.getElementById('loadingText');
+function fail(message){loading.querySelector('.spinner').style.display='none';loading.querySelector('h2').textContent='Unable to start';loadingText.textContent=message;}
+if(typeof THREE==='undefined'){fail('The 3D engine could not be loaded. Check the network connection and refresh.');return;}
+try{const c=document.createElement('canvas');if(!(c.getContext('webgl')||c.getContext('experimental-webgl')))throw new Error();}catch(e){fail('WebGL is not available in this browser.');return;}
+const T=THREE;
+
+// ---------- renderer / scene ----------
+const app=document.getElementById('app');
+const scene=new T.Scene();
+scene.fog=new T.Fog(0x061014,460,1250);
+const camera=new T.PerspectiveCamera(46,innerWidth/innerHeight,.4,3600);
+camera.position.set(380,250,490);
+const renderer=new T.WebGLRenderer({antialias:true,preserveDrawingBuffer:true,powerPreference:'high-performance'});
+function preferredPixelRatio(){const dpr=Math.max(1,window.devicePixelRatio||1);return Math.min(dpr,innerWidth<640?1.35:innerWidth<1000?1.65:2);}
+renderer.setPixelRatio(preferredPixelRatio());
+renderer.setSize(innerWidth,innerHeight);
+renderer.shadowMap.enabled=true;
+renderer.shadowMap.type=T.PCFSoftShadowMap;
+renderer.outputEncoding=T.sRGBEncoding;
+renderer.toneMapping=T.ACESFilmicToneMapping;
+renderer.toneMappingExposure=1.2;
+app.appendChild(renderer.domElement);
+
+(function makeBackground(){
+  const c=document.createElement('canvas');c.width=8;c.height=512;const x=c.getContext('2d');
+  const g=x.createLinearGradient(0,0,0,512);g.addColorStop(0,'#10252a');g.addColorStop(.48,'#071519');g.addColorStop(1,'#030709');
+  x.fillStyle=g;x.fillRect(0,0,8,512);const tx=new T.CanvasTexture(c);tx.encoding=T.sRGBEncoding;scene.background=tx;
+})();
+
+let envMap=null;
+(function makeEnvironment(){
+  try{
+    const pmrem=new T.PMREMGenerator(renderer);
+    const c=document.createElement('canvas');c.width=32;c.height=512;const x=c.getContext('2d');
+    const g=x.createLinearGradient(0,0,0,512);g.addColorStop(0,'#ffffff');g.addColorStop(.2,'#b7e9e5');g.addColorStop(.46,'#dce9ea');g.addColorStop(.55,'#6d8588');g.addColorStop(.8,'#263a3f');g.addColorStop(1,'#081013');
+    x.fillStyle=g;x.fillRect(0,0,32,512);x.fillStyle='rgba(255,255,255,.75)';x.fillRect(0,8,32,35);
+    const tx=new T.CanvasTexture(c);tx.mapping=T.EquirectangularReflectionMapping;envMap=pmrem.fromEquirectangular(tx).texture;scene.environment=envMap;tx.dispose();pmrem.dispose();
+  }catch(e){}
+})();
+
+scene.add(new T.HemisphereLight(0xd8ffff,0x071013,.9));
+scene.add(new T.AmbientLight(0x8ab4b8,.18));
+const key=new T.DirectionalLight(0xf4ffff,1.35);key.position.set(170,310,180);key.castShadow=true;const shadowResolution=innerWidth<700?1024:2048;key.shadow.mapSize.set(shadowResolution,shadowResolution);key.shadow.camera.left=-500;key.shadow.camera.right=500;key.shadow.camera.top=500;key.shadow.camera.bottom=-500;key.shadow.camera.near=30;key.shadow.camera.far=1000;key.shadow.bias=-.0004;key.shadow.normalBias=.7;scene.add(key);
+const fill=new T.DirectionalLight(0x7acfff,.45);fill.position.set(-220,160,-180);scene.add(fill);
+const rim=new T.DirectionalLight(0x70ffd2,.48);rim.position.set(210,90,-260);scene.add(rim);
+
+// ---------- procedural materials ----------
+function texture(draw,w=256,h=256,repeatX=1,repeatY=1){const c=document.createElement('canvas');c.width=w;c.height=h;draw(c.getContext('2d'),w,h);const tx=new T.CanvasTexture(c);tx.wrapS=tx.wrapT=T.RepeatWrapping;tx.repeat.set(repeatX,repeatY);tx.anisotropy=8;tx.encoding=T.sRGBEncoding;return tx;}
+function seededNoise(ctx,w,h,base,amount){ctx.fillStyle=base;ctx.fillRect(0,0,w,h);for(let i=0;i<w*h*.05;i++){const p=Math.random()>.5?255:0;const a=Math.random()*amount;ctx.fillStyle=`rgba(${p},${p},${p},${a})`;ctx.fillRect(Math.random()*w,Math.random()*h,1,1);}}
+const brushed=texture((x,w,h)=>{seededNoise(x,w,h,'#aeb9bd',.08);for(let i=0;i<300;i++){const y=Math.random()*h;x.strokeStyle=`rgba(255,255,255,${Math.random()*.04})`;x.beginPath();x.moveTo(0,y);x.lineTo(w,y);x.stroke();}},256,256);
+const whitePowder=texture((x,w,h)=>{seededNoise(x,w,h,'#cfd9dc',.045);},256,256);
+const floorTx=texture((x,w,h)=>{seededNoise(x,w,h,'#6b7477',.09);x.strokeStyle='rgba(10,20,22,.28)';x.lineWidth=3;x.strokeRect(0,0,w,h);for(let i=0;i<35;i++){x.strokeStyle=`rgba(255,255,255,${Math.random()*.035})`;x.beginPath();x.moveTo(Math.random()*w,Math.random()*h);x.lineTo(Math.random()*w,Math.random()*h);x.stroke();}},512,512,7,7);
+const carbonTx=texture((x,w,h)=>{x.fillStyle='#202b2e';x.fillRect(0,0,w,h);x.strokeStyle='rgba(255,255,255,.025)';for(let i=-h;i<w;i+=8){x.beginPath();x.moveTo(i,0);x.lineTo(i+h,h);x.stroke();x.beginPath();x.moveTo(i,h);x.lineTo(i+h,0);x.stroke();}},128,128,3,3);
+const M={
+  white:new T.MeshStandardMaterial({map:whitePowder,color:0xe9f0f2,roughness:.38,metalness:.12,envMapIntensity:.95}),
+  white2:new T.MeshStandardMaterial({color:0xbcc9cd,roughness:.42,metalness:.22,envMapIntensity:.9}),
+  metal:new T.MeshStandardMaterial({map:brushed,color:0xc5d1d4,roughness:.27,metalness:.88,envMapIntensity:1.25}),
+  dark:new T.MeshStandardMaterial({map:carbonTx,color:0x26363a,roughness:.48,metalness:.47,envMapIntensity:1.05}),
+  black:new T.MeshStandardMaterial({color:0x10191c,roughness:.56,metalness:.35}),
+  glass:new T.MeshPhysicalMaterial({color:0xa8ffff,roughness:.08,metalness:0,transmission:.36,transparent:true,opacity:.34,envMapIntensity:1.2,side:T.DoubleSide}),
+  glassDark:new T.MeshPhysicalMaterial({color:0x4aa4aa,roughness:.12,metalness:.08,transmission:.16,transparent:true,opacity:.3,side:T.DoubleSide}),
+  mint:new T.MeshStandardMaterial({color:0x55f2c2,emissive:0x164f40,emissiveIntensity:.7,roughness:.35,metalness:.18}),
+  cyan:new T.MeshStandardMaterial({color:0x55cffa,emissive:0x153b4d,emissiveIntensity:.8,roughness:.33,metalness:.2}),
+  violet:new T.MeshStandardMaterial({color:0x9b8cff,emissive:0x2b2254,emissiveIntensity:.65,roughness:.38,metalness:.16}),
+  amber:new T.MeshStandardMaterial({color:0xffb45e,emissive:0x5b2e0c,emissiveIntensity:.6,roughness:.42,metalness:.14}),
+  rubber:new T.MeshStandardMaterial({color:0x11181a,roughness:.88,metalness:.05}),
+  red:new T.MeshStandardMaterial({color:0xff6f72,emissive:0x5a1118,emissiveIntensity:.55,roughness:.4}),
+  fluidBlue:new T.MeshPhysicalMaterial({color:0x37c9df,emissive:0x063b44,emissiveIntensity:.6,roughness:.12,transmission:.2,transparent:true,opacity:.72}),
+  fluidPink:new T.MeshPhysicalMaterial({color:0xe36fbc,emissive:0x481330,emissiveIntensity:.5,roughness:.14,transmission:.18,transparent:true,opacity:.7})
+};
+const floorMat=new T.MeshStandardMaterial({map:floorTx,color:0x9ba5a8,roughness:.75,metalness:.12});
+
+function mesh(geometry,material,x=0,y=0,z=0,parent=scene){const m=new T.Mesh(geometry,material);m.position.set(x,y,z);m.castShadow=true;m.receiveShadow=true;parent.add(m);return m;}
+function box(w,h,d,mat,x,y,z,parent){return mesh(new T.BoxGeometry(w,h,d),mat,x,y,z,parent);}
+function cyl(rt,rb,h,segments,mat,x,y,z,parent){return mesh(new T.CylinderGeometry(rt,rb,h,segments),mat,x,y,z,parent);}
+function roundedPanel(w,h,d,r,mat,x,y,z,parent){
+  const shape=new T.Shape();shape.moveTo(-w/2+r,-h/2);shape.lineTo(w/2-r,-h/2);shape.quadraticCurveTo(w/2,-h/2,w/2,-h/2+r);shape.lineTo(w/2,h/2-r);shape.quadraticCurveTo(w/2,h/2,w/2-r,h/2);shape.lineTo(-w/2+r,h/2);shape.quadraticCurveTo(-w/2,h/2,-w/2,h/2-r);shape.lineTo(-w/2,-h/2+r);shape.quadraticCurveTo(-w/2,-h/2,-w/2+r,-h/2);
+  const g=new T.ExtrudeGeometry(shape,{depth:d,bevelEnabled:true,bevelSegments:2,steps:1,bevelSize:r*.22,bevelThickness:r*.22});g.center();return mesh(g,mat,x,y,z,parent);
+}
+function screen(w,h,x,y,z,parent,color=0x55f2c2){const mat=new T.MeshStandardMaterial({color:0x071719,emissive:color,emissiveIntensity:.6,roughness:.28,metalness:.18});const s=roundedPanel(w,h,1.2,2,mat,x,y,z,parent);return s;}
+function ledDot(x,y,z,parent,mat=M.mint,r=1.2){return mesh(new T.SphereGeometry(r,14,10),mat,x,y,z,parent);}
+function cable(points,color=0x18272b,r=.85,parent=scene){const curve=new T.CatmullRomCurve3(points.map(p=>new T.Vector3(p[0],p[1],p[2])));const g=new T.TubeGeometry(curve,32,r,8,false);return mesh(g,new T.MeshStandardMaterial({color,roughness:.7,metalness:.1}),0,0,0,parent);}
+function labelPlate(text,w,parent,x,y,z){const c=document.createElement('canvas');c.width=512;c.height=96;const ctx=c.getContext('2d');ctx.fillStyle='#0a1b1f';ctx.fillRect(0,0,c.width,c.height);ctx.strokeStyle='#2c5054';ctx.lineWidth=4;ctx.strokeRect(2,2,c.width-4,c.height-4);ctx.fillStyle='#bfffee';ctx.font='600 38px ui-monospace,monospace';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(text,256,49);const tx=new T.CanvasTexture(c);tx.encoding=T.sRGBEncoding;const mat=new T.MeshBasicMaterial({map:tx,transparent:true});const p=mesh(new T.PlaneGeometry(w,w*96/512),mat,x,y,z,parent);return p;}
+
+// ---------- room ----------
+const floor=mesh(new T.PlaneGeometry(1800,1400),floorMat,0,-.6,0);floor.rotation.x=-Math.PI/2;floor.receiveShadow=true;
+const room=new T.Group();scene.add(room);
+box(930,6,640,M.white2,0,225,-310,room); // rear wall cap
+box(930,450,5,new T.MeshStandardMaterial({color:0x718084,roughness:.75,metalness:.08}),0,224,-315,room);
+for(let x=-420;x<=420;x+=120){box(2,450,7,new T.MeshStandardMaterial({color:0x87989b,roughness:.5,metalness:.5}),x,224,-311,room);}
+for(let y=0;y<=440;y+=90){box(930,2,7,new T.MeshStandardMaterial({color:0x87989b,roughness:.5,metalness:.5}),0,y,-311,room);}
+// floor safety lines
+const laneMat=new T.MeshStandardMaterial({color:0x49b69b,emissive:0x0d3e33,emissiveIntensity:.35,roughness:.8});
+[-255,255].forEach(x=>box(3,.5,570,laneMat,x,0,0,room));
+box(510,.5,3,laneMat,0,0,250,room);
+// ceiling lighting
+const ceiling=new T.Group();scene.add(ceiling);
+for(let z=-235;z<=235;z+=115){
+  box(600,4,7,M.dark,0,300,z,ceiling);
+  const lightMat=new T.MeshStandardMaterial({color:0xe8ffff,emissive:0xd8ffff,emissiveIntensity:1.5,roughness:.2});
+  box(500,2.2,15,lightMat,0,296,z,ceiling);
+  const pl=new T.PointLight(0xd7ffff,.7,470,2);pl.position.set(0,285,z);ceiling.add(pl);
+}
+// central conveyor rail
+const rail=new T.Group();scene.add(rail);
+box(510,8,48,M.dark,0,12,12,rail);box(500,4,26,M.metal,0,19,12,rail);
+for(let x=-230;x<=230;x+=46){box(7,11,42,M.black,x,22,12,rail);}
+
+// reusable lab items
+function plate(parent,color=M.white2){const g=new T.Group();parent.add(g);const base=roundedPanel(42,28,4,3,M.white,0,0,0,g);base.rotation.x=Math.PI/2;const wellMat=color===M.white2?M.cyan:color;for(let i=0;i<8;i++)for(let j=0;j<4;j++)cyl(1.35,1.35,1.1,12,wellMat,-14+i*4,2.7,-6+j*4,g);return g;}
+function tipRack(parent){const g=new T.Group();parent.add(g);const base=roundedPanel(36,26,4,3,M.white2,0,0,0,g);base.rotation.x=Math.PI/2;for(let i=0;i<8;i++)for(let j=0;j<4;j++)cyl(.85,.25,8,10,M.white,-13+i*3.7,6,-5.5+j*3.7,g);return g;}
+function tube(r,h,parent,mat=M.fluidPink){const g=new T.Group();parent.add(g);const outer=cyl(r,r*.84,h,20,M.glass,0,0,0,g);const fluid=cyl(r*.72,r*.62,h*.48,20,mat,0,-h*.17,0,g);cyl(r*1.05,r*1.05,2,20,M.white2,0,h/2+1,0,g);return g;}
+function machineBase(w,d,parent){const g=new T.Group();parent.add(g);const base=roundedPanel(w,d,10,6,M.dark,0,5,0,g);base.rotation.x=Math.PI/2;for(const sx of [-1,1])for(const sz of [-1,1])cyl(3,3,7,16,M.rubber,sx*(w/2-9),0,sz*(d/2-9),g);return g;}
+
+const systems=[];
+const pickables=[];
+function registerSystem(name,subtitle,group,pick,focus,process){const system={name,subtitle,group,pick,focus,process,progress:0};pick.userData.system=systems.length;pickables.push(pick);systems.push(system);return system;}
+function pickBox(w,h,d,x,y,z,parent){const m=mesh(new T.BoxGeometry(w,h,d),new T.MeshBasicMaterial({transparent:true,opacity:0,depthWrite:false}),x,y,z,parent);m.castShadow=false;m.receiveShadow=false;return m;}
+
+// ---------- liquid handler ----------
+function buildLiquidHandler(){
+  const g=new T.Group();g.position.set(-205,0,-115);scene.add(g);machineBase(165,105,g);
+  roundedPanel(160,96,8,8,M.white,0,57,0,g).rotation.x=Math.PI/2;
+  // enclosure columns and canopy
+  for(const x of [-73,73])for(const z of [-43,43])box(5,120,5,M.metal,x,73,z,g);
+  box(154,7,92,M.white,0,135,0,g);box(154,100,3,M.glass,0,83,-45,g);box(3,100,84,M.glass,-77,83,0,g);box(3,100,84,M.glass,77,83,0,g);
+  // deck
+  const deck=box(143,7,82,M.dark,0,40,0,g);deck.receiveShadow=true;
+  const p1=plate(g,M.cyan);p1.position.set(34,47,14);
+  const p2=plate(g,M.violet);p2.position.set(-15,47,15);
+  const rack=tipRack(g);rack.position.set(-53,48,-18);
+  for(let i=0;i<5;i++){const bottle=tube(5,24,g,i%2?M.fluidBlue:M.fluidPink);bottle.position.set(42+i*9,58,-25);}
+  // gantry
+  box(135,6,8,M.metal,0,113,20,g);box(135,6,8,M.metal,0,113,-20,g);
+  const bridge=new T.Group();bridge.position.set(0,108,0);g.add(bridge);box(12,12,78,M.dark,0,0,0,bridge);
+  const head=new T.Group();head.position.set(0,-20,0);bridge.add(head);roundedPanel(28,30,18,4,M.white2,0,0,0,head);screen(18,7,0,2,9.5,head);
+  const pipettes=[];for(let i=0;i<8;i++){const p=cyl(1.2,.45,25,12,M.metal,-10.5+i*3, -26,0,head);pipettes.push(p);}
+  const dropMat=new T.MeshStandardMaterial({color:0x69e7ff,emissive:0x1d6370,emissiveIntensity:.8,transparent:true,opacity:.9});
+  const drops=[];for(let i=0;i<8;i++){const d=mesh(new T.SphereGeometry(.75,10,8),dropMat,-10.5+i*3,-39,0,head);d.visible=false;drops.push(d);}
+  screen(34,18,62,80,48,g);labelPlate('LIQUID HANDLER',55,g,0,23,53);
+  cable([[-70,120,35],[-40,132,38],[0,126,38],[0,115,32]],0x15272a,1.6,g);
+  const taskLight=new T.PointLight(0x78ffe0,1.3,110,2);taskLight.position.set(0,100,5);g.add(taskLight);
+  const pick=pickBox(170,145,110,0,75,0,g);
+  const sys=registerSystem('Liquid Handler','96/384-well precision dispense',g,pick,new T.Vector3(-205,72,-115),'PRECISION DISPENSE');
+  sys.bridge=bridge;sys.head=head;sys.drops=drops;sys.taskLight=taskLight;sys.plate=p1;
+  return sys;
+}
+
+// ---------- robotic arm ----------
+function buildRobotArm(){
+  const g=new T.Group();g.position.set(0,0,-55);scene.add(g);machineBase(105,105,g);
+  const base=cyl(30,34,18,48,M.dark,0,18,0,g);const turn=new T.Group();turn.position.y=28;g.add(turn);
+  cyl(21,21,16,40,M.white2,0,0,0,turn);
+  const shoulder=new T.Group();shoulder.position.set(0,12,0);turn.add(shoulder);
+  const upper=roundedPanel(30,78,24,9,M.white,0,38,0,shoulder);upper.rotation.z=-.2;
+  const elbow=new T.Group();elbow.position.set(16,76,0);shoulder.add(elbow);cyl(17,17,24,30,M.dark,0,0,0,elbow).rotation.x=Math.PI/2;
+  const fore=roundedPanel(26,72,20,8,M.white2,18,33,0,elbow);fore.rotation.z=-.48;
+  const wrist=new T.Group();wrist.position.set(36,68,0);elbow.add(wrist);cyl(12,12,20,28,M.dark,0,0,0,wrist).rotation.x=Math.PI/2;
+  const gripper=new T.Group();gripper.position.set(14,0,0);wrist.add(gripper);box(24,13,16,M.metal,0,0,0,gripper);box(4,18,4,M.dark,9,-12,-5,gripper);box(4,18,4,M.dark,9,-12,5,gripper);
+  const held=plate(gripper,M.mint);held.scale.set(.65,.65,.65);held.position.set(18,-18,0);held.rotation.z=Math.PI/2;
+  ledDot(0,31,18,turn,M.mint,1.7);labelPlate('SAMPLE ROBOT',47,g,0,12,54);
+  const taskLight=new T.PointLight(0x6affd1,1.1,120,2);taskLight.position.set(25,110,20);g.add(taskLight);
+  const pick=pickBox(130,175,135,10,82,0,g);
+  const sys=registerSystem('Robotic Arm','plate and tube logistics',g,pick,new T.Vector3(0,76,-55),'SAMPLE TRANSFER');
+  sys.turn=turn;sys.shoulder=shoulder;sys.elbow=elbow;sys.wrist=wrist;sys.gripper=gripper;sys.taskLight=taskLight;
+  return sys;
+}
+
+// ---------- refrigerated centrifuge ----------
+function buildCentrifuge(){
+  const g=new T.Group();g.position.set(208,0,-120);scene.add(g);machineBase(130,112,g);
+  roundedPanel(122,92,70,12,M.white,0,58,0,g);
+  const darkTop=roundedPanel(112,76,5,11,M.dark,0,105,0,g);darkTop.rotation.x=Math.PI/2;
+  const rotor=new T.Group();rotor.position.set(0,106,0);g.add(rotor);
+  cyl(35,35,9,48,M.metal,0,0,0,rotor);cyl(12,12,12,32,M.dark,0,4,0,rotor);
+  const buckets=[];for(let i=0;i<8;i++){const a=i/8*Math.PI*2;const b=new T.Group();b.position.set(Math.cos(a)*25,3,Math.sin(a)*25);b.rotation.y=-a;rotor.add(b);roundedPanel(13,20,10,3,M.dark,0,0,0,b);const tt=tube(3,16,b,i%2?M.fluidBlue:M.fluidPink);tt.position.y=8;buckets.push(b);}
+  const lidPivot=new T.Group();lidPivot.position.set(0,109,-39);g.add(lidPivot);const lid=roundedPanel(116,82,9,12,M.white2,0,0,35,lidPivot);lid.rotation.x=Math.PI/2;const window=cyl(33,33,2,48,M.glassDark,0,6,35,lidPivot);
+  screen(37,20,35,72,36,g);for(let i=0;i<3;i++)ledDot(18+i*8,59,36.5,g,[M.mint,M.cyan,M.amber][i],1.25);
+  labelPlate('REFRIGERATED CENTRIFUGE',63,g,0,23,36);
+  const taskLight=new T.PointLight(0x65dfff,.7,100,2);taskLight.position.set(0,125,0);g.add(taskLight);
+  const pick=pickBox(145,145,130,0,72,0,g);
+  const sys=registerSystem('Centrifuge','sealed refrigerated separation',g,pick,new T.Vector3(208,72,-120),'REFRIGERATED SPIN');
+  sys.rotor=rotor;sys.lidPivot=lidPivot;sys.taskLight=taskLight;
+  return sys;
+}
+
+// ---------- incubator stack ----------
+function buildIncubator(){
+  const g=new T.Group();g.position.set(-205,0,132);scene.add(g);machineBase(145,106,g);
+  roundedPanel(136,210,84,12,M.white,0,112,0,g);
+  const doors=[];const lights=[];
+  for(let i=0;i<4;i++){
+    const y=39+i*47;const door=new T.Group();door.position.set(0,y,43);g.add(door);roundedPanel(118,39,4,6,M.glassDark,0,0,0,door);box(8,25,4,M.metal,48,0,3,door);screen(28,9,-34,9,3,door,i%2?0x55cffa:0x55f2c2);ledDot(34,10,3.8,door,M.mint,1);
+    const shelf=box(105,3,68,M.metal,0,y-16,0,g);const pp=plate(g,i%2?M.violet:M.cyan);pp.position.set(0,y-11,0);pp.scale.set(.9,.9,.9);
+    const li=new T.PointLight(i%2?0x6abfff:0x67ffd0,.42,65,2);li.position.set(0,y,20);g.add(li);doors.push(door);lights.push(li);
+  }
+  box(110,10,67,M.dark,0,215,0,g);for(let x=-45;x<=45;x+=10)box(5,2,40,M.black,x,221,0,g);
+  labelPlate('CO2 INCUBATION ARRAY',64,g,0,15,44);
+  const pick=pickBox(155,235,120,0,117,0,g);
+  const sys=registerSystem('Incubator Stack','CO₂, humidity and imaging',g,pick,new T.Vector3(-205,112,132),'CELL CULTURE');
+  sys.doors=doors;sys.taskLights=lights;
+  return sys;
+}
+
+// ---------- multimode plate reader ----------
+function buildPlateReader(){
+  const g=new T.Group();g.position.set(5,0,150);scene.add(g);machineBase(135,110,g);
+  roundedPanel(128,91,78,14,M.white2,0,62,0,g);
+  roundedPanel(112,62,7,10,M.dark,0,79,40,g);
+  screen(43,22,25,66,42,g);for(let i=0;i<4;i++)ledDot(-38+i*9,59,42,g,i===0?M.mint:M.cyan,1.2);
+  const slot=box(74,8,3,M.black,-13,35,40,g);
+  const tray=new T.Group();tray.position.set(-13,33,39);g.add(tray);const trayDeck=roundedPanel(74,46,4,4,M.metal,0,0,0,tray);trayDeck.rotation.x=Math.PI/2;const pp=plate(tray,M.violet);pp.position.y=4;pp.scale.set(.95,.95,.95);
+  const optics=new T.Group();optics.position.set(0,102,0);g.add(optics);cyl(15,12,24,28,M.dark,0,0,0,optics);cyl(5,3,12,20,M.cyan,0,-17,0,optics);
+  const scanGlow=new T.PointLight(0x956fff,0,95,2);scanGlow.position.set(0,70,5);g.add(scanGlow);
+  labelPlate('MULTIMODE PLATE READER',66,g,0,20,42);
+  const pick=pickBox(145,135,125,0,67,0,g);
+  const sys=registerSystem('Plate Reader','absorbance and fluorescence',g,pick,new T.Vector3(5,72,150),'MULTIMODE ASSAY');
+  sys.tray=tray;sys.optics=optics;sys.scanGlow=scanGlow;
+  return sys;
+}
+
+// ---------- bioreactor ----------
+function buildBioreactor(){
+  const g=new T.Group();g.position.set(205,0,135);scene.add(g);machineBase(145,120,g);
+  roundedPanel(126,78,48,10,M.white2,0,50,24,g);screen(45,24,26,54,49,g);for(let i=0;i<3;i++)ledDot(-39+i*10,46,49.5,g,[M.mint,M.cyan,M.amber][i],1.2);
+  const vessel=new T.Group();vessel.position.set(-22,105,-10);g.add(vessel);
+  const outer=cyl(31,31,92,48,M.glass,0,0,0,vessel);const liquid=cyl(26,26,64,48,M.fluidPink,0,-10,0,vessel);
+  const jacket=cyl(34,34,72,48,new T.MeshPhysicalMaterial({color:0x5cdfff,transparent:true,opacity:.16,roughness:.12,transmission:.18,side:T.DoubleSide}),0,-5,0,vessel);
+  cyl(36,36,8,48,M.metal,0,49,0,vessel);cyl(35,35,7,48,M.metal,0,-49,0,vessel);
+  const motor=new T.Group();motor.position.set(0,67,0);vessel.add(motor);roundedPanel(30,34,28,5,M.dark,0,0,0,motor);cyl(4,4,74,16,M.metal,0,-51,0,motor);
+  const impeller=new T.Group();impeller.position.set(0,-78,0);motor.add(impeller);for(let i=0;i<4;i++){const blade=box(18,3,7,M.metal,9,0,0,impeller);blade.rotation.y=i*Math.PI/2;}
+  const bubbles=[];for(let i=0;i<22;i++){const b=mesh(new T.SphereGeometry(.8+Math.random()*.8,10,8),M.cyan,(Math.random()-.5)*32,-37+Math.random()*53,(Math.random()-.5)*32,vessel);b.material=b.material.clone();b.material.transparent=true;b.material.opacity=.5;bubbles.push(b);}
+  // sensor manifold and tubing
+  for(let i=0;i<3;i++){cyl(3,3,38,16,M.metal,-15+i*15,76,0,vessel);ledDot(-15+i*15,96,0,vessel,[M.mint,M.cyan,M.violet][i],1.3);}
+  cable([[8,154,-9],[50,165,0],[55,104,15],[44,84,22]],0x17373b,1.8,g);
+  cable([[-48,135,-8],[-65,132,-10],[-67,70,15],[-52,66,32]],0x3e6c73,1.4,g);
+  labelPlate('INSTRUMENTED BIOREACTOR',63,g,0,17,49);
+  const taskLight=new T.PointLight(0xff88d2,.72,110,2);taskLight.position.set(-20,130,20);g.add(taskLight);
+  const pick=pickBox(155,205,140,0,102,0,g);
+  const sys=registerSystem('Bioreactor','closed-loop cell culture',g,pick,new T.Vector3(205,100,135),'BIOPROCESS CONTROL');
+  sys.motor=motor;sys.impeller=impeller;sys.bubbles=bubbles;sys.taskLight=taskLight;sys.liquid=liquid;
+  return sys;
+}
+
+const liquidHandler=buildLiquidHandler();
+const robotArm=buildRobotArm();
+const centrifuge=buildCentrifuge();
+const incubator=buildIncubator();
+const plateReader=buildPlateReader();
+const bioreactor=buildBioreactor();
+
+// ---------- autonomous workflow transport layer ----------
+const WORKFLOW_DOCKS={
+  input:new T.Vector3(-255,31,12),
+  output:new T.Vector3(255,31,12),
+  0:new T.Vector3(-205,31,-42),
+  1:new T.Vector3(0,31,-4),
+  2:new T.Vector3(208,31,-42),
+  3:new T.Vector3(-205,31,67),
+  4:new T.Vector3(5,31,82),
+  5:new T.Vector3(205,31,68)
+};
+const workflowLayer=new T.Group();scene.add(workflowLayer);
+let routeSegments=[],routeNodes=[],workflowTimeline=null,workflowStepEls=[],primaryExecution=null;
+const machineActivity=new Array(systems.length).fill(false),machineQueued=new Array(systems.length).fill(false),machineProgress=new Array(systems.length).fill(0),machineOperation=new Array(systems.length).fill('');
+const machineBeaconR=[82,57,67,74,68,73];
+const machineBeacons=systems.map((s,i)=>{const mat=new T.MeshBasicMaterial({color:0x55f2c2,transparent:true,opacity:.08,depthWrite:false,blending:T.AdditiveBlending});const ring=mesh(new T.TorusGeometry(machineBeaconR[i],1.05,8,80),mat,s.group.position.x,1.2,s.group.position.z,scene);ring.rotation.x=Math.PI/2;ring.renderOrder=3;return ring;});
+
+function transferCurve(a,b){
+  const y=31,midZ=12;
+  const pts=[a.clone(),new T.Vector3(a.x,y,midZ),new T.Vector3((a.x+b.x)/2,y,midZ),new T.Vector3(b.x,y,midZ),b.clone()];
+  const clean=[];pts.forEach(p=>{if(!clean.length||clean[clean.length-1].distanceToSquared(p)>.01)clean.push(p);});
+  if(clean.length<3)clean.splice(1,0,a.clone().lerp(b,.5));
+  return new T.CatmullRomCurve3(clean,false,'catmullrom',.5);
+}
+function clearWorkflowRoute(){
+  routeSegments.forEach(s=>{workflowLayer.remove(s.under,s.glow);s.under.geometry.dispose();s.glow.geometry.dispose();s.under.material.dispose();s.glow.material.dispose();});routeSegments=[];
+  routeNodes.forEach(n=>{workflowLayer.remove(n);n.geometry.dispose();n.material.dispose();});routeNodes=[];
+}
+function buildWorkflowRoute(profile,timeline){
+  clearWorkflowRoute();const accent=new T.Color(profile.accent);
+  timeline.events.filter(e=>e.type==='transfer').forEach((e,idx)=>{
+    const underMat=new T.MeshBasicMaterial({color:0x10272b,transparent:true,opacity:.72,depthWrite:false});
+    const glowMat=new T.MeshBasicMaterial({color:accent,transparent:true,opacity:.24,depthWrite:false,blending:T.AdditiveBlending});
+    const under=mesh(new T.TubeGeometry(e.curve,72,1.65,8,false),underMat,0,0,0,workflowLayer);
+    const glow=mesh(new T.TubeGeometry(e.curve,72,.55,7,false),glowMat,0,0,0,workflowLayer);under.castShadow=glow.castShadow=false;under.receiveShadow=glow.receiveShadow=false;e.segmentIndex=idx;routeSegments.push({under,glow,event:e});
+  });
+  const unique=[WORKFLOW_DOCKS.input,...profile.steps.map(s=>WORKFLOW_DOCKS[s.system]),WORKFLOW_DOCKS.output].filter((p,i,a)=>a.findIndex(q=>q.distanceToSquared(p)<1)===i);
+  unique.forEach((p,i)=>{const mat=new T.MeshBasicMaterial({color:i===0||i===unique.length-1?0xffffff:accent,transparent:true,opacity:.58,depthWrite:false,blending:T.AdditiveBlending});const node=mesh(new T.TorusGeometry(8,1.15,8,36),mat,p.x,25,p.z,workflowLayer);node.rotation.x=Math.PI/2;routeNodes.push(node);});
+  machineBeacons.forEach(b=>b.material.color.copy(accent));
+}
+function createWorkflowCarrier(index){
+  const g=new T.Group();scene.add(g);g.visible=index===0;
+  const carrierMat=new T.MeshStandardMaterial({color:0x14262b,roughness:.42,metalness:.64,envMapIntensity:1});
+  const base=roundedPanel(50,35,5,4,carrierMat,0,0,0,g);base.rotation.x=Math.PI/2;
+  const sample=plate(g,index%2?M.cyan:M.violet);sample.scale.set(.86,.86,.86);sample.position.y=5;
+  const ringMat=new T.MeshBasicMaterial({color:index%2?0x55cffa:0x9b8cff,transparent:true,opacity:.8,depthWrite:false,blending:T.AdditiveBlending});
+  const ring=mesh(new T.TorusGeometry(27,1.05,8,40),ringMat,0,1,0,g);ring.rotation.x=Math.PI/2;
+  const beacon=ledDot(20,7,13,g,index%2?M.cyan:M.violet,1.25);
+  g.userData={index,ring,beacon,batchId:'',execution:null};return g;
+}
+const carriers=Array.from({length:4},(_,i)=>createWorkflowCarrier(i));
+
+// ---------- interaction / camera controls ----------
+const target=new T.Vector3(0,82,15);let desiredTarget=target.clone();let yaw=.67,pitch=.29,distance=660;let desiredYaw=yaw,desiredPitch=pitch,desiredDistance=distance;let dragging=false,dragTravel=0,autoOrbit=false,labelsOn=true;const activePointers=new Map();let gesture=null;let interactionMode='orbit';
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+function overviewDistance(){const aspect=innerWidth/Math.max(1,innerHeight);if(aspect<.58)return 900;if(aspect<.9)return 810;if(innerWidth<920)return 755;return 700;}
+function stopAutoOrbit(){autoOrbit=false;const button=document.getElementById('autoOrbit');button.classList.remove('active');button.setAttribute('aria-pressed','false');}
+function updateCamera(dt=.016){
+  const k=1-Math.exp(-dt*8.5);yaw+=(desiredYaw-yaw)*k;pitch+=(desiredPitch-pitch)*k;distance+=(desiredDistance-distance)*k;target.lerp(desiredTarget,k);
+  const cp=Math.cos(pitch);camera.position.set(target.x+Math.sin(yaw)*cp*distance,target.y+Math.sin(pitch)*distance,target.z+Math.cos(yaw)*cp*distance);camera.lookAt(target);
+}
+function panCamera(dx,dy,mult=1){const scale=distance*.00125*mult;const right=new T.Vector3().setFromMatrixColumn(camera.matrixWorld,0);const up=new T.Vector3().setFromMatrixColumn(camera.matrixWorld,1);desiredTarget.addScaledVector(right,-dx*scale);desiredTarget.addScaledVector(up,dy*scale);desiredTarget.x=clamp(desiredTarget.x,-390,390);desiredTarget.y=clamp(desiredTarget.y,18,210);desiredTarget.z=clamp(desiredTarget.z,-300,330);}
+function beginGesture(){if(activePointers.size<2){gesture=null;return;}const pts=[...activePointers.values()];const dx=pts[0].x-pts[1].x,dy=pts[0].y-pts[1].y;gesture={distance:Math.hypot(dx,dy),cx:(pts[0].x+pts[1].x)/2,cy:(pts[0].y+pts[1].y)/2};}
+renderer.domElement.addEventListener('contextmenu',e=>e.preventDefault());
+renderer.domElement.addEventListener('pointerdown',e=>{activePointers.set(e.pointerId,{x:e.clientX,y:e.clientY,px:e.clientX,py:e.clientY});dragging=true;dragTravel=0;interactionMode=(e.button===2||e.shiftKey)?'pan':'orbit';renderer.domElement.classList.add('dragging');try{renderer.domElement.setPointerCapture(e.pointerId);}catch(_){}if(activePointers.size===2)beginGesture();});
+renderer.domElement.addEventListener('pointermove',e=>{const p=activePointers.get(e.pointerId);if(!p)return;p.px=p.x;p.py=p.y;p.x=e.clientX;p.y=e.clientY;const dx=p.x-p.px,dy=p.y-p.py;dragTravel+=Math.abs(dx)+Math.abs(dy);if(activePointers.size>=2){const pts=[...activePointers.values()];const ddx=pts[0].x-pts[1].x,ddy=pts[0].y-pts[1].y,newDist=Math.max(20,Math.hypot(ddx,ddy)),cx=(pts[0].x+pts[1].x)/2,cy=(pts[0].y+pts[1].y)/2;if(gesture){desiredDistance=clamp(desiredDistance*(gesture.distance/newDist),175,1250);panCamera(cx-gesture.cx,cy-gesture.cy,.8);}gesture={distance:newDist,cx,cy};stopAutoOrbit();return;}if(interactionMode==='pan'||e.shiftKey)panCamera(dx,dy);else{desiredYaw-=dx*.0045;desiredPitch=clamp(desiredPitch+dy*.0036,-.08,1.22);}stopAutoOrbit();});
+function endPointer(e){activePointers.delete(e.pointerId);if(activePointers.size<2)gesture=null;if(activePointers.size===0){dragging=false;renderer.domElement.classList.remove('dragging');}try{renderer.domElement.releasePointerCapture(e.pointerId);}catch(_){}}
+renderer.domElement.addEventListener('pointerup',endPointer);renderer.domElement.addEventListener('pointercancel',endPointer);renderer.domElement.addEventListener('lostpointercapture',endPointer);
+renderer.domElement.addEventListener('wheel',e=>{e.preventDefault();const unit=e.deltaMode===1?16:e.deltaMode===2?innerHeight:1;desiredDistance=clamp(desiredDistance*Math.exp(e.deltaY*unit*.00105),175,1350);stopAutoOrbit();},{passive:false});
+renderer.domElement.addEventListener('dblclick',()=>overview());
+
+const raycaster=new T.Raycaster();const mouse=new T.Vector2();
+renderer.domElement.addEventListener('click',e=>{if(dragTravel>6)return;mouse.x=e.clientX/innerWidth*2-1;mouse.y=-(e.clientY/innerHeight)*2+1;raycaster.setFromCamera(mouse,camera);const hits=raycaster.intersectObjects(pickables,false);if(hits.length)selectSystem(hits[0].object.userData.system,true);});
+
+const machineName=document.getElementById('machineName'),tProcess=document.getElementById('tProcess'),tCycle=document.getElementById('tCycle'),tBatch=document.getElementById('tBatch'),tState=document.getElementById('tState'),statusText=document.getElementById('statusText'),progressBar=document.getElementById('progressBar'),systemPanel=document.getElementById('systemPanel');
+const focusSel=document.getElementById('focusSel');let selected=0;
+function selectSystem(index,moveCamera){selected=clamp(index,0,systems.length-1);focusSel.value=String(selected);const s=systems[selected];machineName.textContent=s.name;tProcess.textContent=s.process;tBatch.textContent=['A-260711','R-4418','CF-091','IC-220','PR-819','BR-066'][selected];if(moveCamera)focusView();systems.forEach(sys=>sys.group.traverse(o=>{if(o.material&&o.material.emissive&&o.userData.originalEmissive===undefined)o.userData.originalEmissive=o.material.emissiveIntensity;}));if(typeof renderInspectionStatic==='function'&&inspectionDrawer.classList.contains('show'))renderInspectionStatic(selected);}
+function overview(){desiredTarget.set(0,78,12);desiredYaw=.67;desiredPitch=.28;desiredDistance=overviewDistance();setViewButton('viewLab');}
+function focusView(){const p=systems[selected].focus;desiredTarget.copy(p);desiredTarget.y+=selected===3?5:0;desiredYaw=selected===0?0.72:selected===3?2.35:selected===5?0.55:0.7;desiredPitch=.23;desiredDistance=selected===3?405:selected===5?375:345;setViewButton('viewCell');}
+function topView(){desiredTarget.set(0,55,5);desiredYaw=.02;desiredPitch=1.16;desiredDistance=innerWidth<640?760:650;setViewButton('viewTop');}
+function fitView(){desiredTarget.set(0,72,10);desiredYaw=.67;desiredPitch=.25;desiredDistance=overviewDistance()+55;setViewButton('fitView');}
+function setViewButton(id){['viewLab','viewCell','viewTop','fitView'].forEach(x=>document.getElementById(x).classList.toggle('active',x===id));}
+document.getElementById('viewLab').onclick=overview;document.getElementById('viewCell').onclick=focusView;document.getElementById('viewTop').onclick=topView;document.getElementById('fitView').onclick=fitView;
+document.getElementById('autoOrbit').setAttribute('aria-pressed','false');document.getElementById('autoOrbit').onclick=function(){autoOrbit=!autoOrbit;this.classList.toggle('active',autoOrbit);this.setAttribute('aria-pressed',String(autoOrbit));};
+document.getElementById('labelsBtn').setAttribute('aria-pressed','true');document.getElementById('labelsBtn').onclick=function(){labelsOn=!labelsOn;this.classList.toggle('active',labelsOn);this.setAttribute('aria-pressed',String(labelsOn));};
+focusSel.onchange=()=>selectSystem(+focusSel.value,true);
+
+
+// ---------- detailed machine inspection ----------
+const inspectionDrawer=document.getElementById('inspectionDrawer'),drawerBackdrop=document.getElementById('drawerBackdrop');
+const machineDetails=[
+  {asset:'LH-01',summary:'Eight-channel precision liquid handler with enclosed deck, reagent custody and optical verification.',health:99.4,maintenance:'Calibration due in 12 days',revision:'rev 4.2',subsystems:['Gantry metrology','Pipetting head','Deck vision','Reagent cooling','Tip custody','Barcode reader'],specs:[['Channels','8 independent'],['Working range','0.5–1,000 µL'],['Position repeatability','±0.08 mm'],['Deck formats','96 / 384 well'],['Environmental control','HEPA enclosure'],['Verification','gravimetric + vision']],telemetry:[['X/Y position','±0.03 mm'],['Z-force','0.42 N'],['Tip seal','99.98%'],['Deck temperature','8.2 °C']],logs:['Volume model approved the active dispense map.','Deck vision reconciled all source and destination labware.','Tip-use policy reserved a sterile channel set.']},
+  {asset:'RA-02',summary:'Six-axis sample logistics robot with collision-safe motion planning and adaptive plate custody.',health:98.8,maintenance:'Joint inspection due in 28 days',revision:'rev 3.8',subsystems:['Base encoder','Shoulder drive','Elbow drive','Wrist control','Adaptive gripper','Collision model'],specs:[['Axes','6 coordinated'],['Reach','1,120 mm'],['Repeatability','±0.05 mm'],['Payload','4.5 kg'],['Gripper force','2–40 N'],['Safety','dynamic exclusion zones']],telemetry:[['Joint error','0.018°'],['Grip force','8.4 N'],['Path clearance','42 mm'],['Cycle energy','18.6 Wh']],logs:['Scheduler reserved a collision-free transfer corridor.','Gripper force profile matched the current plate type.','Custody handoff confirmed by barcode and pose estimate.']},
+  {asset:'CF-03',summary:'Sealed refrigerated centrifuge with active rotor balance, lid interlock and programmable acceleration.',health:99.0,maintenance:'Rotor certification current',revision:'rev 5.1',subsystems:['Rotor drive','Bucket balance','Lid interlock','Cooling loop','Vibration sensing','Brake controller'],specs:[['Maximum speed','15,000 rpm'],['Maximum RCF','21,130 × g'],['Temperature','−10 to 40 °C'],['Rotor capacity','8 buckets'],['Imbalance trip','< 0.4 g'],['Containment','sealed aerosol path']],telemetry:[['Rotor speed','1,200 rpm'],['Chamber temp','4.1 °C'],['Vibration','0.18 mm/s'],['Balance error','0.07 g']],logs:['Rotor balance model passed the planned plate configuration.','Cooling loop preconditioned the chamber before spin release.','Lid and sample identity interlocks were independently verified.']},
+  {asset:'IC-04',summary:'Four-zone CO₂ incubation array with independent climate control, imaging and automated access.',health:99.6,maintenance:'Sensor verification due in 19 days',revision:'rev 4.7',subsystems:['Thermal zones','CO₂ control','Humidity loop','Door seals','Internal imaging','Contamination watch'],specs:[['Chambers','4 independent'],['Temperature','5–50 °C'],['CO₂ range','0–20%'],['Humidity','up to 95% RH'],['Recovery time','< 4 minutes'],['Imaging','scheduled brightfield']],telemetry:[['Temperature','37.0 °C'],['CO₂','5.00%'],['Humidity','92.4% RH'],['Door seal','−18 Pa']],logs:['Culture window predicted to remain inside tolerance.','Door-open duration budget allocated for robotic retrieval.','Image schedule shifted to avoid disturbing the active handoff.']},
+  {asset:'PR-05',summary:'Multimode plate reader with motorized tray, scanning optics and continuous assay quality control.',health:98.9,maintenance:'Optics calibration due in 9 days',revision:'rev 6.0',subsystems:['Tray transport','Excitation optics','Emission optics','Focus control','Reference channel','Signal processor'],specs:[['Modes','absorbance / fluorescence'],['Plate formats','6–384 well'],['Wavelength','230–850 nm'],['Read time','< 90 sec'],['Dynamic range','> 7 decades'],['Focus','automatic Z optimization']],telemetry:[['Reference drift','0.12%'],['Signal SNR','48.2 dB'],['Tray position','±0.04 mm'],['Optics temp','31.7 °C']],logs:['Read order optimized to minimize photobleaching.','Reference channel normalized the current plate scan.','Outlier policy armed for automatic confirmatory wells.']},
+  {asset:'BR-06',summary:'Instrumented bioreactor with jacketed vessel, agitation, sparging and closed-loop process control.',health:99.2,maintenance:'Probe calibration current',revision:'rev 5.5',subsystems:['Agitation drive','Gas sparger','Thermal jacket','pH probe','DO probe','Feed manifold'],specs:[['Working volume','0.5–5.0 L'],['Agitation','50–1,500 rpm'],['Gas channels','4 mass-flow'],['Temperature','10–45 °C'],['pH control','acid / base dosing'],['Sampling','closed aseptic loop']],telemetry:[['Agitation','420 rpm'],['pH','7.08'],['Dissolved O₂','42.6%'],['Temperature','36.9 °C']],logs:['Feed trajectory remains aligned with the predicted growth phase.','DO controller increased sparging without exceeding shear limits.','Soft sensor found no evidence of contamination or sensor drift.']}
+];
+const inspectEls={eyebrow:document.getElementById('inspectEyebrow'),title:document.getElementById('inspectTitle'),subtitle:document.getElementById('inspectSubtitle'),state:document.getElementById('inspectState'),operation:document.getElementById('inspectOperation'),asset:document.getElementById('inspectAsset'),batch:document.getElementById('inspectBatch'),health:document.getElementById('inspectHealth'),healthBar:document.getElementById('inspectHealthBar'),maintenance:document.getElementById('inspectMaintenance'),subsystems:document.getElementById('inspectSubsystems'),specs:document.getElementById('inspectSpecs'),telemetry:document.getElementById('inspectTelemetry'),log:document.getElementById('inspectLog'),revision:document.getElementById('inspectSpecRevision')};
+function renderInspectionStatic(index){const d=machineDetails[index],sys=systems[index];inspectEls.eyebrow.textContent='SYSTEM '+String(index+1).padStart(2,'0')+' · DIGITAL TWIN';inspectEls.title.textContent=sys.name;inspectEls.subtitle.textContent=d.summary;inspectEls.asset.textContent=d.asset;inspectEls.health.textContent=d.health.toFixed(1)+'%';inspectEls.healthBar.style.width=d.health+'%';inspectEls.maintenance.textContent=d.maintenance;inspectEls.revision.textContent=d.revision;inspectEls.subsystems.innerHTML=d.subsystems.map(x=>'<div class="subsystem-node"><b>'+x+'</b><span>online · synchronized</span></div>').join('');inspectEls.specs.innerHTML=d.specs.map(x=>'<div class="spec"><span>'+x[0]+'</span><b>'+x[1]+'</b></div>').join('');inspectEls.log.innerHTML=d.logs.map((x,i)=>'<article><b>'+['DECISION','VERIFICATION','RELEASE'][i]+'</b> · '+x+'</article>').join('');renderInspectionLive();}
+function renderInspectionLive(){if(!inspectionDrawer.classList.contains('show'))return;const d=machineDetails[selected],active=machineActivity[selected],queued=machineQueued[selected],paused=!running&&elapsed>0;inspectEls.state.textContent=paused?'PAUSED':active?'ACTIVE':queued?'QUEUED':running?'STANDBY':'READY';inspectEls.operation.textContent=active||queued?machineOperation[selected]:'Available for scheduling';inspectEls.batch.textContent=primaryExecution&&primaryExecution.batchId?primaryExecution.batchId:'No active batch';inspectEls.telemetry.innerHTML=d.telemetry.map((x,i)=>{let value=x[1];if(i===0&&active&&running)value=x[1]+' · live';return '<div class="live-row"><span>'+x[0]+'</span><b>'+value+'</b></div>';}).join('');}
+let overlayReturnFocus=null;function rememberOverlayFocus(){overlayReturnFocus=document.activeElement instanceof HTMLElement?document.activeElement:null;}function restoreOverlayFocus(){if(overlayReturnFocus&&document.contains(overlayReturnFocus))overlayReturnFocus.focus({preventScroll:true});overlayReturnFocus=null;}
+function openInspection(){rememberOverlayFocus();inspectionDrawer.classList.add('show');drawerBackdrop.classList.add('show');inspectionDrawer.setAttribute('aria-hidden','false');renderInspectionStatic(selected);focusView();document.getElementById('closeInspection').focus({preventScroll:true});}
+function closeInspection(){const wasOpen=inspectionDrawer.classList.contains('show');inspectionDrawer.classList.remove('show');drawerBackdrop.classList.remove('show');inspectionDrawer.setAttribute('aria-hidden','true');if(wasOpen)restoreOverlayFocus();}
+document.getElementById('inspectBtn').onclick=openInspection;document.getElementById('closeInspection').onclick=closeInspection;drawerBackdrop.onclick=closeInspection;
+
+// ---------- commercial narrative ----------
+const commercialPanel=document.getElementById('commercialPanel'),toast=document.getElementById('toast');
+function openCommercial(section='platform'){rememberOverlayFocus();commercialPanel.classList.add('show');commercialPanel.setAttribute('aria-hidden','false');requestAnimationFrame(()=>{const el=document.getElementById(section);if(el)el.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});else commercialPanel.scrollTop=0;document.getElementById('closeCommercial').focus({preventScroll:true});});}
+function closeCommercial(){const wasOpen=commercialPanel.classList.contains('show');commercialPanel.classList.remove('show');commercialPanel.setAttribute('aria-hidden','true');if(wasOpen)restoreOverlayFocus();}
+document.getElementById('platformBtn').onclick=()=>openCommercial('platform');document.getElementById('closeCommercial').onclick=closeCommercial;document.getElementById('enterLabBtn').onclick=closeCommercial;document.getElementById('ctaEnterLab').onclick=closeCommercial;document.getElementById('openInspectionFromCommercial').onclick=()=>{closeCommercial();setTimeout(openInspection,180);};
+document.querySelectorAll('[data-site]').forEach(btn=>btn.addEventListener('click',()=>{const section=btn.dataset.site;if(section==='lab'){closeCommercial();overview();}else openCommercial(section);}));document.querySelectorAll('[data-scroll]').forEach(btn=>btn.addEventListener('click',()=>{const el=document.getElementById(btn.dataset.scroll);if(el)el.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});}));
+function showToast(message){toast.textContent=message;toast.classList.add('show');clearTimeout(showToast.t);showToast.t=setTimeout(()=>toast.classList.remove('show'),2200);}
+
+// ---------- AI orchestration UI ----------
+const aiUI={state:document.getElementById('aiState'),decision:document.getElementById('aiDecision'),confidence:document.getElementById('aiConfidence'),risk:document.getElementById('aiRisk'),latency:document.getElementById('aiLatency'),robotBar:document.getElementById('aiRobotBar'),robotText:document.getElementById('aiRobotText'),instrumentBar:document.getElementById('aiInstrumentBar'),instrumentText:document.getElementById('aiInstrumentText'),capacityBar:document.getElementById('aiCapacityBar'),capacityText:document.getElementById('aiCapacityText'),feed:document.getElementById('aiFeed')};
+let aiLastKey='',aiEvents=[];
+function pushAIEvent(type,text){const key=type+text;if(aiEvents[0]&&aiEvents[0].key===key)return;aiEvents.unshift({key,type,text});aiEvents=aiEvents.slice(0,3);aiUI.feed.innerHTML=aiEvents.map(x=>'<div class="decision-event"><strong>'+x.type+'</strong> '+x.text+'</div>').join('');}
+function updateAIOrchestrator(){const profile=currentProfile(),ex=primaryExecution,event=ex&&ex.event;const activeCount=machineActivity.filter(Boolean).length,queuedCount=machineQueued.filter(Boolean).length,paused=!running&&elapsed>0;let state=running?'executing':paused?'paused':'planning',decision='Protocol graph validated. Awaiting batch release.';if(running&&event){if(event.type==='transfer')decision='Reserved a collision-safe carrier path to '+(event.system>=0?systems[event.system].name:'the output queue')+'.';else decision='Released '+event.operation+' after custody, calibration and environmental checks passed.';}else if(paused&&event){decision='Execution paused with sample custody and machine reservations preserved.';}if(!sterile)decision='Sterile pressure cascade is disabled. Execution remains operator-authorized but risk is elevated.';aiUI.state.textContent=state;aiUI.decision.textContent=decision;aiUI.confidence.textContent=(sterile?99.1+.35*Math.sin(elapsed*.04):94.2).toFixed(1)+'%';aiUI.risk.textContent=sterile?'low':'elevated';aiUI.latency.textContent=Math.round(16+4*Math.abs(Math.sin(elapsed*.17)))+' ms';const robot=Math.min(100,(machineActivity[1]?82:queuedCount*12)+(running?8:0)),instrument=Math.min(100,activeCount*31+queuedCount*11),capacity=Math.min(100,Math.round((profile.rate*speed/1000)*100));[[aiUI.robotBar,aiUI.robotText,robot],[aiUI.instrumentBar,aiUI.instrumentText,instrument],[aiUI.capacityBar,aiUI.capacityText,capacity]].forEach(x=>{x[0].style.width=x[2]+'%';x[1].textContent=x[2]+'%';});const key=(running?'run':paused?'pause':'ready')+'|'+(ex?ex.batchId:'idle')+'|'+(event?event.type+event.stepIndex:'ready')+'|'+sterile;if(key!==aiLastKey){aiLastKey=key;if(running&&event)pushAIEvent(event.type==='transfer'?'SCHEDULE':'RELEASE',event.type==='transfer'?'Carrier route locked; downstream capacity confirmed.':systems[event.system].name+' task released with '+(sterile?'all quality gates passing.':'operator risk acknowledgement.'));else if(paused)pushAIEvent('PAUSE','Execution checkpoint committed; custody and reservations remain locked.');else pushAIEvent('GRAPH','Protocol dependencies resolved and resources reserved.');}}
+
+// ---------- protocol planning and closed-loop execution ----------
+const runBtn=document.getElementById('runBtn'),runLabel=document.getElementById('runLabel'),runIcon=document.getElementById('runIcon');let running=false;let elapsed=0;let completedRuns=0;let sampleCount=0;let plateCount=0;let wellCount=0;let speed=1;let sterile=true;let soundOn=false;let audioCtx=null;let hum=null;let followBatch=false;let lastFollowStep=-1;
+const protocolSel=document.getElementById('protocolSel');
+const workflowName=document.getElementById('workflowName'),workflowBatch=document.getElementById('workflowBatch'),workflowEta=document.getElementById('workflowEta'),workflowSteps=document.getElementById('workflowSteps'),workflowCurrent=document.getElementById('workflowCurrent'),workflowQueue=document.getElementById('workflowQueue');
+const protocolProfiles={
+  screen:{name:'High-throughput screen',code:'SCR',rate:768,batchSize:96,accent:0x55f2c2,transfer:3.1,steps:[
+    {system:0,label:'Dose',operation:'Compound and reagent dispense',duration:8},
+    {system:1,label:'Handoff',operation:'Barcode-verified plate transfer',duration:4},
+    {system:2,label:'Spin-down',operation:'Plate settle · 1,200 × g',duration:7},
+    {system:3,label:'Incubate',operation:'37 °C · 5% CO₂ exposure',duration:10},
+    {system:1,label:'Retrieve',operation:'Automated incubator retrieval',duration:4},
+    {system:4,label:'Read',operation:'Fluorescence and absorbance scan',duration:9}
+  ]},
+  culture:{name:'Cell culture expansion',code:'CUL',rate:192,batchSize:24,accent:0xe36fbc,transfer:3.4,steps:[
+    {system:5,label:'Expand',operation:'Closed-loop cell expansion',duration:14},
+    {system:1,label:'Harvest',operation:'Aseptic vessel-to-plate transfer',duration:5},
+    {system:2,label:'Separate',operation:'Cell harvest centrifugation',duration:9},
+    {system:0,label:'Feed',operation:'Media exchange and normalization',duration:9},
+    {system:3,label:'Recover',operation:'Controlled culture recovery',duration:13},
+    {system:4,label:'Verify',operation:'Confluence and viability read',duration:8}
+  ]},
+  crispr:{name:'CRISPR validation',code:'CRS',rate:384,batchSize:96,accent:0x9b8cff,transfer:3.2,steps:[
+    {system:0,label:'Transfect',operation:'Guide RNA and reagent assembly',duration:10},
+    {system:1,label:'Transfer',operation:'Sealed assay plate handoff',duration:4},
+    {system:2,label:'Spinoculate',operation:'Programmed spinoculation',duration:8},
+    {system:3,label:'Express',operation:'Edited-cell expression window',duration:14},
+    {system:1,label:'Retrieve',operation:'Autonomous sample retrieval',duration:4},
+    {system:4,label:'Validate',operation:'Phenotype and reporter quantification',duration:10}
+  ]},
+  protein:{name:'Protein expression',code:'PRT',rate:288,batchSize:48,accent:0xffb45e,transfer:3.3,steps:[
+    {system:5,label:'Express',operation:'Induced protein expression',duration:15},
+    {system:1,label:'Harvest',operation:'Closed-container sample harvest',duration:5},
+    {system:2,label:'Clarify',operation:'High-speed lysate clarification',duration:10},
+    {system:0,label:'Prepare',operation:'Assay normalization and dilution',duration:9},
+    {system:1,label:'Load',operation:'Reader plate loading',duration:4},
+    {system:4,label:'Quantify',operation:'Protein concentration and QC scan',duration:9}
+  ]}
+};
+function currentProfile(){return protocolProfiles[protocolSel.value];}
+function buildTimeline(profile){
+  const events=[];let cursor=0,from=WORKFLOW_DOCKS.input;
+  profile.steps.forEach((step,stepIndex)=>{
+    const to=WORKFLOW_DOCKS[step.system],duration=step.transfer||profile.transfer;
+    const transfer={type:'transfer',from:from.clone(),to:to.clone(),duration,start:cursor,end:cursor+duration,stepIndex,system:step.system,operation:'Transfer to '+systems[step.system].name};transfer.curve=transferCurve(transfer.from,transfer.to);events.push(transfer);cursor+=duration;
+    events.push({type:'process',position:to.clone(),duration:step.duration,start:cursor,end:cursor+step.duration,stepIndex,system:step.system,operation:step.operation});cursor+=step.duration;from=to;
+  });
+  const duration=profile.transfer;const transfer={type:'transfer',from:from.clone(),to:WORKFLOW_DOCKS.output.clone(),duration,start:cursor,end:cursor+duration,stepIndex:profile.steps.length,system:-1,operation:'Release completed batch'};transfer.curve=transferCurve(transfer.from,transfer.to);events.push(transfer);cursor+=duration;
+  return {events,total:cursor,releaseInterval:Math.max(10,cursor/carriers.length)};
+}
+function executionAt(jobTime,carrierIndex){
+  if(jobTime<0)return {visible:false};const cycleIndex=Math.floor(jobTime/workflowTimeline.total),phase=jobTime%workflowTimeline.total;let event=workflowTimeline.events[workflowTimeline.events.length-1];for(const e of workflowTimeline.events){if(phase>=e.start&&phase<e.end){event=e;break;}}
+  const progress=Math.max(0,Math.min(1,(phase-event.start)/event.duration));const profile=currentProfile();return {visible:true,cycleIndex,phase,event,progress,batchId:profile.code+'-'+String(cycleIndex*carriers.length+carrierIndex+1).padStart(3,'0')};
+}
+function renderProtocolPlan(){
+  const profile=currentProfile();workflowName.textContent=profile.name;workflowSteps.innerHTML='';workflowStepEls=profile.steps.map((step,i)=>{const el=document.createElement('div');el.className='workflow-step';el.innerHTML='<b>'+String(i+1).padStart(2,'0')+'</b><span>'+step.label+'</span><small>'+systems[step.system].name+'</small>';workflowSteps.appendChild(el);return el;});
+  const assigned=new Set(profile.steps.map(s=>s.system)).size;workflowQueue.textContent='0 active batches · '+assigned+' instruments assigned';workflowEta.textContent=formatTime(workflowTimeline.total);workflowBatch.textContent=profile.code+'-001';workflowCurrent.textContent='Ready to release sample carrier';
+}
+function configureProtocol(resetCounts=true){
+  elapsed=0;simTime=0;setRunning(false);lastFollowStep=-1;workflowTimeline=buildTimeline(currentProfile());buildWorkflowRoute(currentProfile(),workflowTimeline);renderProtocolPlan();systems.forEach(s=>s.progress=0);carriers.forEach((c,i)=>{c.visible=i===0;c.position.copy(WORKFLOW_DOCKS.input);c.rotation.y=0;c.userData.execution=null;});
+  if(resetCounts){completedRuns=0;sampleCount=0;plateCount=0;wellCount=0;}updateWorkflowState();overview();
+}
+function formatTime(seconds){const s=Math.max(0,Math.ceil(seconds));return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0');}
+function setRunning(value){running=value;runBtn.classList.toggle('running',running);runLabel.textContent=running?'Pause Protocol':elapsed?'Resume Protocol':'Run Protocol';runIcon.innerHTML=running?'<path d="M7 5h4v14H7zM13 5h4v14h-4z"/>':'<path d="M8 5v14l11-7z"/>';if(soundOn)updateSound();}
+runBtn.onclick=()=>setRunning(!running);
+document.getElementById('resetBtn').onclick=()=>configureProtocol(true);
+document.getElementById('speedRange').oninput=e=>speed=+e.target.value;
+document.getElementById('sterileToggle').onchange=e=>{sterile=e.target.checked;statusText.textContent=sterile?'STERILE · NOMINAL':'OPEN LOOP · ACTIVE';};
+document.getElementById('lightsToggle').onchange=e=>{const on=e.target.checked;systems.forEach(s=>{if(s.taskLight)s.taskLight.visible=on;if(s.taskLights)s.taskLights.forEach(l=>l.visible=on);});};
+document.getElementById('followToggle').onchange=e=>{followBatch=e.target.checked;if(!followBatch)lastFollowStep=-1;};
+protocolSel.onchange=()=>configureProtocol(true);
+function resetSimulation(){configureProtocol(true);}
+
+function updateWorkflowState(){
+  const profile=currentProfile();machineActivity.fill(false);machineQueued.fill(false);machineProgress.fill(0);machineOperation.fill('');systems.forEach(s=>s.progress=0);
+  const ready=!running&&elapsed<=0,paused=!running&&elapsed>0;let activeCount=0;primaryExecution=null;
+  if(ready){
+    carriers.forEach((carrier,i)=>{carrier.visible=i===0;carrier.position.copy(WORKFLOW_DOCKS.input);carrier.rotation.y=0;carrier.userData.execution=null;carrier.userData.batchId=i===0?profile.code+'-001':'';carrier.userData.ring.material.opacity=i===0?0.72:0;});
+    primaryExecution=executionAt(0,0);workflowStepEls.forEach(el=>{el.classList.remove('complete','active');el.style.setProperty('--step-remaining','100%');});
+    workflowBatch.textContent=profile.code+'-001';workflowEta.textContent=formatTime(workflowTimeline.total);workflowCurrent.textContent='Ready to release sample carrier';const assigned=new Set(profile.steps.map(s=>s.system)).size;workflowQueue.textContent='0 active batches · '+assigned+' instruments assigned';
+    routeSegments.forEach(s=>{s.glow.material.opacity=.16;});machineBeacons.forEach(b=>{b.material.opacity=.07;b.scale.setScalar(1);});return;
+  }
+  carriers.forEach((carrier,i)=>{
+    const jobTime=elapsed-i*workflowTimeline.releaseInterval,ex=executionAt(jobTime,i);carrier.userData.execution=ex;carrier.visible=ex.visible;if(!ex.visible)return;activeCount++;if(i===0)primaryExecution=ex;
+    const event=ex.event;if(event.type==='transfer'){
+      const p=event.curve.getPointAt(ex.progress),tan=event.curve.getTangentAt(ex.progress);carrier.position.copy(p);carrier.rotation.y=Math.atan2(tan.x,tan.z);carrier.userData.ring.material.opacity=.55+.35*Math.sin((elapsed+i)*5);if(event.system>=0){machineQueued[event.system]=true;machineOperation[event.system]=event.operation;}
+    }else{
+      carrier.position.copy(event.position);carrier.rotation.y=0;carrier.position.y+=Math.sin((elapsed+i)*3)*.45;carrier.userData.ring.material.opacity=.82;machineActivity[event.system]=true;machineProgress[event.system]=Math.max(machineProgress[event.system],ex.progress);machineOperation[event.system]=event.operation;
+    }
+    carrier.userData.batchId=ex.batchId;
+  });
+  systems.forEach((system,i)=>{system.progress=machineProgress[i];});if(!primaryExecution)primaryExecution=executionAt(0,0);
+  const ex=primaryExecution,event=ex.event,currentStep=Math.min(profile.steps.length-1,event.stepIndex);
+  workflowStepEls.forEach((el,i)=>{el.classList.toggle('complete',i<currentStep||event.stepIndex>=profile.steps.length);el.classList.toggle('active',i===currentStep&&event.stepIndex<profile.steps.length);el.style.setProperty('--step-remaining',i===currentStep&&event.type==='process'?((1-ex.progress)*100).toFixed(1)+'%':'100%');});
+  workflowBatch.textContent=ex.batchId;workflowEta.textContent=formatTime(workflowTimeline.total-ex.phase);const action=event.type==='transfer'?(event.system>=0?'TRANSFERRING · '+systems[event.system].name.toUpperCase():'RELEASING COMPLETED BATCH'):'RUNNING · '+event.operation.toUpperCase();workflowCurrent.textContent=(paused?'PAUSED · ':'')+action;
+  const assigned=new Set(profile.steps.map(s=>s.system)).size;workflowQueue.textContent=activeCount+' active batch'+(activeCount===1?'':'es')+' · '+assigned+' instruments assigned';
+  routeSegments.forEach((segment,i)=>{const active=event.type==='transfer'&&event.segmentIndex===i;segment.glow.material.opacity=active?0.9:0.2;});
+  machineBeacons.forEach((beacon,i)=>{const active=machineActivity[i],queued=machineQueued[i];beacon.material.opacity=active?0.82:queued?0.28:0.07;beacon.scale.setScalar(active&&running?1+.025*Math.sin(elapsed*6):1);});
+  if(running&&followBatch&&event.system>=0&&event.stepIndex!==lastFollowStep){lastFollowStep=event.stepIndex;selectSystem(event.system,true);}
+}
+
+function updateSound(){
+  try{
+    if(!audioCtx)audioCtx=new (window.AudioContext||window.webkitAudioContext)();
+    if(soundOn&&audioCtx.state==='suspended')audioCtx.resume().catch(()=>{});
+    if(soundOn&&running&&!hum){hum=audioCtx.createOscillator();const gain=audioCtx.createGain();hum.type='sine';hum.frequency.value=72;gain.gain.value=.018;hum.connect(gain).connect(audioCtx.destination);hum.start();hum._gain=gain;}
+    if((!soundOn||!running)&&hum){hum.stop();hum=null;}
+  }catch(e){}
+}
+document.getElementById('soundBtn').setAttribute('aria-pressed','false');document.getElementById('soundBtn').onclick=function(){soundOn=!soundOn;this.classList.toggle('active',soundOn);this.setAttribute('aria-pressed',String(soundOn));updateSound();};
+
+// ---------- modal / screenshot ----------
+const modal=document.getElementById('manifestModal');function openManifest(){rememberOverlayFocus();modal.classList.add('show');modal.setAttribute('aria-hidden','false');document.getElementById('closeManifest').focus({preventScroll:true});}function closeManifest(){const wasOpen=modal.classList.contains('show');modal.classList.remove('show');modal.setAttribute('aria-hidden','true');if(wasOpen)restoreOverlayFocus();}modal.setAttribute('aria-hidden','true');document.getElementById('manifestBtn').onclick=openManifest;document.getElementById('closeManifest').onclick=closeManifest;modal.addEventListener('click',e=>{if(e.target===modal)closeManifest();});
+document.getElementById('shotBtn').onclick=()=>{try{renderer.render(scene,camera);const a=document.createElement('a');a.download='incurable-autonomous-wet-lab.png';a.href=renderer.domElement.toDataURL('image/png');document.body.appendChild(a);a.click();a.remove();showToast('Laboratory image captured.');}catch(error){console.error(error);showToast('Screenshot could not be created on this device.');}};
+
+// ---------- animation ----------
+const clock=new T.Clock();let simTime=0;const tags=systems.map((_,i)=>document.getElementById('tag'+i));
+function ease(t){return t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2;}
+function pingpong(t){return 1-Math.abs((t%2)-1);}
+function updateMachines(t,dt){
+  const lh=machineActivity[0],arm=machineActivity[1],spin=machineActivity[2],inc=machineActivity[3],read=machineActivity[4],bio=machineActivity[5];
+  // liquid handler executes only when its assigned protocol step is active
+  const a=t*.5;liquidHandler.bridge.position.x+=( (lh?Math.sin(a)*43:0)-liquidHandler.bridge.position.x)*.09;liquidHandler.bridge.position.z+=( (lh?Math.cos(a*.73)*17:0)-liquidHandler.bridge.position.z)*.09;liquidHandler.head.position.y+=( (lh?-20-Math.max(0,Math.sin(a*2.1))*13:-20)-liquidHandler.head.position.y)*.12;
+  liquidHandler.drops.forEach((d,i)=>{const phase=(t*2.4+i*.12)%1;d.visible=lh&&phase<.56;d.position.y=-39-phase*15;d.scale.setScalar(.65+phase*.5);});
+  // robot follows coordinated handoff trajectories only during transfer operations
+  robotArm.turn.rotation.y+=( (arm?Math.sin(t*.42)*1.25:0)-robotArm.turn.rotation.y)*.075;robotArm.shoulder.rotation.z+=( (arm?-.18+Math.sin(t*.58)*.28:-.18)-robotArm.shoulder.rotation.z)*.08;robotArm.elbow.rotation.z+=( (arm?-.45+Math.sin(t*.7+1.1)*.38:-.45)-robotArm.elbow.rotation.z)*.08;robotArm.wrist.rotation.x+=( (arm?Math.sin(t*.8)*.28:0)-robotArm.wrist.rotation.x)*.1;robotArm.gripper.rotation.z+=( (arm?Math.sin(t*.9)*.25:0)-robotArm.gripper.rotation.z)*.1;
+  // centrifuge closes, locks and spins only during a separation step
+  if(spin)centrifuge.rotor.rotation.y+=dt*43;centrifuge.lidPivot.rotation.x+=( (spin?-1.03:0)-centrifuge.lidPivot.rotation.x)*.09;
+  // incubator door briefly opens at load and unload, then seals for culture
+  const incP=machineProgress[3];incubator.doors.forEach((d,i)=>{const chosen=i===Math.floor((elapsed/workflowTimeline.total*4)%4),open=inc&&chosen&&(incP<.13||incP>.88);d.rotation.y+=( (open?-.48:0)-d.rotation.y)*.09;});
+  // plate reader tray closes and optical head scans during the assay read
+  const tr=read?Math.min(1,machineProgress[4]*2.2):0;plateReader.tray.position.z+=( (39-tr*55)-plateReader.tray.position.z)*.12;plateReader.optics.position.x+=( (read?Math.sin(t*2.1)*28:0)-plateReader.optics.position.x)*.12;plateReader.scanGlow.intensity=read?1.2+.7*Math.sin(t*5):0;
+  // bioreactor maintains agitation only when assigned
+  if(bio){bioreactor.impeller.rotation.y+=dt*14;bioreactor.liquid.rotation.y+=dt*.22;}
+  bioreactor.bubbles.forEach((b,i)=>{b.position.y+=dt*(bio?17:1.2);b.position.x+=Math.sin(t*1.8+i)*dt*.5;if(b.position.y>25)b.position.y=-42;});
+  liquidHandler.taskLight.intensity=lh?1.15+Math.sin(t*3)*0.18:0.38;bioreactor.taskLight.intensity=bio?0.68+Math.sin(t*2.2)*0.12:0.28;
+}
+function updateSimulation(dt){
+  const profile=currentProfile(),simDt=running?dt*speed:0;if(running){elapsed+=simDt;simTime+=simDt;}updateWorkflowState();
+  let totalCompleted=0;carriers.forEach((_,i)=>{const jobTime=elapsed-i*workflowTimeline.releaseInterval;if(jobTime>=workflowTimeline.total)totalCompleted+=Math.floor(jobTime/workflowTimeline.total);});completedRuns=totalCompleted;plateCount=completedRuns;wellCount=completedRuns*profile.batchSize;sampleCount=wellCount;
+  const sel=systems[selected],active=machineActivity[selected],queued=machineQueued[selected],paused=!running&&elapsed>0,totalSec=Math.floor(elapsed);tCycle.textContent=String(Math.floor(totalSec/60)).padStart(2,'0')+':'+String(totalSec%60).padStart(2,'0');tState.textContent=paused?'PAUSED':active?'ACTIVE':queued?'QUEUED':running?'STANDBY':'READY';tProcess.textContent=active||queued?machineOperation[selected]:sel.process;tBatch.textContent=primaryExecution?primaryExecution.batchId:'—';progressBar.style.width=(sel.progress*100).toFixed(1)+'%';systemPanel.classList.toggle('running',active&&running);statusText.textContent=paused?'EXECUTION PAUSED':active?(sterile?'EXECUTING · NOMINAL':'OPEN LOOP · ACTIVE'):queued?'SAMPLE IN TRANSIT':running?'AVAILABLE · SCHEDULED':'SYSTEM READY';
+  document.getElementById('sSamples').textContent=sampleCount.toLocaleString();document.getElementById('sRate').textContent=(running?Math.round(profile.rate*speed):0)+' / hr';document.getElementById('mPlates').textContent=plateCount;document.getElementById('mWells').textContent=wellCount.toLocaleString();document.getElementById('mRuns').textContent=completedRuns;document.getElementById('mYield').textContent=(99.15+.28*Math.sin(elapsed*.05)).toFixed(2)+'%';
+  document.getElementById('qCV').textContent=(.62+.13*Math.abs(Math.sin(elapsed*.17))).toFixed(2)+'%';document.getElementById('qTemp').textContent=(22+.15*Math.sin(elapsed*.12)).toFixed(1)+' °C';document.getElementById('qCO2').textContent=(5+.025*Math.sin(elapsed*.08)).toFixed(2)+'%';document.getElementById('qPressure').textContent=(sterile?'+12':'0')+' Pa';document.getElementById('qualityText').textContent=sterile?'All environmental and process windows pass.':'Sterile pressure cascade disabled by operator.';
+  updateAIOrchestrator();renderInspectionLive();
+  tags.forEach((tag,i)=>{const sub=tag.querySelector('span');if(!running&&elapsed>0&&(machineActivity[i]||machineQueued[i]))sub.textContent='PAUSED · '+machineOperation[i];else if(machineActivity[i])sub.textContent='ACTIVE · '+machineOperation[i];else if(machineQueued[i])sub.textContent='QUEUED · incoming sample';else sub.textContent=systems[i].subtitle;});return simDt;
+}
+function updateLabels(){
+  tags.forEach((tag,i)=>{if(!labelsOn){tag.style.display='none';return;}const p=systems[i].focus.clone();p.y+=systems[i].name==='Incubator Stack'?100:systems[i].name==='Bioreactor'?88:70;p.project(camera);const x=(p.x*.5+.5)*innerWidth;const y=(-p.y*.5+.5)*innerHeight;const visible=p.z<1&&x>70&&x<innerWidth-70&&y>55&&y<innerHeight-90;tag.style.display=visible?'block':'none';if(visible){tag.style.left=x+'px';tag.style.top=y+'px';tag.style.opacity=i===selected?'1':'.72';}}
+  );
+}
+
+function animate(){requestAnimationFrame(animate);const dt=Math.min(clock.getDelta(),.05);if(autoOrbit&&!dragging&&!matchMedia('(prefers-reduced-motion: reduce)').matches)desiredYaw+=dt*.105;const simDt=updateSimulation(dt);if(running||elapsed===0)updateMachines(simTime,simDt);updateCamera(dt);updateLabels();renderer.render(scene,camera);}
+
+// keyboard / resize
+window.addEventListener('keydown',e=>{
+  if(e.key==='Escape'){closeManifest();closeInspection();closeCommercial();return;}
+  const interactive=e.target instanceof Element&&e.target.closest('button,input,select,textarea,a,[contenteditable="true"]');
+  if(interactive||e.metaKey||e.ctrlKey||e.altKey)return;
+  if(e.code==='Space'){e.preventDefault();setRunning(!running);return;}
+  if(e.key==='r'||e.key==='R'){resetSimulation();return;}
+  if(e.key==='0'){fitView();return;}
+  if(e.key==='f'||e.key==='F'){focusView();return;}
+  if(e.key==='+'||e.key==='='){desiredDistance=clamp(desiredDistance*.88,175,1350);return;}
+  if(e.key==='-'||e.key==='_'){desiredDistance=clamp(desiredDistance*1.14,175,1350);return;}
+  if(['ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(e.key)){e.preventDefault();if(e.key==='ArrowLeft')desiredYaw+=.08;if(e.key==='ArrowRight')desiredYaw-=.08;if(e.key==='ArrowUp')desiredPitch=clamp(desiredPitch-.06,-.08,1.22);if(e.key==='ArrowDown')desiredPitch=clamp(desiredPitch+.06,-.08,1.22);stopAutoOrbit();return;}
+  if(['w','a','s','d','W','A','S','D'].includes(e.key)){const k=e.key.toLowerCase();panCamera(k==='a'?-22:k==='d'?22:0,k==='w'?-18:k==='s'?18:0);stopAutoOrbit();}
+});
+window.addEventListener('resize',()=>{camera.aspect=innerWidth/Math.max(1,innerHeight);camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight);renderer.setPixelRatio(preferredPixelRatio());if(document.getElementById('viewLab').classList.contains('active')||document.getElementById('fitView').classList.contains('active'))desiredDistance=Math.max(desiredDistance,overviewDistance());});
+
+document.addEventListener('visibilitychange',()=>{if(document.hidden){if(hum){hum.stop();hum=null;}}else{clock.getDelta();if(soundOn)updateSound();}});
+
+// start
+selectSystem(0,false);configureProtocol(true);overview();
+setTimeout(()=>{loading.style.opacity='0';loading.style.transition='opacity .45s ease';setTimeout(()=>loading.remove(),470);},700);
+animate();
+};
+</script>
+<script>
+(function loadThreeAndStart(){
+  'use strict';
+  const urls=[
+    './vendor/three.min.js',
+    'https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js',
+    'https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js',
+    'https://unpkg.com/three@0.128.0/build/three.min.js'
+  ];
+  const loading=document.getElementById('loading'),text=document.getElementById('loadingText');let index=0,started=false;
+  function start(){if(started||typeof window.__startIncurableBiolab!=='function')return;started=true;window.__startIncurableBiolab();}
+  function fail(){if(started)return;const spinner=loading&&loading.querySelector('.spinner'),title=loading&&loading.querySelector('h2');if(spinner)spinner.style.display='none';if(title)title.textContent='Unable to start';if(text)text.textContent='The 3D engine could not be loaded. Check the network connection, content blockers, or firewall, then refresh.';}
+  function next(){if(window.THREE){start();return;}if(index>=urls.length){fail();return;}const script=document.createElement('script'),src=urls[index++];let settled=false;const timer=setTimeout(()=>finish(false),6500);function finish(ok){if(settled)return;settled=true;clearTimeout(timer);script.onload=script.onerror=null;if(ok&&window.THREE){start();return;}script.remove();next();}script.src=src+'?v=0.128.0';script.async=true;script.crossOrigin='anonymous';script.referrerPolicy='no-referrer';script.onload=()=>finish(true);script.onerror=()=>finish(false);document.head.appendChild(script);}
+  next();
+})();
+</script>
+</body>
+</html>
