@@ -6,100 +6,98 @@ export const Route = createFileRoute("/science")({
   head: () =>
     pageMeta(
       "CRISPR and mRNA — Incurable?",
-      "The only two modalities. Fully automated, 24/7/365. Whichever closes a disease first — mRNA or CRISPR — is the one that does it.",
+      "Two approaches to studying disease in a proposed automated wet lab.",
     ),
   component: Science,
 });
 
-const mrna = [
-  { n: "01", title: "Design", body: "A coding sequence for a program a cell has lost or never ran. The loop writes it." },
-  { n: "02", title: "Synthesize", body: "Oligo line, unattended. No batch waiting on a person between rooms." },
-  { n: "03", title: "Pack", body: "Lipid nanoparticle, formed, sized, held cold under the gantry." },
-  { n: "04", title: "Deliver", body: "iPSC neurons, microglia, a barrier model. Did the program arrive. Did it work." },
-];
+const approaches = [
+  {
+    name: "mRNA",
+    title: "Give cells an instruction.",
+    description:
+      "Study how cells respond when they receive a new instruction through mRNA.",
+    border: "border-t-iris-violet/40",
+    accent: "text-iris-violet",
+  },
+  {
+    name: "CRISPR",
+    title: "Change a gene. See what follows.",
+    description:
+      "Study how an edit changes cell behavior and record the observed effects.",
+    border: "border-t-iris-cyan/40",
+    accent: "text-iris-cyan",
+  },
+] as const;
 
-const crispr = [
-  { n: "05", title: "Library", body: "Guides against loci that recur in Alzheimer’s, starting with TREM2 and its neighborhood." },
-  { n: "06", title: "Edit", body: "Ribonucleoprotein into the cell type the question is actually about." },
-  { n: "07", title: "Confirm", body: "Sequence the allele. Do not trust a fluorescent proxy and go home." },
-  { n: "08", title: "Phenotype", body: "A readout that matters — clearance, inflammation, survival — tied to that edit." },
-];
-
-function Steps({ items }: { items: { n: string; title: string; body: string }[] }) {
-  return (
-    <ol>
-      {items.map((item) => (
-        <li key={item.n} className="grid grid-cols-[2.5rem_1fr] gap-4 border-t border-hairline py-5">
-          <span className="font-mono text-xs text-pumice">{item.n}</span>
-          <div>
-            <h3 className="text-lg">{item.title}</h3>
-            <p className="mt-1 text-pumice">{item.body}</p>
-          </div>
-        </li>
-      ))}
-    </ol>
-  );
-}
+const loop = [
+  {
+    title: "Design",
+    description: "Write a question an experiment can answer.",
+  },
+  {
+    title: "Test",
+    description: "Compare the outcome with a reference.",
+  },
+  {
+    title: "Record",
+    description: "Keep the outcome and conditions together.",
+  },
+] as const;
 
 function Science() {
   return (
     <Shell>
       <PageHero
         kicker="Science"
-        title="CRISPR and mRNA,"
-        italic="already real, not yet industrial."
-        dek="CRISPR and mRNA, and nothing else on the gantry. Both are medicines today. What does not exist is a wet lab that runs them as one autonomous loop, every hour of the year. Whichever finishes a disease first is the one that does it."
+        title="CRISPR and mRNA."
+        italic="One research loop."
+        dek="Hall 01 is a proposed wet lab for running and measuring experiments around the clock."
       />
-      <section className="frame section">
-        <div className="prose">
-          <p>
-            The modalities are not a wager that biology might someday become programmable. A handful of
-            approvals already settled that. Sickle-cell disease has an edited-cell therapy. Infectious
-            disease has mRNA at population scale. Rare disease has more of both on the way. The bottleneck
-            we are built for is different: the number of closed design-build-test loops a year, aimed at
-            diseases that are still mostly managed rather than ended.
-          </p>
-          <p>
-            A disease like Alzheimer’s is a bad fit for a single heroic construct and a good fit for a loop.
-            Amyloid antibodies — lecanemab, donanemab — can slow decline for some people and can harm them.
-            Tau, microglia, vasculature, and the blood-brain barrier do not retire because amyloid moved.
-            That is why it sits on the long list. It is not a decision that the hall starts there. A nearer
-            disease may be the one mRNA or CRISPR can finish first.
-          </p>
+
+      <section className="frame pt-10 pb-16 md:pt-14 md:pb-24">
+        <div className="grid gap-4 md:grid-cols-2">
+          {approaches.map((approach) => (
+            <article
+              key={approach.name}
+              className={`rounded-xl border border-hairline border-t-2 bg-graphite p-6 md:p-9 ${approach.border}`}
+            >
+              <p className={`font-mono text-sm ${approach.accent}`}>
+                {approach.name}
+              </p>
+              <h2 className="idx mt-4">{approach.title}</h2>
+              <p className="mt-3 max-w-sm text-pumice">
+                {approach.description}
+              </p>
+            </article>
+          ))}
         </div>
-        <div className="mt-16 grid gap-12 lg:grid-cols-2">
-          <div>
-            <p className="kicker">mRNA</p>
-            <h2 className="idx mt-3">Send a program in.</h2>
-            <div className="mt-6">
-              <Steps items={mrna} />
-            </div>
-          </div>
-          <div>
-            <p className="kicker">CRISPR</p>
-            <h2 className="idx mt-3">Ask which gene matters.</h2>
-            <div className="mt-6">
-              <Steps items={crispr} />
-            </div>
-          </div>
-        </div>
-        <p className="measure mt-10 text-pumice">
-          They share the last room. Sequencing, phenotype, and the decision to keep or kill a design sit
-          on the same gantry, so an mRNA outcome and a CRISPR outcome land in one record. That record is
-          what we sell. The decision about the disease stays here.
-        </p>
+        <h2 className="idx mt-12">The shared loop</h2>
+        <ol className="mt-5 grid gap-px overflow-hidden rounded-xl border border-hairline bg-hairline sm:grid-cols-3">
+          {loop.map((step) => (
+            <li key={step.title} className="bg-obsidian p-6">
+              <h3 className="font-sans text-lg">{step.title}</h3>
+              <p className="mt-2 text-pumice">{step.description}</p>
+            </li>
+          ))}
+        </ol>
+        <Link to="/data" className="mission-link mt-5">
+          See the proposed assay record
+        </Link>
       </section>
-      <section className="rule">
-        <div className="frame section">
-          <h2 className="statement">No readout is implied by the building.</h2>
-          <p className="dek mt-6">
-            A hall is not a clinical result. We will not publish a timeline to a patient, because we do not
-            have one we could defend. The loop is the business. Alzheimer’s is the long mission of the firm,
-            not a promise that this loop starts there.
-          </p>
-          <Link to="/alzheimers" className="btn btn-primary mt-8">
-            The long mission
-          </Link>
+
+      <section className="rule mission-section">
+        <div className="frame section mission-grid">
+          <h2 className="title">The long mission.</h2>
+          <div>
+            <p className="dek">
+              Alzheimer’s is a long-term research goal. Hall 01 is at the design
+              stage, with no clinical results or treatment timeline.
+            </p>
+            <Link to="/alzheimers" className="btn btn-primary mt-6">
+              The Alzheimer’s mission
+            </Link>
+          </div>
         </div>
       </section>
     </Shell>

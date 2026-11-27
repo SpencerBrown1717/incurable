@@ -1,248 +1,194 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { Database, FlaskConical, Pill } from "lucide-react";
 import { DarkFloor } from "@/components/site/dark-floor";
 import { LabScene } from "@/components/site/lab-scene";
 import { Shell } from "@/components/site/shell";
-import { pageMeta, programs, roadmap, specs, stories } from "@/lib/site";
+import { FIELD_SQFT, pageMeta, stories } from "@/lib/site";
+import "./home.css";
 
 export const Route = createFileRoute("/")({
   head: () =>
     pageMeta(
       "Incurable? — Says who.",
-      "Fully automated CRISPR and mRNA, 24/7/365, at the scale of Meta’s Hyperion — 173.6 football-field halls. Data to frontier labs. Drugs at generic scale. Alzheimer’s is the long mission, not a promise to be first.",
+      "Incurable is designing an automated wet lab for CRISPR and mRNA research. Explore the Hall 01 concept and the long-term mission.",
     ),
   component: Home,
 });
 
+const researchPaths = [
+  {
+    href: "/science",
+    icon: FlaskConical,
+    title: "The science",
+    summary: "CRISPR and mRNA research in a shared experimental workflow.",
+  },
+  {
+    href: "/data",
+    icon: Database,
+    title: "The data",
+    summary: "Lab-generated assay records for researchers and model builders.",
+  },
+  {
+    href: "/price",
+    icon: Pill,
+    title: "The cost",
+    summary: "A manufacturing model designed around the economics of generics.",
+  },
+] as const;
+
 function Home() {
   return (
     <Shell>
-      <section className="frame barrier">
-        <div>
-          <p className="kicker">incurable.ai · the business is the hall</p>
-          <h1 className="display barrier-title mt-6">
-            <span className="block">Incurable?</span>
-            <span className="block italic">Says who.</span>
-          </h1>
-          <p className="dek mt-8">
-            A fully autonomous wet lab for CRISPR and mRNA. Lights off, every
-            hour of the year, drawn to the footprint of Meta’s largest data
-            center — 173.6 football fields of floor. Data to frontier labs.
-            New drugs, made at generic scale. Alzheimer’s is the long mission.
-            It may not be the first thing the hall finishes.
-          </p>
-          <div className="mt-8 flex flex-wrap gap-3">
-            <Link to="/contact" className="btn btn-primary">
-              Talk to us
-            </Link>
-            <a href="#hall" className="btn btn-ghost">
-              See the hall
-            </a>
+      <section className="home-hero" aria-labelledby="home-title">
+        <div className="frame">
+          <div className="home-hero-grid">
+            <div className="home-hero-copy">
+              <p className="home-label">Autonomous wet lab concept</p>
+              <h1 id="home-title">
+                Incurable?
+                <em>Says who.</em>
+              </h1>
+              <p className="home-intro">
+                We’re designing an automated lab to study diseases medicine
+                still can’t cure.
+              </p>
+              <div className="mt-7 flex flex-wrap gap-3">
+                <a href="#hall" className="btn btn-primary">
+                  Explore Hall 01
+                </a>
+                <Link to="/alzheimers" className="btn btn-ghost">
+                  The mission
+                </Link>
+              </div>
+            </div>
+            <div className="home-model">
+              <LabScene />
+            </div>
           </div>
-        </div>
-        <div>
-          <dl className="spec-rail">
+
+          <dl className="home-specs">
             <div>
-              <dt>Scale</dt>
-              <dd>173.6 halls</dd>
+              <dt>Proposed footprint</dt>
+              <dd>{FIELD_SQFT.toLocaleString("en-US")} sq ft</dd>
             </div>
             <div>
-              <dt>Duty</dt>
-              <dd>24/7/365</dd>
+              <dt>Design target</dt>
+              <dd>24/7 operation</dd>
             </div>
             <div>
-              <dt>Loop</dt>
-              <dd>CRISPR · mRNA</dd>
-            </div>
-            <div>
-              <dt>The floor</dt>
-              <dd>Lights off</dd>
+              <dt>Research methods</dt>
+              <dd>CRISPR + mRNA</dd>
             </div>
           </dl>
-          <p className="scroll-cue mt-8 hidden lg:block">
-            Scroll to enter the hall
-          </p>
         </div>
       </section>
 
-      <section id="hall" aria-label="The automated wet lab">
-        <div className="hall-stage">
-          <LabScene />
-        </div>
-      </section>
-
-      <section className="rule mission-section">
-        <div className="frame section mission-grid">
-          <div>
-            <p className="kicker">The long mission</p>
-            <h2 className="title mt-4">
+      <section className="home-mission" aria-labelledby="mission-title">
+        <div className="frame home-mission-frame">
+          <div className="home-mission-copy">
+            <p className="home-label">The long mission</p>
+            <h2 id="mission-title" className="title mt-4">
               A shorter list of incurable diseases.
             </h2>
-          </div>
-          <div>
-            <p className="dek">
-              Alzheimer’s is part of the long mission. There is no treatment or
-              timeline to offer today. The hall is designed to keep research
-              moving around the clock.
+            <p className="mt-5">
+              Alzheimer’s is among the diseases we hope to address. The work is
+              at the concept stage, with no treatment or trial to offer.
             </p>
-            <Link to="/alzheimers" className="mission-link mt-6">
-              Read about the mission <span aria-hidden="true">↗</span>
+            <Link to="/alzheimers" className="btn mt-6">
+              Why Alzheimer’s matters
             </Link>
           </div>
+          <figure className="home-mission-image">
+            <img
+              src="/neuron-study.jpg"
+              alt="Illustration of a branching neuron glowing violet against a dark background"
+              width={1200}
+              height={800}
+              loading="lazy"
+              decoding="async"
+            />
+            <figcaption>Neuron illustration</figcaption>
+          </figure>
         </div>
       </section>
 
-      <section className="rule hall-section">
+      <section
+        id="hall"
+        className="home-hall rule"
+        aria-labelledby="hall-title"
+      >
         <div className="frame section">
-          <div className="grid gap-8 lg:grid-cols-[0.8fr_1.2fr] lg:items-end">
+          <div className="home-section-heading">
             <div>
-              <p className="kicker">Hall 01</p>
-              <h2 className="title mt-4">Inside the hall.</h2>
+              <p className="home-label">The floor plan</p>
+              <h2 id="hall-title" className="title mt-3">
+                Inside Hall 01.
+              </h2>
             </div>
-            <p className="dek">
-              Explore a floor plan of the proposed autonomous lab. Select a bay
-              to see its role, or let the simulation cycle through all eight
-              stations.
+            <p className="home-section-note">
+              Select a bay to see how the proposed lab would work.
             </p>
           </div>
-          <div className="hall-panel mt-10">
-            <DarkFloor />
-          </div>
+          <DarkFloor />
+          <Link to="/labs" className="home-text-link mt-6">
+            See the lab design and scale
+          </Link>
         </div>
       </section>
 
-      <section className="rule">
+      <section className="home-paths rule" aria-labelledby="research-title">
         <div className="frame section">
-          <div className="grid gap-10 lg:grid-cols-[0.7fr_1.3fr]">
-            <div>
-              <p className="kicker">Scale reference</p>
-              <h2 className="title mt-4">The hall, in numbers.</h2>
-              <p className="dek mt-5">
-                Louisiana Economic Development puts Meta’s Hyperion campus at
-                nearly ten million square feet. That is equivalent to 173.6
-                football fields.
-              </p>
-            </div>
-            <dl>
-              {specs.map((row) => (
-                <div
-                  key={row.k}
-                  className="grid gap-1 border-t border-hairline py-4 sm:grid-cols-[0.8fr_1.2fr] sm:gap-6"
-                >
-                  <dt className="text-pumice">{row.k}</dt>
-                  <dd>{row.v}</dd>
-                </div>
-              ))}
-            </dl>
-          </div>
-        </div>
-      </section>
-
-      <section className="rule">
-        <div className="frame section">
-          <h2 className="title">What the hall is for.</h2>
-          <div className="program-grid mt-8">
-            {programs.map((program) => (
-              <Link
-                key={program.href}
-                to={program.href}
-                className="program-card group"
-              >
-                <p className="kicker">{program.kicker}</p>
-                <h3 className="idx mt-5">{program.title}</h3>
-                <p className="mt-4 text-pumice">{program.body}</p>
-                <span className="mission-link mt-6">
-                  Explore <span aria-hidden="true">↗</span>
-                </span>
+          <h2 id="research-title" className="title">
+            From research to medicine.
+          </h2>
+          <div className="home-path-grid mt-7">
+            {researchPaths.map(({ href, icon: Icon, title, summary }) => (
+              <Link key={href} to={href} className="home-path">
+                <Icon size={23} strokeWidth={1.5} aria-hidden="true" />
+                <h3>{title}</h3>
+                <p>{summary}</p>
               </Link>
             ))}
           </div>
         </div>
       </section>
 
-      <section className="rule">
-        <div className="frame section">
-          <p className="kicker">The build</p>
-          <h2 className="title mt-4">From one field to the campus.</h2>
-          <ol className="mt-12 grid gap-10 lg:grid-cols-3">
-            {roadmap.map((step) => (
-              <li key={step.n} className="border-t border-hairline pt-5">
-                <p className="kicker">
-                  {step.n} · {step.when}
-                </p>
-                <h3 className="idx mt-4">{step.title}</h3>
-                <p className="mt-3 text-pumice">{step.body}</p>
-              </li>
-            ))}
-          </ol>
-        </div>
-      </section>
-
-      <section className="rule">
-        <div className="frame section">
-          <p className="kicker">Manufacturing</p>
-          <h2 className="statement mt-5">New medicines at generic scale.</h2>
-          <p className="dek mt-6">
-            The model pairs original drug design with the volume and thin
-            margins of generic manufacturing.
-          </p>
-          <Link to="/price" className="btn btn-ghost mt-8">
-            Read about the model
-          </Link>
-        </div>
-      </section>
-
-      <section className="rule">
-        <div className="frame section">
-          <div className="flex items-end justify-between gap-6">
-            <h2 className="title">From the desk.</h2>
-            <Link to="/news" className="nav-link hidden text-sm sm:inline">
+      <section className="rule" aria-labelledby="news-title">
+        <div className="frame section home-news">
+          <div>
+            <h2 id="news-title" className="title">
+              From the desk.
+            </h2>
+            <Link to="/news" className="home-text-link mt-4">
               All essays
             </Link>
           </div>
-          <ul className="mt-10">
+          <ul className="home-essay-list">
             {stories.slice(0, 3).map((story) => (
-              <li key={story.slug} className="border-t border-hairline">
-                <Link
-                  to="/news/$slug"
-                  params={{ slug: story.slug }}
-                  className="grid gap-3 py-7 sm:grid-cols-[9rem_1fr]"
-                >
-                  <p className="kicker">
-                    {story.kicker}
-                    <span className="mt-2 block normal-case tracking-normal text-pumice">
-                      {story.date}
-                    </span>
-                  </p>
-                  <span>
-                    <span className="idx block">{story.title}</span>
-                    <span className="mt-2 block max-w-2xl text-pumice">
-                      {story.dek}
-                    </span>
-                  </span>
+              <li key={story.slug}>
+                <Link to="/news/$slug" params={{ slug: story.slug }}>
+                  <span>{story.title}</span>
+                  <span>{story.kicker}</span>
                 </Link>
               </li>
             ))}
           </ul>
-          <Link
-            to="/news"
-            className="nav-link mt-2 inline-flex min-h-11 items-center text-sm sm:hidden"
-          >
-            All essays
-          </Link>
         </div>
       </section>
 
-      <section className="rule contact-band">
-        <div className="frame section mission-grid">
-          <h2 className="title">Work with Incurable.</h2>
+      <section className="home-contact rule" aria-labelledby="contact-title">
+        <div className="frame section home-section-heading">
           <div>
-            <p className="dek">
-              For data partnerships, lab construction, and press inquiries.
+            <h2 id="contact-title" className="title">
+              Work with Incurable.
+            </h2>
+            <p className="home-section-note mt-4">
+              Data partnerships, lab design, and press.
             </p>
-            <Link to="/contact" className="btn btn-primary mt-6">
-              Talk to us <span aria-hidden="true">↗</span>
-            </Link>
           </div>
+          <Link to="/contact" className="btn btn-primary">
+            Talk to us
+          </Link>
         </div>
       </section>
     </Shell>

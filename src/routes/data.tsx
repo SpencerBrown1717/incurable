@@ -6,88 +6,88 @@ export const Route = createFileRoute("/data")({
   head: () =>
     pageMeta(
       "Data for frontier labs — Incurable?",
-      "Assay records minted in a wet lab that does not close: sequence, edit, phenotype, protocol. Sold to frontier labs. Not patient charts.",
+      "A proposed assay dataset that connects experimental inputs, conditions, and outcomes.",
     ),
   component: Data,
 });
 
 const record = [
-  ["record", "INC-01-004418"],
-  ["hall", "01"],
-  ["lights", "off"],
-  ["modality", "crispr"],
-  ["cell", "ipsc-microglia"],
-  ["locus", "TREM2"],
-  ["edit", "confirmed by sequence"],
-  ["phenotype", "phagocytosis, direction of change"],
-  ["protocol", "attached, replayable"],
-  ["patient_record", "none"],
-  ["source", "minted in hall, not scraped"],
-];
+  { field: "Input", example: "Sequence or edit under study" },
+  { field: "Cell context", example: "Cell type and starting state" },
+  { field: "Readout", example: "Measured change in cell behavior" },
+  { field: "Protocol", example: "Linked experiment conditions" },
+  { field: "Source", example: "Lab assay" },
+] as const;
+
+const features = [
+  {
+    title: "Results in context",
+    body: "Pair each measured outcome with the conditions that produced it.",
+  },
+  {
+    title: "Negative results",
+    body: "Keep failed and inconclusive experiments alongside successes.",
+  },
+  {
+    title: "Lab-generated data",
+    body: "Build the dataset from experiments. Patient records are outside its scope.",
+  },
+] as const;
 
 function Data() {
   return (
     <Shell>
       <PageHero
-        kicker="Data · frontier labs"
-        title="Mint the biology"
-        italic="the web does not have."
-        dek="Frontier labs buy compute because they cannot wish it into existence. They will buy this for the same reason. A microglia answering a guide is not a paragraph someone already posted."
+        kicker="Data"
+        title="Biology worth recording."
+        dek="We plan to license assay datasets to research labs. Each record would connect an experiment’s inputs, conditions, and results."
       />
-      <section className="frame section">
-        <div className="grid gap-12 lg:grid-cols-2">
-          <div className="prose">
-            <p>
-              Every closed loop writes one record. Sequence in. Edit, if there was one. Cell state.
-              Phenotype out. The protocol beside them, so a model can replay the conditions instead of
-              guessing. That is the product we sell to frontier labs.
-            </p>
-            <p>
-              It is not a patient’s chart, a claims database, or a hospital note with the name removed
-              badly. We do not buy medical records, and we will not pretend a scraped corpus is the same
-              thing as an experiment we ran. If a record cannot name its protocol, it does not leave the
-              hall.
-            </p>
-            <h2>What the buyer is actually getting</h2>
-            <p>
-              Supervised pairs at a volume a bench will not produce, with the failure modes still in the
-              file. Most loops should fail. A dataset of only the pretty successes is how you train a model
-              to flatter you. The dark hall is useful because it can afford the misses.
-            </p>
-            <p>
-              Selling the data to frontier labs pays for the next hall. It does not transfer the long mission.
-              The list stays here. Alzheimer’s is on it, and it is not a promise to be the first disease the
-              hall finishes. A smarter model should make the next hour shorter. The medicine, if the loop
-              ever earns one, is not a line item in a data contract.
-            </p>
-          </div>
-          <div>
-            <p className="kicker">One record, the shape of it</p>
-            <dl className="mt-4 border border-hairline">
-              {record.map(([key, value]) => (
-                <div key={key} className="grid grid-cols-[9.5rem_1fr] gap-3 border-b border-hairline px-4 py-3 font-mono text-sm last:border-b-0">
-                  <dt className="text-pumice">{key}</dt>
-                  <dd className={key === "patient_record" ? "text-trace" : "text-ash"}>{value}</dd>
-                </div>
-              ))}
-            </dl>
-            <p className="mt-4 text-sm text-pumice">
-              Illustrative. Hall 01 is specified, not online. Nothing here is a patient, and TREM2 is the
-              kind of locus the library is built to interrogate — not a result we are announcing.
-            </p>
-          </div>
+
+      <section className="frame grid items-start gap-8 pt-10 pb-16 md:pt-14 md:pb-24 lg:grid-cols-[0.8fr_1.2fr] lg:gap-12">
+        <div>
+          <h2 className="idx">What a lab would get</h2>
+          <ul className="mt-5">
+            {features.map((feature) => (
+              <li key={feature.title} className="border-t border-hairline py-4">
+                <h3 className="font-sans text-lg">{feature.title}</h3>
+                <p className="mt-1 max-w-md text-pumice">{feature.body}</p>
+              </li>
+            ))}
+          </ul>
         </div>
+
+        <figure className="overflow-hidden rounded-xl border border-hairline bg-graphite">
+          <figcaption className="border-b border-iris-cyan/25 p-5 sm:p-7">
+            <h2 className="idx">An example assay record</h2>
+            <p className="mt-2 text-sm text-pumice">
+              Illustrative fields from the proposed Hall 01 dataset.
+            </p>
+          </figcaption>
+          <dl className="divide-y divide-hairline">
+            {record.map(({ field, example }) => (
+              <div
+                key={field}
+                className="grid gap-1 px-5 py-3 sm:grid-cols-[8rem_minmax(0,1fr)] sm:gap-4 sm:px-7"
+              >
+                <dt className="font-mono text-sm text-iris-cyan">{field}</dt>
+                <dd>{example}</dd>
+              </div>
+            ))}
+          </dl>
+        </figure>
       </section>
-      <section className="rule">
-        <div className="frame section">
-          <h2 className="statement">If you train the models, start here.</h2>
-          <p className="dek mt-6">
-            Say which lab, what you want the records to condition, and what you will not accept in a
-            corpus. We will answer in the same register.
-          </p>
-          <Link to="/contact" className="btn btn-primary mt-8">
-            Talk about the data
-          </Link>
+
+      <section className="rule contact-band">
+        <div className="frame section mission-grid">
+          <h2 className="title">Help shape the dataset.</h2>
+          <div>
+            <p className="dek">
+              Tell us which experiments, outcomes, and metadata your team needs.
+            </p>
+            <Link to="/contact" className="btn btn-primary mt-6">
+              Talk about the data
+            </Link>
+          </div>
         </div>
       </section>
     </Shell>

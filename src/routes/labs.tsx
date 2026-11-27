@@ -1,102 +1,121 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { PageHero, Shell } from "@/components/site/shell";
-import { FIELD_SQFT, HALLS_AT_HYPERION, HYPERION_SQFT, pageMeta } from "@/lib/site";
+import { FIELD_FT, FIELD_SQFT, HALLS_AT_HYPERION, pageMeta } from "@/lib/site";
 
 export const Route = createFileRoute("/labs")({
   head: () =>
     pageMeta(
-      "173.6 halls — Incurable?",
-      "Hall 01 is one football field of automated CRISPR and mRNA, lights off, 24/7/365. About 174 of them fit Meta’s Hyperion footprint.",
+      "Labs — Incurable?",
+      "Explore Hall 01, a proposed autonomous wet lab the size of a football field, and the campus footprint that inspired its scale.",
     ),
   component: Labs,
 });
 
-const bars = [
-  { label: "A bench", sqft: 24, note: "One person, one hood." },
-  { label: "Hall 01", sqft: FIELD_SQFT, note: "360 × 160 ft. Lights off." },
-  { label: "Hyperion reference", sqft: HYPERION_SQFT, note: "Nearly 10 million sq ft. Meta, Richland Parish." },
+const HALL_COUNT = Math.round(HALLS_AT_HYPERION);
+
+const hallFeatures = [
+  {
+    title: "One automated line",
+    description: "A shared gantry connects the CRISPR and mRNA workstations.",
+  },
+  {
+    title: "Lights-out operation",
+    description:
+      "The design calls for continuous operation with an empty aisle.",
+  },
+  {
+    title: "A human owns the stop",
+    description: "An operator outside the enclosed floor can stop the line.",
+  },
 ];
 
 function Labs() {
-  const max = HYPERION_SQFT;
   return (
     <Shell>
       <PageHero
         kicker="Labs"
-        title="173.6 halls."
-        italic="The size of the reference."
-        dek="A fully autonomous wet lab for CRISPR and mRNA. Hall 01 is one football field, lights off, 24/7/365. Meta’s Hyperion footprint holds about 174 of them. That is the campus the business is drawn to."
+        title="A lab the size of a football field."
+        dek="Hall 01 is the design for an autonomous CRISPR and mRNA wet lab. One field is the building block for a much larger campus."
       />
-      <section className="frame section">
-        <div className="prose">
-          <p>
-            Car plants learned this before biology did. When the cell no longer needs a person, you do not
-            keep the overheads on out of habit. You turn them off. The line still runs. A human, elsewhere,
-            still owns the stop.
-          </p>
-          <p>
-            Drug discovery kept the lights on because the protocol was a walk. Hood to incubator to
-            sequencer, with a label in between. Incurable? designs the hall the other way around. The
-            gantry is the walk. mRNA synthesis, particle formation, cell dosing, CRISPR editing, and the
-            readout sit on one spine. The sample does not wait for a shift change.
-          </p>
-          <h2>Fully autonomous, inside an envelope</h2>
-          <p>
-            Fully autonomous does not mean unsupervised in the moral sense. It means no person in the aisle.
-            Air, interlocks, and biosafety are designed as a closed envelope — the default hall at a level a
-            competent institutional board would recognize, higher containment in sealed rooms off the main
-            gantry, not as an afterthought behind a door someone props open. The floor is empty. The stop is
-            not automated. A person, off the floor, can cut the hall.
-          </p>
-        </div>
 
-        <div className="mt-16">
-          <p className="kicker">Scale, honest proportions</p>
-          <p className="dek mt-4">
-            The bench disappears. That is the point. Bar length is floor area, not ambition.
-          </p>
-          <ul className="mt-8 space-y-6">
-            {bars.map((bar) => (
-              <li key={bar.label}>
-                <div className="flex items-baseline justify-between gap-4">
-                  <p>{bar.label}</p>
-                  <p className="font-mono text-xs tabular-nums text-pumice">{bar.sqft.toLocaleString()} sq ft</p>
-                </div>
-                <div className="mt-2 h-3 bg-graphite">
-                  <div
-                    className="h-full bg-ash"
-                    style={{ width: `${Math.max((bar.sqft / max) * 100, bar.sqft === 24 ? 0.35 : 0.8)}%` }}
-                  />
-                </div>
-                <p className="mt-2 text-sm text-pumice">{bar.note}</p>
-              </li>
-            ))}
-          </ul>
-          <p className="mt-8 max-w-2xl text-sm text-pumice">
-            {HYPERION_SQFT.toLocaleString()} ÷ {FIELD_SQFT.toLocaleString()} = {HALLS_AT_HYPERION.toFixed(1)}{" "}
-            halls. Louisiana Economic Development, 13 July 2026, on Meta’s Richland Parish campus. An
-            earlier public figure was four million square feet. We cite the later one, and we are not
-            claiming the site.
-          </p>
+      <section className="frame section" aria-labelledby="lab-scale">
+        <div className="grid gap-8 lg:grid-cols-[0.8fr_1.2fr] lg:items-center lg:gap-16">
+          <div>
+            <h2 id="lab-scale" className="title">
+              One hall. Room to repeat.
+            </h2>
+            <dl className="mt-8 grid grid-cols-2 gap-5 border-t border-hairline pt-5">
+              <div>
+                <dt className="text-sm text-pumice">Hall 01</dt>
+                <dd className="idx mt-2 tabular-nums">
+                  {FIELD_SQFT.toLocaleString("en-US")} sq ft
+                </dd>
+                <dd className="mt-1 text-sm text-pumice">
+                  {FIELD_FT.length} × {FIELD_FT.width} ft
+                </dd>
+              </div>
+              <div>
+                <dt className="text-sm text-pumice">Meta Hyperion campus</dt>
+                <dd className="idx mt-2 tabular-nums">~10 million sq ft</dd>
+                <dd className="mt-1 text-sm text-pumice">Area reference</dd>
+              </div>
+            </dl>
+            <a
+              className="nav-link mt-6 inline-flex border-b border-hairline pb-1 text-sm"
+              href="https://www.opportunitylouisiana.gov/news/meta-commits-more-than-50-billion-for-north-louisiana-project-becoming-one-of-the-largest-data-centers-in-history"
+            >
+              Louisiana Economic Development, July 2026
+            </a>
+          </div>
+
+          <figure className="rounded-xl border border-hairline bg-graphite p-5 sm:p-8">
+            <div
+              aria-hidden="true"
+              className="grid grid-cols-[repeat(15,minmax(0,1fr))] gap-[3px] sm:gap-1"
+            >
+              {Array.from({ length: HALL_COUNT }, (_, index) => (
+                <span
+                  key={index}
+                  className={`aspect-[9/4] rounded-[2px] ${index === 0 ? "bg-iris-violet" : "bg-iris-violet/20"}`}
+                />
+              ))}
+            </div>
+            <figcaption className="mt-5 flex items-start gap-3 text-sm text-pumice">
+              <span
+                aria-hidden="true"
+                className="mt-1.5 size-2.5 shrink-0 rounded-[2px] bg-iris-violet"
+              />
+              <span>
+                The highlighted tile is Hall 01. About {HALL_COUNT} halls would
+                cover the area of Meta’s expanded Richland Parish campus.
+              </span>
+            </figcaption>
+          </figure>
         </div>
       </section>
-      <section className="rule">
+
+      <section className="rule" aria-labelledby="lab-operation">
         <div className="frame section">
-          <h2 className="statement">
-            One field is the module.
-            <span className="italic"> The campus is the repetition.</span>
+          <h2 id="lab-operation" className="title">
+            How the hall would run.
           </h2>
-          <p className="dek mt-6">
-            We are not building a bigger university lab. We are building the biology equivalent of a
-            hyperscale floorplate, and selling the assay exhaust to the models that hyperscale exists to
-            train.
-          </p>
+          <div className="mt-8 grid gap-6 md:grid-cols-3">
+            {hallFeatures.map(({ title, description }) => (
+              <div key={title} className="border-t border-hairline pt-5">
+                <h3 className="idx">{title}</h3>
+                <p className="mt-3 max-w-xs text-pumice">{description}</p>
+              </div>
+            ))}
+          </div>
           <div className="mt-8 flex flex-wrap gap-3">
-            <Link to="/science" className="btn btn-primary">
-              The loop
+            <Link to="/" hash="hall" className="btn btn-primary">
+              Explore the hall
+            </Link>
+            <Link to="/science" className="btn btn-ghost">
+              The research loop
             </Link>
             <Link to="/data" className="btn btn-ghost">
-              The data
+              The assay data
             </Link>
           </div>
         </div>

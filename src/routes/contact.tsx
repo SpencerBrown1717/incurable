@@ -6,13 +6,24 @@ import { interests, pageMeta } from "@/lib/site";
 export const Route = createFileRoute("/contact")({
   head: () =>
     pageMeta(
-      "Talk to us — Incurable?",
-      "Data partnerships, the build, and press. Families looking for treatment will be told we cannot offer one.",
+      "Prepare an inquiry — Incurable?",
+      "Draft a note about assay data, lab construction, or press. Drafts stay in the current browser tab.",
     ),
   component: Contact,
 });
 
 type InterestId = (typeof interests)[number]["id"];
+
+const topicLabels: Record<InterestId, string> = {
+  data: "Assay data",
+  build: "Lab construction",
+  press: "Press",
+  family: "Families",
+};
+
+function focusHeading(heading: HTMLHeadingElement | null) {
+  heading?.focus();
+}
 
 function Contact() {
   const [interest, setInterest] = useState<InterestId>("data");
@@ -21,24 +32,23 @@ function Contact() {
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
-  const [held, setHeld] = useState<{ name: string; interest: string } | null>(null);
-  const selected = interests.find((item) => item.id === interest) ?? interests[0];
+  const [saved, setSaved] = useState(false);
 
-  function submit(event: FormEvent) {
+  function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (name.trim().length < 2) {
-      setError("Name the person.");
+      setError("Enter a name with at least two characters.");
       return;
     }
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
-      setError("That email will not work.");
+      setError("Enter a valid email address.");
       return;
     }
     if (interest !== "family" && message.trim().length < 20) {
-      setError("Say what you actually want. A sentence is not enough.");
+      setError("Write a note of at least 20 characters.");
       return;
     }
-    setError("");
+
     const payload = {
       name: name.trim(),
       org: org.trim(),
@@ -50,115 +60,144 @@ function Contact() {
     try {
       sessionStorage.setItem("incurables-note", JSON.stringify(payload));
     } catch {
-      /* private mode */
+      setError("This browser tab couldn’t save the draft.");
+      return;
     }
-    setHeld({ name: payload.name, interest: selected.label });
+    setError("");
+    setSaved(true);
   }
 
   return (
     <Shell>
       <PageHero
-        kicker="The desk"
-        title="Talk to us."
-        dek="Data, the build, or press. Write as if a person who has read the site is on the other side — because the point of the site is that we will not inflate the claim."
+        kicker="Contact"
+        title="Prepare an inquiry."
+        dek="Draft a note about assay data, lab construction, or press. Drafts stay in this browser tab."
       />
-      <section className="frame section">
-        <div className="grid gap-12 lg:grid-cols-[0.8fr_1.2fr]">
-          <div className="prose">
-            <p>
-              If you buy for a frontier lab, say which one and what a record must contain before you would
-              trust it. If you build factories, say what you have taken dark before. If you write, ask for
-              the sentence we would defend.
+      <section className="frame section pt-10 sm:pt-14">
+        <div className="grid items-start gap-8 lg:grid-cols-[minmax(0,0.65fr)_minmax(0,1fr)] lg:gap-14">
+          <aside
+            className="max-w-md border-t border-hairline pt-5"
+            aria-labelledby="families-heading"
+          >
+            <h2 id="families-heading" className="idx">
+              For families
+            </h2>
+            <p className="mt-3 text-pumice">
+              Hall 01 is a research concept. Incurable currently offers no
+              treatment, clinical trials, or waiting list.
             </p>
-            <p>
-              If you are a family looking for a treatment: we cannot offer one, a trial, or a timeline.
-              Hall 01 is not online. There is no waiting list to join, and we will not keep your hope on
-              file as a lead. The Alzheimer’s page is the long mission, not a treatment and not a promise to
-              be first.
-            </p>
-          </div>
-          <div>
-            {held ? (
-              <div className="border border-hairline p-6 sm:p-8">
-                <p className="kicker">Received</p>
-                <h2 className="idx mt-4">Held for {held.name}.</h2>
-                <p className="mt-4 text-pumice">
-                  Marked as {held.interest}. This desk keeps the note in the browser only — it does not
-                  send mail from here. A working company would answer from a person, in the register you
-                  wrote in.
+          </aside>
+          <div className="rounded-xl border border-hairline bg-graphite/50 p-5 sm:p-8">
+            {saved ? (
+              <>
+                <h2 className="idx" tabIndex={-1} ref={focusHeading}>
+                  Draft saved.
+                </h2>
+                <p className="mt-3 text-pumice">
+                  Saved for this browser session.
                 </p>
                 <button
                   type="button"
                   className="btn btn-ghost mt-6"
                   onClick={() => {
-                    setHeld(null);
+                    setSaved(false);
                     setMessage("");
                   }}
                 >
                   Write another
                 </button>
-              </div>
+              </>
             ) : (
               <form onSubmit={submit} noValidate className="grid gap-5">
                 <fieldset>
-                  <legend className="kicker">You are writing as</legend>
-                  <div className="mt-3 grid gap-2 sm:grid-cols-2">
-                    {interests.map((item) => (
+                  <legend className="text-base font-medium">Topic</legend>
+                  <div className="mt-3 grid grid-cols-2 gap-2">
+                    {interests.map(({ id }) => (
                       <label
-                        key={item.id}
-                        className={`block min-h-11 cursor-pointer border px-3 py-3 ${
-                          interest === item.id ? "border-ash text-ash" : "border-hairline text-pumice"
-                        }`}
+                        key={id}
+                        className="flex min-h-11 cursor-pointer items-center gap-2 rounded-md border border-hairline px-3 py-2 text-sm has-checked:border-iris-violet has-checked:bg-iris-violet/10"
                       >
                         <input
                           type="radio"
                           name="interest"
-                          value={item.id}
-                          checked={interest === item.id}
-                          onChange={() => setInterest(item.id)}
-                          className="sr-only"
+                          value={id}
+                          checked={interest === id}
+                          onChange={() => setInterest(id)}
+                          className="shrink-0 accent-iris-violet"
                         />
-                        <span className="block text-ash">{item.label}</span>
-                        <span className="mt-1 block text-sm">{item.note}</span>
+                        {topicLabels[id]}
                       </label>
                     ))}
                   </div>
                 </fieldset>
                 {interest === "family" ? (
-                  <p className="border border-hairline px-4 py-4 text-sm text-pumice">
-                    You can still leave a note. Please do not include medical details. We cannot act on
-                    them, and this page should not be holding them.
+                  <p id="family-note" className="text-pumice">
+                    Please leave medical details out of your draft.
                   </p>
                 ) : null}
+                <div className="grid gap-5 sm:grid-cols-2">
+                  <label className="grid gap-2">
+                    <span className="text-sm font-medium">Name</span>
+                    <input
+                      className="field"
+                      value={name}
+                      onChange={(event) => setName(event.target.value)}
+                      autoComplete="name"
+                      required
+                    />
+                  </label>
+                  <label className="grid gap-2">
+                    <span className="text-sm font-medium">
+                      Organization{" "}
+                      <span className="text-pumice">(optional)</span>
+                    </span>
+                    <input
+                      className="field"
+                      value={org}
+                      onChange={(event) => setOrg(event.target.value)}
+                      autoComplete="organization"
+                    />
+                  </label>
+                </div>
                 <label className="grid gap-2">
-                  <span className="kicker">Name</span>
-                  <input className="field" value={name} onChange={(e) => setName(e.target.value)} autoComplete="name" />
-                </label>
-                <label className="grid gap-2">
-                  <span className="kicker">Organization</span>
-                  <input className="field" value={org} onChange={(e) => setOrg(e.target.value)} autoComplete="organization" />
-                </label>
-                <label className="grid gap-2">
-                  <span className="kicker">Email</span>
+                  <span className="text-sm font-medium">Email</span>
                   <input
                     className="field"
                     type="email"
                     value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    onChange={(event) => setEmail(event.target.value)}
                     autoComplete="email"
+                    required
                   />
                 </label>
                 <label className="grid gap-2">
-                  <span className="kicker">Note</span>
-                  <textarea className="field" value={message} onChange={(e) => setMessage(e.target.value)} />
+                  <span className="text-sm font-medium">
+                    Note{" "}
+                    {interest === "family" ? (
+                      <span className="text-pumice">(optional)</span>
+                    ) : null}
+                  </span>
+                  <textarea
+                    className="field resize-y"
+                    value={message}
+                    onChange={(event) => setMessage(event.target.value)}
+                    aria-describedby={
+                      interest === "family" ? "family-note" : undefined
+                    }
+                    required={interest !== "family"}
+                  />
                 </label>
                 {error ? (
                   <p className="text-sm text-trace" role="alert">
                     {error}
                   </p>
                 ) : null}
-                <button type="submit" className="btn btn-primary w-full sm:w-auto">
-                  {interest === "family" ? "Leave the note" : "Send to the desk"}
+                <button
+                  type="submit"
+                  className="btn btn-primary w-full sm:w-auto sm:justify-self-start"
+                >
+                  Save draft
                 </button>
               </form>
             )}
