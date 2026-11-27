@@ -46,7 +46,7 @@ export function Shell({ children }: { children: ReactNode }) {
       <a className="skip" href="#main">
         Skip to content
       </a>
-      <header className="site-header sticky top-0 z-40 border-b border-hairline bg-obsidian">
+      <header className="site-header sticky top-0 z-40 bg-obsidian">
         <div className="frame site-nav-frame flex items-center justify-between gap-6">
           <Link to="/" onClick={() => setOpen(false)}>
             <Wordmark />
@@ -79,6 +79,7 @@ export function Shell({ children }: { children: ReactNode }) {
             {open ? "Close" : "Menu"}
           </button>
         </div>
+        <div className="iris-line" aria-hidden="true" />
       </header>
       {open ? (
         <div

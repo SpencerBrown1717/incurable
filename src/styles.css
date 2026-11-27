@@ -9,12 +9,16 @@
   --font-mono: "Geist Mono Variable", ui-monospace, monospace;
   --font-display: "Instrument Serif", ui-serif, Georgia, serif;
 
-  --color-obsidian: #08090b;
+  --color-obsidian: #000000;
   --color-graphite: #101419;
-  --color-ash: #f4f6f8;
-  --color-bone: #ffffff;
-  --color-pumice: #a4acb6;
-  --color-trace: #a2e9e2;
+  --color-ash: #e7e2d6;
+  --color-bone: #f4f0e6;
+  --color-pumice: #8f8a80;
+  --color-trace: #c4b496;
+  --color-iris-violet: #b9a6ff;
+  --color-iris-cyan: #8fe3ff;
+  --color-iris-amber: #ffc98f;
+  --color-iris-ink: #0b0a12;
   --color-hairline: color-mix(in oklab, #d0def1 15%, transparent);
   --color-hairline-strong: color-mix(in oklab, #d0def1 32%, transparent);
 
@@ -193,7 +197,7 @@
   }
 
   .site-header {
-    background: rgb(8 9 11 / 96%);
+    background: rgb(0 0 0 / 92%);
     backdrop-filter: blur(16px);
   }
 
@@ -219,9 +223,9 @@
     width: 21px;
     height: 21px;
     flex: none;
-    border: 1px solid #86cbd2;
+    border: 1px solid color-mix(in oklab, var(--color-ash) 35%, transparent);
     border-radius: 5px;
-    color: var(--color-trace);
+    color: var(--color-ash);
   }
 
   .wordmark-symbol::before,
@@ -241,7 +245,7 @@
   }
 
   .wordmark-accent {
-    color: var(--color-trace);
+    color: var(--color-ash);
   }
 
   .btn {
@@ -267,12 +271,111 @@
   }
 
   .btn-primary {
-    background: linear-gradient(105deg, #b4aff3, #a0d9ef 47%, #bdecd9);
-    color: #0a131b;
+    border-radius: 999px;
+    background: linear-gradient(
+      105deg,
+      var(--color-iris-violet) 0%,
+      var(--color-iris-cyan) 52%,
+      var(--color-iris-amber) 100%
+    );
+    color: var(--color-iris-ink);
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.55),
+      0 10px 28px -16px rgb(185 166 255 / 0.85);
   }
 
   .btn-primary:hover {
-    background: linear-gradient(105deg, #c6c0ff, #bae8f8 47%, #d0f8e5);
+    background: linear-gradient(105deg, #c9baff 0%, #a6ebff 52%, #ffd6a8 100%);
+    color: var(--color-iris-ink);
+  }
+
+  .iris-line {
+    height: 2px;
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      #7b61ff 8%,
+      #5fe3ff 32%,
+      #fffaf0 50%,
+      #ffb36b 70%,
+      #b46cff 92%,
+      transparent 100%
+    );
+    box-shadow: 0 10px 28px rgb(143 227 255 / 0.18);
+  }
+
+  .barrier {
+    display: grid;
+    align-items: center;
+    gap: 48px;
+    min-height: calc(100svh - var(--spacing-nav));
+    padding-block: 48px 64px;
+  }
+
+  @media (min-width: 1024px) {
+    .barrier {
+      grid-template-columns: minmax(0, 1.15fr) minmax(280px, 0.85fr);
+      gap: 64px;
+    }
+  }
+
+  .barrier-title {
+    color: color-mix(in oklab, var(--color-ash) 68%, transparent);
+  }
+
+  .spec-rail {
+    margin: 0;
+    border-left: 1px solid color-mix(in oklab, var(--color-ash) 28%, transparent);
+    padding-left: 22px;
+    background: repeating-linear-gradient(
+        to bottom,
+        color-mix(in oklab, var(--color-ash) 45%, transparent) 0 1px,
+        transparent 1px 8px
+      )
+      left top / 9px 100% no-repeat;
+  }
+
+  .spec-rail div {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 16px;
+    align-items: baseline;
+    padding-block: 16px;
+    border-top: 1px solid color-mix(in oklab, var(--color-ash) 18%, transparent);
+  }
+
+  .spec-rail div:first-child {
+    border-top: 0;
+  }
+
+  .spec-rail dt {
+    color: color-mix(in oklab, var(--color-ash) 82%, transparent);
+    font-size: 1.02rem;
+  }
+
+  .spec-rail dd {
+    color: var(--color-pumice);
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+    letter-spacing: 0.04em;
+    text-align: right;
+  }
+
+  .scroll-cue {
+    justify-self: end;
+    color: var(--color-pumice);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .hall-stage {
+    height: clamp(440px, 78svh, 820px);
+    background:
+      radial-gradient(42% 46% at 22% 58%, rgb(111 82 255 / 0.16), transparent 70%),
+      radial-gradient(28% 34% at 78% 42%, rgb(95 227 255 / 0.08), transparent 72%),
+      #000;
   }
 
   .site-nav-cta {

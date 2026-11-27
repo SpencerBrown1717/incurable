@@ -1,6 +1,6 @@
 .lab-scene {
-  --stage-text: #25394d;
-  --stage-line: rgb(57 94 121 / 12%);
+  --stage-text: #e7e2d6;
+  --stage-line: rgb(231 226 214 / 12%);
   position: relative;
   isolation: isolate;
   margin: 0;
@@ -10,12 +10,7 @@
   grid-template-rows: minmax(0, 1fr) auto;
   overflow: hidden;
   color: var(--stage-text);
-  background: radial-gradient(
-    ellipse at 45% 28%,
-    #f9fcff 0%,
-    #eef5fb 45%,
-    #d6e5ef 100%
-  );
+  background: transparent;
 }
 
 .lab-scene::before {
@@ -46,9 +41,9 @@
 }
 
 .lab-scene__marker span {
-  border-left: 1px solid #9dafbd;
+  border-left: 1px solid rgb(231 226 214 / 28%);
   padding-left: 10px;
-  color: #526d80;
+  color: #8f8a80;
   font-weight: 500;
 }
 
@@ -94,8 +89,8 @@
   gap: 8px;
   padding: 8px 16px 8px 24px;
   border-top: 1px solid var(--stage-line);
-  background: rgb(235 243 249 / 74%);
-  color: #3b586e;
+  background: rgb(0 0 0 / 72%);
+  color: #c8c4bc;
   font: 500 11px/1.4 var(--font-mono, monospace);
 }
 
@@ -113,12 +108,12 @@
   border-radius: 4px;
   white-space: nowrap;
   font: inherit;
-  color: #17394e;
+  color: #e7e2d6;
 }
 
 .lab-scene__controls button:hover {
-  border-color: #adbfcd;
-  background: #f5faff;
+  border-color: rgb(231 226 214 / 28%);
+  background: rgb(255 255 255 / 6%);
 }
 
 .lab-scene__controls button:focus-visible {

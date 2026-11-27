@@ -16,45 +16,57 @@ export const Route = createFileRoute("/")({
 function Home() {
   return (
     <Shell>
-      <section className="landing-hero">
-        <div className="frame landing-grid">
-          <div className="landing-copy">
-            <p className="landing-label">Autonomous wet lab</p>
-            <h1 className="landing-heading">
-              173.6 halls.
-              <span>One long mission.</span>
-            </h1>
-            <p className="landing-intro">
-              A fully autonomous wet lab for CRISPR and mRNA, designed at the
-              scale of Meta’s Hyperion campus. The long mission includes
-              Alzheimer’s.
-            </p>
-            <div className="landing-actions">
-              <a href="#hall" className="btn btn-primary">
-                Explore the hall <span aria-hidden="true">↘</span>
-              </a>
-              <Link to="/alzheimers" className="btn btn-ghost">
-                Alzheimer’s mission
-              </Link>
-            </div>
+      <section className="frame barrier">
+        <div>
+          <p className="kicker">incurable.ai · the business is the hall</p>
+          <h1 className="display barrier-title mt-6">
+            <span className="block">Incurable?</span>
+            <span className="block italic">Says who.</span>
+          </h1>
+          <p className="dek mt-8">
+            A fully autonomous wet lab for CRISPR and mRNA. Lights off, every
+            hour of the year, drawn to the footprint of Meta’s largest data
+            center — 173.6 football fields of floor. Data to frontier labs.
+            New drugs, made at generic scale. Alzheimer’s is the long mission.
+            It may not be the first thing the hall finishes.
+          </p>
+          <div className="mt-8 flex flex-wrap gap-3">
+            <Link to="/contact" className="btn btn-primary">
+              Talk to us
+            </Link>
+            <a href="#hall" className="btn btn-ghost">
+              See the hall
+            </a>
           </div>
-          <div className="landing-model">
-            <LabScene />
-          </div>
-          <dl className="landing-measurements">
+        </div>
+        <div>
+          <dl className="spec-rail">
             <div>
-              <dt>Proposed footprint</dt>
-              <dd>~10 million sq ft</dd>
+              <dt>Scale</dt>
+              <dd>173.6 halls</dd>
             </div>
             <div>
-              <dt>Scale reference</dt>
-              <dd>Meta Hyperion</dd>
-            </div>
-            <div>
-              <dt>Designed duty cycle</dt>
+              <dt>Duty</dt>
               <dd>24/7/365</dd>
             </div>
+            <div>
+              <dt>Loop</dt>
+              <dd>CRISPR · mRNA</dd>
+            </div>
+            <div>
+              <dt>The floor</dt>
+              <dd>Lights off</dd>
+            </div>
           </dl>
+          <p className="scroll-cue mt-8 hidden lg:block">
+            Scroll to enter the hall
+          </p>
+        </div>
+      </section>
+
+      <section id="hall" aria-label="The automated wet lab">
+        <div className="hall-stage">
+          <LabScene />
         </div>
       </section>
 
@@ -79,7 +91,7 @@ function Home() {
         </div>
       </section>
 
-      <section id="hall" className="rule hall-section">
+      <section className="rule hall-section">
         <div className="frame section">
           <div className="grid gap-8 lg:grid-cols-[0.8fr_1.2fr] lg:items-end">
             <div>
