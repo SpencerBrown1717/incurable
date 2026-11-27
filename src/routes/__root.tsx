@@ -19,7 +19,7 @@ export const Route = createRootRoute({
       {
         name: "description",
         content:
-          "Incurable is designing an automated wet lab for research into diseases medicine still can’t cure.",
+          "Incurable? automates CRISPR and mRNA at incurable.ai — a wet lab the size of Meta’s Hyperion, 173.6 football-field halls, 24/7/365. Data to frontier labs. Drugs at generic scale. Alzheimer’s is the long mission, not a promise to be first.",
       },
       { name: "theme-color", content: "#000000" },
     ],

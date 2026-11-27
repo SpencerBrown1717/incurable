@@ -17,26 +17,32 @@ export const nav = [
   {
     href: "/labs",
     label: "Labs",
+    note: "Football-field halls. The lights stay off.",
   },
   {
     href: "/science",
     label: "Science",
+    note: "CRISPR and mRNA. The only two. One gantry.",
   },
   {
     href: "/price",
     label: "Price",
+    note: "New drugs, manufactured at generic scale.",
   },
   {
     href: "/data",
     label: "Data",
+    note: "Assay records sold to frontier labs. Not patient charts.",
   },
   {
     href: "/alzheimers",
     label: "Alzheimer’s",
+    note: "The long mission. Not a promise to be first.",
   },
   {
     href: "/news",
     label: "News",
+    note: "Essays from the desk. No miracle headlines.",
   },
 ] as const;
 
@@ -83,6 +89,67 @@ export const darkLab = [
     n: "04",
     title: "Either one can finish first",
     body: "CRISPR or mRNA. Whichever closes a disease sooner is the one that does it. The hall runs both.",
+  },
+] as const;
+
+export const specs = [
+  { k: "Hall 01", v: "One football field, 360 × 160 ft" },
+  { k: "Floor", v: "57,600 sq ft, lights off" },
+  { k: "People on the floor", v: "None. The stop is a person, off the floor." },
+  { k: "Duty", v: "24/7/365. The hall does not close." },
+  { k: "Modalities", v: "CRISPR and mRNA. Nothing else on the gantry." },
+  { k: "Campus reference", v: "Meta Hyperion — nearly 10 million sq ft" },
+  { k: "That floor, in fields", v: "173.6 halls. About 174." },
+  { k: "Long mission", v: "The incurable list. Alzheimer’s included, not promised first." },
+  { k: "What we sell", v: "Assay data, to frontier labs. Not patient records." },
+  { k: "What we make", v: "New drugs, mass-produced as generics." },
+] as const;
+
+export const programs = [
+  {
+    href: "/labs",
+    kicker: "01 — The business",
+    title: "173.6 halls",
+    body: "Meta’s Hyperion, nearly ten million square feet, divided by one football field. About 174. That is the floor the automation is drawn to.",
+  },
+  {
+    href: "/science",
+    kicker: "02 — The loop",
+    title: "CRISPR and mRNA",
+    body: "Fully automated, both of them, 24/7/365. Whichever closes a disease first is the one that does it. We will not pick the winner in a press release.",
+  },
+  {
+    href: "/data",
+    kicker: "03 — The record",
+    title: "Frontier labs",
+    body: "Every closed loop writes a sequence, an edit, a cell state, and the protocol. Frontier labs cannot scrape that. We mint it, and we sell it.",
+  },
+  {
+    href: "/price",
+    kicker: "04 — The price",
+    title: "Generics",
+    body: "Design the drug, then make it the way a generic is made. Volume. Thin margin. No castle.",
+  },
+] as const;
+
+export const roadmap = [
+  {
+    n: "01",
+    when: "Now",
+    title: "Specify Hall 01",
+    body: "One field. Lights off. CRISPR and mRNA, fully automated, 24/7/365. No disease is promised first. No clinical claim attached.",
+  },
+  {
+    n: "02",
+    when: "Scale",
+    title: "Repeat until it is 173.6",
+    body: "The campus is drawn to Meta’s Hyperion in Richland Parish — nearly ten million square feet. Ten million divided by one field is 173.6 halls. About 174. Biology, not racks.",
+  },
+  {
+    n: "03",
+    when: "After",
+    title: "The long mission",
+    body: "The incurable list, Alzheimer’s included. It may not be the first name the hall can finish. A nearer disease may fall sooner, to mRNA or to CRISPR.",
   },
 ] as const;
 

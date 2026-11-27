@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import { Link, useRouterState } from "@tanstack/react-router";
 import { nav } from "@/lib/site";
 
@@ -17,16 +17,9 @@ function Wordmark() {
   );
 }
 
-export function Shell({
-  children,
-  className = "",
-}: {
-  children: ReactNode;
-  className?: string;
-}) {
+export function Shell({ children }: { children: ReactNode }) {
   const path = useRouterState({ select: (s) => s.location.pathname });
   const [open, setOpen] = useState(false);
-  const menuButton = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     setOpen(false);
@@ -41,25 +34,15 @@ export function Shell({
 
   useEffect(() => {
     if (!open) return;
-    const desktop = window.matchMedia("(min-width: 80rem)");
-    const closeOnDesktop = () => {
-      if (desktop.matches) setOpen(false);
-    };
     const onKey = (event: KeyboardEvent) => {
-      if (event.key !== "Escape") return;
-      setOpen(false);
-      menuButton.current?.focus();
+      if (event.key === "Escape") setOpen(false);
     };
-    desktop.addEventListener("change", closeOnDesktop);
     window.addEventListener("keydown", onKey);
-    return () => {
-      desktop.removeEventListener("change", closeOnDesktop);
-      window.removeEventListener("keydown", onKey);
-    };
+    return () => window.removeEventListener("keydown", onKey);
   }, [open]);
 
   return (
-    <div className={`min-h-svh bg-obsidian text-ash ${className}`}>
+    <div className="min-h-svh bg-obsidian text-ash">
       <a className="skip" href="#main">
         Skip to content
       </a>
@@ -88,7 +71,6 @@ export function Shell({
           </nav>
           <button
             type="button"
-            ref={menuButton}
             className="site-menu-toggle btn btn-ghost xl:hidden"
             aria-expanded={open}
             aria-controls="site-menu"
@@ -109,37 +91,36 @@ export function Shell({
               <Link
                 key={item.href}
                 to={item.href}
-                className="border-t border-hairline py-4 text-lg"
-                onClick={() => setOpen(false)}
+                className="border-t border-hairline py-5"
               >
-                {item.label}
+                <span className="idx block">{item.label}</span>
+                <span className="mt-1 block text-sm text-pumice">
+                  {item.note}
+                </span>
               </Link>
             ))}
-            <Link
-              to="/contact"
-              className="btn btn-primary mt-6 w-full"
-              onClick={() => setOpen(false)}
-            >
+            <Link to="/contact" className="btn btn-primary mt-6 w-full">
               Talk to us
             </Link>
           </nav>
         </div>
       ) : null}
-      <main id="main" inert={open}>
-        {children}
-      </main>
-      <footer className="rule" inert={open}>
-        <div className="frame grid gap-7 py-12 md:grid-cols-[1fr_1fr]">
-          <div>
+      <main id="main">{children}</main>
+      <footer className="rule">
+        <div className="frame section grid gap-12 md:grid-cols-12">
+          <div className="md:col-span-5">
             <p>
               <Wordmark />
             </p>
             <p className="mt-4 max-w-sm text-pumice">
-              A proposed lab for automated drug discovery.
+              CRISPR and mRNA, fully automated, at the scale of Meta’s largest
+              campus — 173.6 halls. The long mission is the incurable list.
+              Alzheimer’s is on it. It is not a promise to be first.
             </p>
           </div>
-          <nav aria-label="Footer">
-            <ul className="flex flex-wrap items-center gap-x-5 gap-y-3">
+          <div className="md:col-span-3">
+            <p className="kicker">Pages</p>
+            <ul className="mt-4 space-y-2">
               {nav.map((item) => (
                 <li key={item.href}>
                   <Link to={item.href} className="nav-link">
@@ -153,11 +134,28 @@ export function Shell({
                 </Link>
               </li>
             </ul>
-          </nav>
+          </div>
+          <div className="md:col-span-4">
+            <p className="kicker">The hall</p>
+            <dl className="mt-4 space-y-3">
+              <div className="flex justify-between gap-4 border-t border-hairline pt-3">
+                <dt className="kicker">Scale</dt>
+                <dd className="kicker text-ash">173.6 halls</dd>
+              </div>
+              <div className="flex justify-between gap-4 border-t border-hairline pt-3">
+                <dt className="kicker">Duty</dt>
+                <dd className="kicker text-ash">24/7/365</dd>
+              </div>
+              <div className="flex justify-between gap-4 border-t border-hairline pt-3">
+                <dt className="kicker">Loop</dt>
+                <dd className="kicker text-ash">CRISPR · mRNA</dd>
+              </div>
+            </dl>
+          </div>
         </div>
         <div className="frame flex flex-col gap-2 border-t border-hairline py-6 text-sm text-pumice sm:flex-row sm:justify-between">
           <p>© 2026 Incurable? · incurable.ai</p>
-          <p>Research concept only.</p>
+          <p>Not a clinic. Not an offer of treatment.</p>
         </div>
       </footer>
     </div>
