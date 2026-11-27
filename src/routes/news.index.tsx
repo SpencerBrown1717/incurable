@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { NewsFigure } from "@/components/site/news-figure";
 import { pageMeta, stories } from "@/lib/site";
 
 export const Route = createFileRoute("/news/")({
@@ -13,15 +14,18 @@ export const Route = createFileRoute("/news/")({
 function NewsIndex() {
   return (
     <>
-      <header className="frame section pb-0">
-        <p className="kicker">News</p>
-        <h1 className="title mt-5">From the desk.</h1>
-        <p className="dek mt-6">
-          Four essays. No product announcements disguised as science, because the hall is not online and we
-          will not write as if it were.
-        </p>
+      <header className="frame section grid items-end gap-8 pb-0 md:grid-cols-2">
+        <div>
+          <p className="kicker">News</p>
+          <h1 className="title mt-5">From the desk.</h1>
+          <p className="dek mt-6">
+            Four essays. No product announcements disguised as science, because the hall is not online and
+            we will not write as if it were.
+          </p>
+        </div>
+        <NewsFigure className="w-full max-w-sm md:justify-self-end" />
       </header>
-      <section className="frame section">
+      <section className="frame section pt-12">
         <ul>
           {stories.map((story) => (
             <li key={story.slug} className="border-t border-hairline">

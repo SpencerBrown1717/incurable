@@ -1,4 +1,6 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+import { Fragment } from "react";
+import { NewsFigure } from "@/components/site/news-figure";
 import { pageMeta, storyBySlug, stories } from "@/lib/site";
 
 export const Route = createFileRoute("/news/$slug")({
@@ -19,6 +21,7 @@ function StoryPage() {
   const story = Route.useLoaderData();
   const index = stories.findIndex((item) => item.slug === story.slug);
   const next = stories[(index + 1) % stories.length];
+  const firstHeading = story.blocks.findIndex((block) => block.type === "h2");
 
   return (
     <article>
@@ -36,9 +39,14 @@ function StoryPage() {
       </header>
       <div className="frame section">
         <div className="prose">
-          {story.blocks.map((block, i) =>
-            block.type === "h2" ? <h2 key={i}>{block.text}</h2> : <p key={i}>{block.text}</p>,
-          )}
+          {story.blocks.map((block, i) => (
+            <Fragment key={i}>
+              {i === firstHeading ? (
+                <NewsFigure storySlug={story.slug} className="my-9 max-w-lg" />
+              ) : null}
+              {block.type === "h2" ? <h2>{block.text}</h2> : <p>{block.text}</p>}
+            </Fragment>
+          ))}
         </div>
         {next ? (
           <div className="mt-16 border-t border-hairline pt-8">

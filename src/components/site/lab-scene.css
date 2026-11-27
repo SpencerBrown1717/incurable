@@ -1,197 +1,79 @@
-.lab-scene {
-  --stage-text: #e7e2d6;
-  --stage-line: rgb(231 226 214 / 12%);
-  position: relative;
-  isolation: isolate;
-  margin: 0;
-  min-width: 0;
-  height: 100%;
-  display: grid;
-  grid-template-rows: minmax(0, 1fr) auto;
-  overflow: hidden;
-  color: var(--stage-text);
-  background: transparent;
-}
-
-.lab-scene::before {
-  content: "";
-  position: absolute;
-  z-index: -1;
-  inset: 0;
-  background-image:
-    linear-gradient(to right, var(--stage-line) 1px, transparent 1px),
-    linear-gradient(to bottom, var(--stage-line) 1px, transparent 1px);
-  background-size: 38px 38px;
-  mask-image: linear-gradient(to bottom, #000 0%, transparent 78%);
-  opacity: 0.44;
-}
-
-.lab-scene__marker {
-  position: absolute;
-  top: 22px;
-  left: 24px;
-  z-index: 1;
+.campus-sketch-heading {
   display: flex;
-  align-items: center;
-  gap: 10px;
-  pointer-events: none;
-  font: 650 11px/1.2 var(--font-mono, monospace);
-  letter-spacing: 0.09em;
-  text-transform: uppercase;
-}
-
-.lab-scene__marker span {
-  border-left: 1px solid rgb(231 226 214 / 28%);
-  padding-left: 10px;
-  color: #8f8a80;
-  font-weight: 500;
-}
-
-.lab-scene__viewport {
-  grid-row: 1;
-  grid-column: 1;
-  position: relative;
-  min-height: 0;
-  visibility: hidden;
-  touch-action: pan-y;
-}
-
-.lab-scene[data-ready="true"] .lab-scene__viewport {
-  visibility: visible;
-  cursor: grab;
-}
-
-.lab-scene__viewport:active {
-  cursor: grabbing;
-}
-
-.lab-scene__viewport:focus-visible {
-  outline: 2px solid #175779;
-  outline-offset: -4px;
-}
-
-.lab-scene__viewport canvas {
-  display: block;
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-}
-
-.lab-scene__caption {
-  z-index: 1;
-  grid-row: 2;
-  grid-column: 1;
-  min-height: 62px;
-  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
   justify-content: space-between;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 16px 8px 24px;
-  border-top: 1px solid var(--stage-line);
-  background: rgb(0 0 0 / 72%);
-  color: #c8c4bc;
-  font: 500 11px/1.4 var(--font-mono, monospace);
+  gap: 12px 28px;
+  margin-bottom: 22px;
 }
 
-.lab-scene__controls {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-}
-
-.lab-scene__controls button {
-  min-width: 44px;
+.campus-sketch-heading .nav-link {
+  display: inline-flex;
   min-height: 44px;
-  padding-inline: 8px;
-  border: 1px solid transparent;
-  border-radius: 4px;
-  white-space: nowrap;
-  font: inherit;
-  color: #e7e2d6;
+  align-items: center;
+  text-decoration: underline;
+  text-underline-offset: 0.25em;
 }
 
-.lab-scene__controls button:hover {
-  border-color: rgb(231 226 214 / 28%);
-  background: rgb(255 255 255 / 6%);
-}
-
-.lab-scene__controls button:focus-visible {
-  outline: 2px solid #175779;
-  outline-offset: -2px;
-}
-
-.lab-scene__poster {
-  grid-row: 1;
-  grid-column: 1;
-  display: grid;
-  place-items: center;
-  pointer-events: none;
-}
-
-.lab-scene[data-ready="true"] .lab-scene__poster {
-  visibility: hidden;
-}
-
-.lab-scene__poster-cabinet {
-  position: relative;
+.campus-sketch-figure .site-figure-caption {
   display: flex;
-  align-items: stretch;
-  gap: 3%;
-  padding: 5%;
-  width: 65%;
-  max-width: 510px;
-  aspect-ratio: 1.8;
-  border-radius: 7% 5% 5% 7% / 8%;
-  background: linear-gradient(133deg, #fdfdff 5%, #d9e5ed 75%, #becddc);
-  border: 1px solid #b4cadb;
-  border-bottom: 15px solid #425a6d;
-  box-shadow:
-    11px -9px 0 #c3d1dd,
-    12px -10px 0 #adbfcc,
-    20px 16px 42px rgb(32 61 84 / 23%);
-  transform: skewY(-5deg);
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 6px 20px;
 }
 
-.lab-scene__poster-bay {
-  flex: 1;
-  border: 2px solid #597489;
-  border-radius: 5%;
-  background:
-    linear-gradient(90deg, transparent 79%, #c5d9e5 80% 86%, transparent 87%) 0
-      48% / 100% 45% no-repeat,
-    linear-gradient(#59768a 12%, transparent 13%) 0 84% / 100% 20% no-repeat,
-    linear-gradient(145deg, #a6bac9, #17364b);
-  box-shadow: inset 0 8px 12px rgb(12 37 59 / 36%);
+.campus-sketch-figure .site-figure-art {
+  max-width: 1040px;
+  margin-inline: auto;
 }
 
-.lab-scene__poster-panel {
-  width: 17%;
-  background:
-    linear-gradient(110deg, #274967, #101f38) 50% 8% / 100% 39% no-repeat,
-    linear-gradient(#58a6bc, #58a6bc) 50% 55% / 90% 3% no-repeat,
-    repeating-linear-gradient(#708ca0 0 1px, transparent 1px 5px) 50% 90% / 77%
-      20% no-repeat;
-  border-radius: 8%;
+.campus-sketch-key {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  color: var(--color-ash);
 }
 
-@media (max-width: 530px) {
-  .lab-scene__marker {
-    top: 14px;
-    left: 14px;
-  }
+.campus-sketch-key > span {
+  width: 9px;
+  height: 9px;
+  flex: none;
+  border: 1px solid var(--color-iris-cyan);
+  background: rgb(143 227 255 / 14%);
+}
 
-  .lab-scene__caption {
-    min-height: 56px;
-    padding-inline: 12px 8px;
-    font-size: 10px;
-  }
+.campus-sketch-edge {
+  fill: #08090b;
+}
 
-  .lab-scene__controls {
-    gap: 1px;
-  }
+.campus-sketch-highlight {
+  fill: rgb(143 227 255 / 18%);
+  stroke-width: 1.5;
+}
 
-  .lab-scene__controls button {
-    padding-inline: 5px;
+.campus-sketch-scan {
+  opacity: 0.38;
+  stroke-dasharray: 8 92;
+  stroke-dashoffset: -54;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .campus-sketch-figure[data-figure-in-view="true"] .campus-sketch-scan {
+    animation: campus-scan 3.6s ease-in-out both;
+  }
+}
+
+@keyframes campus-scan {
+  from {
+    opacity: 0;
+    stroke-dashoffset: 8;
+  }
+  35%,
+  72% {
+    opacity: 0.85;
+  }
+  to {
+    opacity: 0.38;
+    stroke-dashoffset: -54;
   }
 }

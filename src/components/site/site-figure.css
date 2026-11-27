@@ -1,0 +1,76 @@
+.site-figure {
+  min-width: 0;
+  border-block: 1px solid var(--color-hairline);
+  background: radial-gradient(
+    ellipse at 50% 48%,
+    #11141a 0%,
+    #070809 56%,
+    #020203 100%
+  );
+}
+
+.site-figure-art {
+  display: block;
+  width: 100%;
+  height: auto;
+  color: var(--color-ash);
+}
+
+.site-figure-caption {
+  padding: 12px clamp(12px, 2vw, 22px);
+  border-top: 1px solid var(--color-hairline);
+  color: #a8a499;
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  line-height: 1.5;
+}
+
+.figure-grid {
+  color: #393b43;
+  stroke-width: 0.75;
+}
+
+.figure-outline {
+  color: #777984;
+  stroke-width: 1;
+}
+
+.figure-strong {
+  color: var(--color-ash);
+}
+
+.figure-cyan {
+  color: var(--color-iris-cyan);
+}
+
+.figure-violet {
+  color: var(--color-iris-violet);
+}
+
+.figure-amber {
+  color: var(--color-iris-amber);
+}
+
+.figure-label {
+  fill: currentColor;
+  stroke: none;
+  font: 14px var(--font-mono);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .site-figure[data-figure-in-view="true"] .figure-pulse {
+    animation: site-figure-pulse 3.2s ease-in-out both;
+  }
+}
+
+@keyframes site-figure-pulse {
+  0%,
+  100% {
+    opacity: var(--figure-pulse-rest, 0.72);
+  }
+
+  36%,
+  56% {
+    opacity: 1;
+  }
+}

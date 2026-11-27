@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { PageHero, Shell } from "@/components/site/shell";
+import { SiteFigure } from "@/components/site/site-figure";
 import { pageMeta, queue } from "@/lib/site";
 
 export const Route = createFileRoute("/price")({
@@ -34,6 +35,61 @@ const steps = [
   },
 ];
 
+function PackagingLine() {
+  return (
+    <SiteFigure
+      label="Outline of a manufacturing line carrying repeated packs of medicine"
+      caption="Manufacturing concept · Repeated packaging at generic scale"
+      viewBox="0 0 640 260"
+      className="order-first lg:order-none"
+    >
+      <path
+        className="figure-grid"
+        d="M43 63h554M43 115h554M43 167h554M43 219h554M80 39v181M560 39v181"
+      />
+      <g transform="matrix(1 0 -.48 .73 130 58)">
+        <path
+          className="figure-outline"
+          d="M0 8h478v156H0zM0 23h478M0 146h478M0 164v10h478v-10"
+        />
+        <path
+          className="figure-grid"
+          d="M0 85h478M23 23v123M130 23v123M237 23v123M344 23v123M451 23v123"
+        />
+        {[33, 94].map((y) =>
+          [35, 142, 249, 356].map((x) => (
+            <g
+              key={`${x}-${y}`}
+              transform={`translate(${x} ${y})`}
+              className={
+                x === 356 && y === 94 ? "figure-amber" : "figure-strong"
+              }
+            >
+              <rect width="83" height="42" rx="5" />
+              <rect x="5" y="5" width="73" height="32" rx="3" opacity=".36" />
+              {[12, 28, 44, 60].map((left) => (
+                <g key={left} opacity=".72">
+                  <rect x={left} y="9" width="10" height="9" rx="4.5" />
+                  <rect x={left} y="24" width="10" height="9" rx="4.5" />
+                </g>
+              ))}
+            </g>
+          )),
+        )}
+        <path
+          className="figure-amber figure-pulse"
+          d="M339 151h112M451 83v68"
+          pathLength="1"
+        />
+      </g>
+      <path
+        className="figure-outline"
+        d="M51 207H36v-15M587 71h15v15M62 200v14m40-14v14m372-14v14m40-14v14"
+      />
+    </SiteFigure>
+  );
+}
+
 function Price() {
   return (
     <Shell>
@@ -44,20 +100,33 @@ function Price() {
         dek="Jeff Bezos said it about retail. It is the plan for the medicine. Design the drug in a hall that never closes. Manufacture it the way generics are manufactured. The disease does not require the branded margin."
       />
       <section className="frame section">
-        <div className="prose">
-          <p>
-            Incurable? designs drugs and then makes them at generic scale. The business is a fully
-            autonomous CRISPR and mRNA hall, the size of Meta’s largest campus — 173.6 football fields of
-            floor — running 24/7/365. Alzheimer’s is the long mission of the firm. It may not be the first
-            disease this loop can finish. The records are sold to frontier labs. The medicine is not.
-          </p>
-          <p>
-            The industry around these diseases is priced like a castle. A patent is a right to exclude, and
-            the years of exclusion are what the invoice is made of. Families meet that number at the worst
-            moment of their lives and are told it is the cost of science. Some of it is. A great deal of it
-            is the margin.
-          </p>
-          <h2>A generic is a way of making, not a theft</h2>
+        <div className="grid items-center gap-8 lg:grid-cols-2 lg:gap-12">
+          <div className="prose">
+            <p>
+              Incurable? designs drugs and then makes them at generic scale. The business is a fully
+              autonomous CRISPR and mRNA hall, the size of Meta’s largest campus — 173.6 football fields of
+              floor — running 24/7/365. Alzheimer’s is the long mission of the firm. It may not be the first
+              disease this loop can finish. The records are sold to frontier labs. The medicine is not.
+            </p>
+            <p>
+              The industry around these diseases is priced like a castle. A patent is a right to exclude, and
+              the years of exclusion are what the invoice is made of. Families meet that number at the worst
+              moment of their lives and are told it is the cost of science. Some of it is. A great deal of it
+              is the margin.
+            </p>
+          </div>
+          <PackagingLine />
+        </div>
+        <ul
+          className="mt-10 grid gap-x-8 gap-y-3 sm:grid-cols-3"
+          aria-label="Manufacturing approach"
+        >
+          <li className="border-t border-hairline pt-3">Original medicine design</li>
+          <li className="border-t border-hairline pt-3">Generic-scale production</li>
+          <li className="border-t border-hairline pt-3">Thin-margin model</li>
+        </ul>
+        <div className="prose mt-12">
+          <h2 className="mt-0">A generic is a way of making, not a theft</h2>
           <p>
             We do not copy a drug that is still under someone else’s patent. That is not a business and it
             is not a cure. We design a new sequence or a new edit, then we manufacture it the way a generic
