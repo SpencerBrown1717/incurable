@@ -9,6 +9,7 @@ export const Route = createFileRoute("/")({
     pageMeta(
       "Incurable? — Says who.",
       "Fully automated CRISPR and mRNA, 24/7/365, at the scale of Meta’s Hyperion — 173.6 football-field halls. Data to frontier labs. Drugs at generic scale. Alzheimer’s is the long mission, not a promise to be first.",
+      "/",
     ),
   component: Home,
 });

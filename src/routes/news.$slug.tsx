@@ -10,8 +10,8 @@ export const Route = createFileRoute("/news/$slug")({
     return story;
   },
   head: ({ loaderData }) => {
-    if (!loaderData) return pageMeta("News — Incurable?", "News and essays from Incurable.");
-    return pageMeta(`${loaderData.title} — Incurable?`, loaderData.dek);
+    if (!loaderData) return pageMeta("News — Incurable?", "News and essays from Incurable.", "/news");
+    return pageMeta(`${loaderData.title} — Incurable?`, loaderData.dek, `/news/${loaderData.slug}`);
   },
   component: StoryPage,
   notFoundComponent: MissingStory,

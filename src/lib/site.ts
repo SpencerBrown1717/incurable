@@ -6,11 +6,26 @@ export const FIELD_SQFT = FIELD_FT.length * FIELD_FT.width;
 export const HYPERION_SQFT = 10_000_000;
 export const HALLS_AT_HYPERION = HYPERION_SQFT / FIELD_SQFT;
 
-export function pageMeta(title: string, description: string) {
+export const SITE_URL = "https://www.incurable.ai";
+export const OG_IMAGE = `${SITE_URL}/og.jpg`;
+
+export function pageMeta(title: string, description: string, path = "/") {
+  const url = new URL(path, SITE_URL).href;
+  const isArticle = /^\/(news)\/.+/.test(path);
   return {
     meta: [
       { title },
       { name: "description", content: description },
+      { property: "og:title", content: title },
+      { property: "og:description", content: description },
+      { property: "og:type", content: isArticle ? "article" : "website" },
+      { property: "og:url", content: url },
+      { property: "og:image", content: OG_IMAGE },
+      { property: "og:site_name", content: "Incurable?" },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: title },
+      { name: "twitter:description", content: description },
+      { name: "twitter:image", content: OG_IMAGE },
     ],
   };
 }

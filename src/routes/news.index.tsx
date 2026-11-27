@@ -7,6 +7,7 @@ export const Route = createFileRoute("/news/")({
     pageMeta(
       "From the desk — Incurable?",
       "Three stories each week on gene editing, emerging medicines, magnetic resonance, and AI in biology and drug discovery.",
+      "/news",
     ),
   component: NewsIndex,
 });
