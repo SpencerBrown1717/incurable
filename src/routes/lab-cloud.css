@@ -1,0 +1,448 @@
+.cloud-shell {
+  --console-bg: #0a090d;
+  --console-panel: #111016;
+  --console-line: #302b3a;
+  --console-ink: #f1edf4;
+  --console-muted: #b6aebf;
+  --console-iris: #d7c6fa;
+  min-height: 100svh;
+  color: var(--console-ink);
+  background: var(--console-bg);
+}
+
+.cloud-frame {
+  width: min(100% - 48px, 1160px);
+  margin-inline: auto;
+}
+
+.cloud-header {
+  border-bottom: 1px solid var(--console-line);
+  background: #0b0a0e;
+}
+
+.cloud-header-inner,
+.cloud-intro,
+.cloud-panel-head,
+.cloud-instrument-info,
+.cloud-reserve-footer,
+.cloud-booking-head,
+.cloud-job-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px 20px;
+}
+
+.cloud-header-inner {
+  min-height: 62px;
+}
+
+.cloud-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 620;
+}
+
+.cloud-brand span {
+  display: inline-grid;
+  width: 22px;
+  height: 22px;
+  place-items: center;
+  border: 1px solid #595064;
+  border-radius: 4px;
+  color: #e6d9fb;
+  font-weight: 460;
+  line-height: 1;
+}
+
+.cloud-mode,
+.cloud-instrument-id,
+.cloud-job code {
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  color: var(--console-muted);
+}
+
+.cloud-main {
+  padding-block: clamp(34px, 5vw, 70px) 56px;
+}
+
+.cloud-intro {
+  align-items: end;
+  margin-bottom: 28px;
+}
+
+.cloud-intro h1 {
+  font-size: clamp(3.7rem, 7vw, 6rem);
+  letter-spacing: -0.035em;
+  line-height: 0.95;
+}
+
+.cloud-intro p {
+  max-width: 42ch;
+  margin-top: 13px;
+  color: var(--console-muted);
+  font-size: 1rem;
+  line-height: 1.55;
+}
+
+.cloud-role {
+  display: grid;
+  gap: 6px;
+}
+
+.cloud-role > span,
+.cloud-fields label,
+.cloud-reserve-footer span {
+  color: var(--console-muted);
+  font-size: 0.875rem;
+}
+
+.cloud-role [role="group"] {
+  display: inline-flex;
+  padding: 3px;
+  border: 1px solid var(--console-line);
+  border-radius: 7px;
+  white-space: nowrap;
+}
+
+.cloud-role button {
+  min-height: 44px;
+  padding-inline: 11px;
+  border-radius: 4px;
+  color: var(--console-muted);
+  font-size: 0.875rem;
+}
+
+.cloud-role button[aria-pressed="true"] {
+  background: #2c223c;
+  color: #efe4ff;
+}
+
+.cloud-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+  gap: 17px;
+  align-items: start;
+}
+
+.cloud-controls {
+  display: grid;
+  min-width: 0;
+  gap: 17px;
+}
+
+.cloud-panel {
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid var(--console-line);
+  border-radius: 8px;
+  background: var(--console-panel);
+}
+
+.cloud-panel-head {
+  min-height: 53px;
+  padding: 10px 18px;
+  border-bottom: 1px solid var(--console-line);
+}
+
+.cloud-panel-head h2,
+.cloud-panel-head > span:first-child {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-sans);
+  font-size: 0.9375rem;
+  font-weight: 620;
+}
+
+.cloud-panel-head svg {
+  color: #c6b0f3;
+}
+
+.cloud-panel-body {
+  padding: 16px 18px;
+}
+
+.cloud-access p,
+.cloud-instrument-info p,
+.cloud-empty,
+.cloud-booking-head p,
+.cloud-note {
+  color: var(--console-muted);
+  font-size: 0.9375rem;
+  line-height: 1.55;
+}
+
+.cloud-access p + .cloud-button,
+.cloud-access p + .cloud-actions {
+  margin-top: 12px;
+}
+
+.cloud-instrument-figure {
+  padding: 18px 14px 8px;
+  background:
+    radial-gradient(ellipse at 48% 58%, #222037, transparent 66%), #0c0b11;
+}
+
+.cloud-instrument-figure svg {
+  width: 100%;
+  height: auto;
+  min-height: 125px;
+}
+
+.cloud-instrument-info {
+  align-items: end;
+  padding: 17px 18px 19px;
+  border-top: 1px solid var(--console-line);
+}
+
+.cloud-instrument-info h2 {
+  margin-bottom: 4px;
+  font-size: clamp(1.6rem, 3vw, 2.1rem);
+  line-height: 1;
+  text-wrap: auto;
+}
+
+.cloud-rate {
+  display: grid;
+  flex: none;
+  justify-items: end;
+  gap: 3px;
+}
+
+.cloud-rate strong,
+.cloud-reserve-footer output {
+  color: var(--console-iris);
+  font-family: var(--font-mono);
+  font-size: 1.15rem;
+  font-weight: 550;
+}
+
+.cloud-rate span {
+  color: var(--console-muted);
+  font-size: 0.8125rem;
+}
+
+.cloud-fields {
+  display: grid;
+  grid-template-columns: 1.35fr 1fr;
+  gap: 10px;
+}
+
+.cloud-fields label {
+  display: grid;
+  min-width: 0;
+  gap: 5px;
+}
+
+.cloud-fields select {
+  width: 100%;
+  min-height: 44px;
+  padding: 0 9px;
+  border: 1px solid #4b4257;
+  border-radius: 5px;
+  background: #15121d;
+  color: var(--console-ink);
+  font-size: 0.9375rem;
+}
+
+.cloud-reserve-footer {
+  align-items: end;
+  margin-top: 14px;
+}
+
+.cloud-reserve-footer > div {
+  display: grid;
+  gap: 1px;
+}
+
+.cloud-status {
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
+  padding: 1px 7px;
+  border: 1px solid var(--console-line);
+  border-radius: 4px;
+  background: #1e1926;
+  color: #d7cbe3;
+  font-size: 0.8125rem;
+  text-transform: capitalize;
+  white-space: nowrap;
+}
+
+.cloud-status[data-status="approved"],
+.cloud-status[data-status="completed"] {
+  border-color: #325251;
+  background: #153030;
+  color: #c1f1e3;
+}
+
+.cloud-status[data-status="pending"],
+.cloud-status[data-status="queued"],
+.cloud-status[data-status="running"] {
+  border-color: #655275;
+  color: #ebd8ff;
+}
+
+.cloud-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+
+.cloud-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 44px;
+  padding: 0 12px;
+  border: 1px solid #4d445a;
+  border-radius: 5px;
+  color: var(--console-ink);
+  background: #191521;
+  font-size: 0.875rem;
+  font-weight: 580;
+}
+
+.cloud-button:not(:disabled):hover {
+  border-color: var(--console-iris);
+}
+
+.cloud-button-primary {
+  border-color: #d7c6fa;
+  color: #17101e;
+  background: #d7c6fa;
+}
+
+.cloud-button-primary:not(:disabled):hover {
+  background: #eddefc;
+}
+
+.cloud-button:disabled {
+  border-color: var(--console-line);
+  color: #aba1b4;
+  background: #26202e;
+}
+
+.cloud-error {
+  margin-top: 14px;
+  padding: 10px 12px;
+  border-left: 2px solid #ffaa9e;
+  color: #ffccc4;
+  background: #291a20;
+}
+
+.cloud-activity {
+  margin-top: 34px;
+}
+
+.cloud-activity > h2 {
+  margin-bottom: 11px;
+  font-size: clamp(2rem, 4vw, 2.65rem);
+  line-height: 1;
+}
+
+.cloud-empty,
+.cloud-booking {
+  padding: 16px 18px;
+}
+
+.cloud-booking + .cloud-booking {
+  border-top: 1px solid var(--console-line);
+}
+
+.cloud-booking-head h3 {
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  font-weight: 610;
+}
+
+.cloud-job {
+  margin-top: 15px;
+  padding: 12px 13px;
+  border: 1px solid var(--console-line);
+  border-radius: 5px;
+  background: #0d0b12;
+}
+
+.cloud-job-head p {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 5px 8px;
+  font-size: 0.9375rem;
+}
+
+.cloud-result {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 12px 22px;
+  align-items: center;
+  margin-top: 12px;
+}
+
+.cloud-result svg {
+  width: 100%;
+  max-width: 570px;
+  height: auto;
+}
+
+.cloud-result figcaption {
+  color: var(--console-muted);
+  font-size: 0.8125rem;
+}
+
+.cloud-result-summary dl {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 9px;
+}
+
+.cloud-result-summary dt {
+  color: var(--console-muted);
+  font-size: 0.8125rem;
+}
+
+.cloud-result-summary dd {
+  font-family: var(--font-mono);
+  font-size: 0.9375rem;
+}
+
+.cloud-note {
+  margin-top: 15px;
+}
+
+@media (max-width: 780px) {
+  .cloud-intro {
+    align-items: start;
+    flex-direction: column;
+  }
+
+  .cloud-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 500px) {
+  .cloud-frame {
+    width: calc(100% - 32px);
+  }
+
+  .cloud-instrument-info,
+  .cloud-booking-head,
+  .cloud-job-head {
+    align-items: start;
+    flex-direction: column;
+  }
+
+  .cloud-rate {
+    justify-items: start;
+  }
+
+  .cloud-result {
+    grid-template-columns: 1fr;
+  }
+}
