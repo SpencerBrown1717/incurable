@@ -8,6 +8,7 @@ export const Route = createFileRoute("/contact")({
     pageMeta(
       "Talk to us — Incurable?",
       "Data partnerships, the build, and press. Families looking for treatment will be told we cannot offer one.",
+      "/contact",
     ),
   component: Contact,
 });

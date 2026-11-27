@@ -8,6 +8,7 @@ export const Route = createFileRoute("/alzheimers")({
     pageMeta(
       "Alzheimer’s — Incurable?",
       "The long mission of the firm. Not a promise that Alzheimer’s is first, not a medicine in hand, not a clinic.",
+      "/alzheimers",
     ),
   component: Alzheimers,
 });
