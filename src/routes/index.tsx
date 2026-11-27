@@ -1,6 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Database, FlaskConical, Pill } from "lucide-react";
-import { DarkFloor } from "@/components/site/dark-floor";
 import { LabScene } from "@/components/site/lab-scene";
 import { Shell } from "@/components/site/shell";
 import { FIELD_SQFT, pageMeta, stories } from "@/lib/site";
@@ -9,8 +8,8 @@ import "./home.css";
 export const Route = createFileRoute("/")({
   head: () =>
     pageMeta(
-      "Incurable? — Says who.",
-      "Incurable is designing an automated wet lab for CRISPR and mRNA research. Explore the Hall 01 concept and the long-term mission.",
+      "Incurable? — The autonomous wet lab",
+      "Explore Incurable’s proposed autonomous wet-lab campus for CRISPR and mRNA research in an interactive 3D facility model.",
     ),
   component: Home,
 });
@@ -20,7 +19,7 @@ const researchPaths = [
     href: "/science",
     icon: FlaskConical,
     title: "The science",
-    summary: "CRISPR and mRNA research in a shared experimental workflow.",
+    summary: "CRISPR and mRNA research on diseases that still have no cure.",
   },
   {
     href: "/data",
@@ -38,52 +37,81 @@ const researchPaths = [
 
 function Home() {
   return (
-    <Shell>
+    <Shell className="home-shell">
       <section className="home-hero" aria-labelledby="home-title">
-        <div className="frame">
-          <div className="home-hero-grid">
-            <div className="home-hero-copy">
-              <p className="home-label">Autonomous wet lab concept</p>
-              <h1 id="home-title">
-                Incurable?
-                <em>Says who.</em>
-              </h1>
-              <p className="home-intro">
-                We’re designing an automated lab to study diseases medicine
-                still can’t cure.
-              </p>
-              <div className="mt-7 flex flex-wrap gap-3">
-                <a href="#hall" className="btn btn-primary">
-                  Explore Hall 01
-                </a>
-                <Link to="/alzheimers" className="btn btn-ghost">
-                  The mission
-                </Link>
-              </div>
-            </div>
-            <div className="home-model">
-              <LabScene />
+        <div className="frame home-opening">
+          <div className="home-hero-copy">
+            <p className="home-label">Facility concept</p>
+            <h1 id="home-title">
+              The autonomous <em>wet lab.</em>
+            </h1>
+            <p className="home-intro">
+              We’re designing a fully automated wet-lab campus for CRISPR and
+              mRNA research on diseases that still have no cure.
+            </p>
+            <div className="home-actions">
+              <a href="#hall" className="btn btn-primary">
+                Explore the facility
+              </a>
+              <Link to="/alzheimers" className="btn btn-ghost">
+                The mission
+              </Link>
             </div>
           </div>
-
           <dl className="home-specs">
             <div>
-              <dt>Proposed footprint</dt>
-              <dd>{FIELD_SQFT.toLocaleString("en-US")} sq ft</dd>
+              <dt>Hall 01 footprint</dt>
+              <dd>{FIELD_SQFT.toLocaleString("en-US")} ft²</dd>
             </div>
             <div>
-              <dt>Design target</dt>
-              <dd>24/7 operation</dd>
+              <dt>Target operation</dt>
+              <dd>24 hours a day</dd>
             </div>
             <div>
-              <dt>Research methods</dt>
+              <dt>Research focus</dt>
               <dd>CRISPR + mRNA</dd>
             </div>
           </dl>
         </div>
+
+        <div className="frame home-facility" id="hall">
+          <figure
+            className="home-facility-figure"
+            aria-labelledby="facility-title"
+          >
+            <figcaption className="home-facility-heading">
+              <h2 id="facility-title">Wet-lab campus</h2>
+              <span>Interactive 3D concept</span>
+            </figcaption>
+            <div className="home-model">
+              <LabScene />
+            </div>
+          </figure>
+        </div>
       </section>
 
-      <section className="home-mission" aria-labelledby="mission-title">
+      <section className="home-hall rule" aria-labelledby="hall-title">
+        <div className="frame home-hall-frame">
+          <div>
+            <p className="home-label">Hall 01</p>
+            <h2 id="hall-title" className="title mt-4">
+              One hall, built to repeat.
+            </h2>
+          </div>
+          <div className="home-hall-copy">
+            <p>
+              The campus starts with Hall 01, a single lab module the size of a
+              football field. The design repeats that module across connected
+              buildings, with lab robotics and space for continuous operation.
+            </p>
+            <Link to="/labs" className="home-text-link mt-3">
+              See the lab design and scale
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      <section className="home-mission rule" aria-labelledby="mission-title">
         <div className="frame home-mission-frame">
           <div className="home-mission-copy">
             <p className="home-label">The long mission</p>
@@ -101,7 +129,7 @@ function Home() {
           <figure className="home-mission-image">
             <img
               src="/neuron-study.jpg"
-              alt="Illustration of a branching neuron glowing violet against a dark background"
+              alt="Illustration of a branching neuron against a dark background"
               width={1200}
               height={800}
               loading="lazy"
@@ -109,30 +137,6 @@ function Home() {
             />
             <figcaption>Neuron illustration</figcaption>
           </figure>
-        </div>
-      </section>
-
-      <section
-        id="hall"
-        className="home-hall rule"
-        aria-labelledby="hall-title"
-      >
-        <div className="frame section">
-          <div className="home-section-heading">
-            <div>
-              <p className="home-label">The floor plan</p>
-              <h2 id="hall-title" className="title mt-3">
-                Inside Hall 01.
-              </h2>
-            </div>
-            <p className="home-section-note">
-              Select a bay to see how the proposed lab would work.
-            </p>
-          </div>
-          <DarkFloor />
-          <Link to="/labs" className="home-text-link mt-6">
-            See the lab design and scale
-          </Link>
         </div>
       </section>
 

@@ -17,7 +17,13 @@ function Wordmark() {
   );
 }
 
-export function Shell({ children }: { children: ReactNode }) {
+export function Shell({
+  children,
+  className = "",
+}: {
+  children: ReactNode;
+  className?: string;
+}) {
   const path = useRouterState({ select: (s) => s.location.pathname });
   const [open, setOpen] = useState(false);
   const menuButton = useRef<HTMLButtonElement>(null);
@@ -53,7 +59,7 @@ export function Shell({ children }: { children: ReactNode }) {
   }, [open]);
 
   return (
-    <div className="min-h-svh bg-obsidian text-ash">
+    <div className={`min-h-svh bg-obsidian text-ash ${className}`}>
       <a className="skip" href="#main">
         Skip to content
       </a>
