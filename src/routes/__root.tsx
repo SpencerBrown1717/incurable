@@ -1,4 +1,9 @@
-import { createRootRoute, HeadContent, Outlet, Scripts } from "@tanstack/react-router";
+import {
+  createRootRoute,
+  HeadContent,
+  Outlet,
+  Scripts,
+} from "@tanstack/react-router";
 import { AuthProvider } from "@/lib/auth/provider";
 import { PreviewHostBridge } from "@/components/preview-host-bridge";
 import appCss from "../styles.css?url";
@@ -16,7 +21,7 @@ export const Route = createRootRoute({
         content:
           "Incurable? automates CRISPR and mRNA at incurable.ai — a wet lab the size of Meta’s Hyperion, 173.6 football-field halls, 24/7/365. Data to frontier labs. Drugs at generic scale. Alzheimer’s is the long mission, not a promise to be first.",
       },
-      { name: "theme-color", content: "#000000" },
+      { name: "theme-color", content: "#08090b" },
     ],
     links: [
       { rel: "icon", type: "image/svg+xml", href: "/favicon.svg" },

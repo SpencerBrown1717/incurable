@@ -6,6 +6,17 @@ function isActive(path: string, href: string) {
   return path === href || path.startsWith(`${href}/`);
 }
 
+function Wordmark() {
+  return (
+    <span className="wordmark">
+      <span className="wordmark-symbol" aria-hidden="true" />
+      <span>
+        Incurable<span className="wordmark-accent">?</span>
+      </span>
+    </span>
+  );
+}
+
 export function Shell({ children }: { children: ReactNode }) {
   const path = useRouterState({ select: (s) => s.location.pathname });
   const [open, setOpen] = useState(false);
@@ -35,12 +46,15 @@ export function Shell({ children }: { children: ReactNode }) {
       <a className="skip" href="#main">
         Skip to content
       </a>
-      <header className="sticky top-0 z-40 border-b border-hairline bg-obsidian">
-        <div className="frame flex h-16 items-center justify-between gap-6">
-          <Link to="/" className="wordmark">
-            Incurable?
+      <header className="site-header sticky top-0 z-40 border-b border-hairline bg-obsidian">
+        <div className="frame site-nav-frame flex items-center justify-between gap-6">
+          <Link to="/" onClick={() => setOpen(false)}>
+            <Wordmark />
           </Link>
-          <nav className="hidden items-center gap-5 xl:flex" aria-label="Primary">
+          <nav
+            className="hidden items-center gap-5 xl:flex"
+            aria-label="Primary"
+          >
             {nav.map((item) => (
               <Link
                 key={item.href}
@@ -51,13 +65,13 @@ export function Shell({ children }: { children: ReactNode }) {
                 {item.label}
               </Link>
             ))}
-            <Link to="/contact" className="btn btn-primary">
+            <Link to="/contact" className="site-nav-cta btn btn-primary">
               Talk to us
             </Link>
           </nav>
           <button
             type="button"
-            className="btn btn-ghost xl:hidden"
+            className="site-menu-toggle btn btn-ghost xl:hidden"
             aria-expanded={open}
             aria-controls="site-menu"
             onClick={() => setOpen((value) => !value)}
@@ -67,12 +81,21 @@ export function Shell({ children }: { children: ReactNode }) {
         </div>
       </header>
       {open ? (
-        <div id="site-menu" className="fixed inset-x-0 bottom-0 top-16 z-30 overflow-y-auto bg-obsidian xl:hidden">
+        <div
+          id="site-menu"
+          className="fixed inset-x-0 bottom-0 top-[var(--spacing-nav)] z-30 overflow-y-auto bg-obsidian xl:hidden"
+        >
           <nav className="frame flex flex-col py-6" aria-label="Mobile">
             {nav.map((item) => (
-              <Link key={item.href} to={item.href} className="border-t border-hairline py-5">
+              <Link
+                key={item.href}
+                to={item.href}
+                className="border-t border-hairline py-5"
+              >
                 <span className="idx block">{item.label}</span>
-                <span className="mt-1 block text-sm text-pumice">{item.note}</span>
+                <span className="mt-1 block text-sm text-pumice">
+                  {item.note}
+                </span>
               </Link>
             ))}
             <Link to="/contact" className="btn btn-primary mt-6 w-full">
@@ -85,10 +108,13 @@ export function Shell({ children }: { children: ReactNode }) {
       <footer className="rule">
         <div className="frame section grid gap-12 md:grid-cols-12">
           <div className="md:col-span-5">
-            <p className="wordmark">Incurable?</p>
+            <p>
+              <Wordmark />
+            </p>
             <p className="mt-4 max-w-sm text-pumice">
-              CRISPR and mRNA, fully automated, at the scale of Meta’s largest campus — 173.6 halls. The
-              long mission is the incurable list. Alzheimer’s is on it. It is not a promise to be first.
+              CRISPR and mRNA, fully automated, at the scale of Meta’s largest
+              campus — 173.6 halls. The long mission is the incurable list.
+              Alzheimer’s is on it. It is not a promise to be first.
             </p>
           </div>
           <div className="md:col-span-3">
@@ -166,7 +192,10 @@ export function IndexList({
   return (
     <ol>
       {items.map((item) => (
-        <li key={item.n} className="grid grid-cols-[2.5rem_1fr] gap-x-4 border-t border-hairline py-6">
+        <li
+          key={item.n}
+          className="grid grid-cols-[2.5rem_1fr] gap-x-4 border-t border-hairline py-6"
+        >
           <span className="font-mono text-xs text-pumice">{item.n}</span>
           <div>
             <h3 className="idx">{item.title}</h3>

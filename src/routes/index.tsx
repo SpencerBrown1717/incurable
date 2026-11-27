@@ -1,7 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { DarkFloor } from "@/components/site/dark-floor";
-import { IndexList, Shell } from "@/components/site/shell";
-import { darkLab, pageMeta, programs, roadmap, specs, stories, today } from "@/lib/site";
+import { LabScene } from "@/components/site/lab-scene";
+import { Shell } from "@/components/site/shell";
+import { pageMeta, programs, roadmap, specs, stories } from "@/lib/site";
 
 export const Route = createFileRoute("/")({
   head: () =>
@@ -15,93 +16,83 @@ export const Route = createFileRoute("/")({
 function Home() {
   return (
     <Shell>
-      <section className="frame section">
-        <p className="kicker">incurable.ai · the business is the hall</p>
-        <h1 className="display mt-6">
-          <span className="block">Incurable?</span>
-          <span className="block italic">Says who.</span>
-        </h1>
-        <p className="dek mt-8">
-          A fully autonomous wet lab for CRISPR and mRNA. Lights off, every hour of the year, drawn to the
-          footprint of Meta’s largest data center — 173.6 football fields of floor. Data to frontier labs.
-          New drugs, made at generic scale. Alzheimer’s is the long mission of the firm. It may not be the
-          first thing the hall finishes.
-        </p>
-        <div className="mt-8 flex flex-wrap gap-3">
-          <Link to="/contact" className="btn btn-primary">
-            Talk to us
-          </Link>
-          <a href="#hall" className="btn btn-ghost">
-            See the hall
-          </a>
-        </div>
-        <dl className="mt-12 grid gap-px border border-hairline bg-hairline sm:grid-cols-3">
-          {[
-            ["Scale", "173.6 halls"],
-            ["Duty", "24/7/365"],
-            ["Loop", "CRISPR · mRNA"],
-          ].map(([k, v]) => (
-            <div key={k} className="bg-obsidian px-4 py-4">
-              <dt className="kicker">{k}</dt>
-              <dd className="stat mt-2">{v}</dd>
+      <section className="landing-hero">
+        <div className="frame landing-grid">
+          <div className="landing-copy">
+            <p className="landing-label">Autonomous wet lab</p>
+            <h1 className="landing-heading">
+              173.6 halls.
+              <span>One long mission.</span>
+            </h1>
+            <p className="landing-intro">
+              A fully autonomous wet lab for CRISPR and mRNA, designed at the
+              scale of Meta’s Hyperion campus. The long mission includes
+              Alzheimer’s.
+            </p>
+            <div className="landing-actions">
+              <a href="#hall" className="btn btn-primary">
+                Explore the hall <span aria-hidden="true">↘</span>
+              </a>
+              <Link to="/alzheimers" className="btn btn-ghost">
+                Alzheimer’s mission
+              </Link>
             </div>
-          ))}
-        </dl>
+          </div>
+          <div className="landing-model">
+            <LabScene />
+          </div>
+          <dl className="landing-measurements">
+            <div>
+              <dt>Proposed footprint</dt>
+              <dd>~10 million sq ft</dd>
+            </div>
+            <div>
+              <dt>Scale reference</dt>
+              <dd>Meta Hyperion</dd>
+            </div>
+            <div>
+              <dt>Designed duty cycle</dt>
+              <dd>24/7/365</dd>
+            </div>
+          </dl>
+        </div>
       </section>
 
-      <section className="rule">
-        <div className="frame section grid items-end gap-10 lg:grid-cols-2">
+      <section className="rule mission-section">
+        <div className="frame section mission-grid">
           <div>
-            <p className="kicker">Hyperion, in football fields</p>
-            <p className="display mt-4">173.6</p>
+            <p className="kicker">The long mission</p>
+            <h2 className="title mt-4">
+              A shorter list of incurable diseases.
+            </h2>
           </div>
           <div>
             <p className="dek">
-              Nearly ten million square feet, the later public figure for Meta’s Richland Parish campus,
-              divided by one field. About 174 halls. That is the size of building the business is drawn to.
-              Biology, not racks. We are not claiming their parish.
+              Alzheimer’s is part of the long mission. There is no treatment or
+              timeline to offer today. The hall is designed to keep research
+              moving around the clock.
             </p>
-            <Link to="/labs" className="btn btn-ghost mt-8">
-              See the scale
+            <Link to="/alzheimers" className="mission-link mt-6">
+              Read about the mission <span aria-hidden="true">↗</span>
             </Link>
           </div>
         </div>
       </section>
 
-      <section className="rule">
-        <div className="frame section">
-          <p className="lede mt-0">
-            The business is the automation. CRISPR and mRNA, at the size of the largest data centers being
-            built. The long mission is the incurable list. Alzheimer’s is on it. A nearer disease may fall
-            sooner, and it may be mRNA or it may be CRISPR. The hall does not wait on that argument.
-          </p>
-          <div className="mt-16 grid gap-12 lg:grid-cols-2 lg:gap-16">
-            <div>
-              <h2 className="kicker mb-2">The way it is done</h2>
-              <IndexList items={today} />
-            </div>
-            <div>
-              <h2 className="kicker mb-2">The dark lab</h2>
-              <IndexList items={darkLab} />
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section id="hall" className="rule">
+      <section id="hall" className="rule hall-section">
         <div className="frame section">
           <div className="grid gap-8 lg:grid-cols-[0.8fr_1.2fr] lg:items-end">
             <div>
-              <p className="kicker">Now look into the dark</p>
-              <h2 className="title mt-4">A field with the lights off.</h2>
+              <p className="kicker">Hall 01</p>
+              <h2 className="title mt-4">Inside the hall.</h2>
             </div>
             <p className="dek">
-              Eight stations. One gantry. Design a sequence, make it, put it in a cell, edit, read, decide,
-              and queue the next one before a person would have capped the tube. Choose a bay, or let the
-              model run.
+              Explore a floor plan of the proposed autonomous lab. Select a bay
+              to see its role, or let the simulation cycle through all eight
+              stations.
             </p>
           </div>
-          <div className="mt-12">
+          <div className="hall-panel mt-10">
             <DarkFloor />
           </div>
         </div>
@@ -111,12 +102,12 @@ function Home() {
         <div className="frame section">
           <div className="grid gap-10 lg:grid-cols-[0.7fr_1.3fr]">
             <div>
-              <p className="kicker">Specified, not implied</p>
+              <p className="kicker">Scale reference</p>
               <h2 className="title mt-4">The hall, in numbers.</h2>
               <p className="dek mt-5">
-                Hyperion, Meta’s Richland Parish campus, was put at nearly ten million square feet by
-                Louisiana Economic Development in July 2026. Earlier figures said four million. We use the
-                later number as a scale reference. We are not building their site.
+                Louisiana Economic Development puts Meta’s Hyperion campus at
+                nearly ten million square feet. That is equivalent to 173.6
+                football fields.
               </p>
             </div>
             <dl>
@@ -136,14 +127,20 @@ function Home() {
 
       <section className="rule">
         <div className="frame section">
-          <p className="kicker">What the building is for</p>
-          <div className="mt-8 grid gap-px border border-hairline bg-hairline lg:grid-cols-2">
+          <h2 className="title">What the hall is for.</h2>
+          <div className="program-grid mt-8">
             {programs.map((program) => (
-              <Link key={program.href} to={program.href} className="group bg-obsidian p-6 sm:p-8">
+              <Link
+                key={program.href}
+                to={program.href}
+                className="program-card group"
+              >
                 <p className="kicker">{program.kicker}</p>
-                <h2 className="idx mt-5 group-hover:italic">{program.title}</h2>
+                <h3 className="idx mt-5">{program.title}</h3>
                 <p className="mt-4 text-pumice">{program.body}</p>
-                <p className="mt-6 text-sm text-ash">Read →</p>
+                <span className="mission-link mt-6">
+                  Explore <span aria-hidden="true">↗</span>
+                </span>
               </Link>
             ))}
           </div>
@@ -170,18 +167,14 @@ function Home() {
 
       <section className="rule">
         <div className="frame section">
-          <p className="kicker">Generics · Jeff Bezos</p>
-          <h2 className="statement mt-5">
-            Your margin
-            <span className="italic"> is my opportunity.</span>
-          </h2>
+          <p className="kicker">Manufacturing</p>
+          <h2 className="statement mt-5">New medicines at generic scale.</h2>
           <p className="dek mt-6">
-            Design the drug. Then manufacture it the way a generic is manufactured — volume, thin margin, no
-            detail force. A patent still in force is not a recipe we copy. A new sequence is. The fat margin
-            on the old one is the opening.
+            The model pairs original drug design with the volume and thin
+            margins of generic manufacturing.
           </p>
           <Link to="/price" className="btn btn-ghost mt-8">
-            How the moat gets walked around
+            Read about the model
           </Link>
         </div>
       </section>
@@ -197,39 +190,47 @@ function Home() {
           <ul className="mt-10">
             {stories.slice(0, 3).map((story) => (
               <li key={story.slug} className="border-t border-hairline">
-                <Link to="/news/$slug" params={{ slug: story.slug }} className="grid gap-3 py-7 sm:grid-cols-[9rem_1fr]">
+                <Link
+                  to="/news/$slug"
+                  params={{ slug: story.slug }}
+                  className="grid gap-3 py-7 sm:grid-cols-[9rem_1fr]"
+                >
                   <p className="kicker">
                     {story.kicker}
-                    <span className="mt-2 block normal-case tracking-normal text-pumice">{story.date}</span>
+                    <span className="mt-2 block normal-case tracking-normal text-pumice">
+                      {story.date}
+                    </span>
                   </p>
                   <span>
                     <span className="idx block">{story.title}</span>
-                    <span className="mt-2 block max-w-2xl text-pumice">{story.dek}</span>
+                    <span className="mt-2 block max-w-2xl text-pumice">
+                      {story.dek}
+                    </span>
                   </span>
                 </Link>
               </li>
             ))}
           </ul>
-          <Link to="/news" className="nav-link mt-2 inline-flex min-h-11 items-center text-sm sm:hidden">
+          <Link
+            to="/news"
+            className="nav-link mt-2 inline-flex min-h-11 items-center text-sm sm:hidden"
+          >
             All essays
           </Link>
         </div>
       </section>
 
-      <section className="rule">
-        <div className="frame section">
-          <h2 className="statement">
-            The lights stay off.
-            <span className="italic"> The year doesn’t pause.</span>
-          </h2>
-          <p className="dek mt-6">
-            Frontier labs buying data. People who have run a dark factory. Press who want the unglamorous
-            version. Families looking for a treatment will be told the truth: the long mission includes a
-            cure for Alzheimer’s. We cannot offer one, and we are not promising it is first.
-          </p>
-          <Link to="/contact" className="btn btn-primary mt-8">
-            Talk to us
-          </Link>
+      <section className="rule contact-band">
+        <div className="frame section mission-grid">
+          <h2 className="title">Work with Incurable.</h2>
+          <div>
+            <p className="dek">
+              For data partnerships, lab construction, and press inquiries.
+            </p>
+            <Link to="/contact" className="btn btn-primary mt-6">
+              Talk to us <span aria-hidden="true">↗</span>
+            </Link>
+          </div>
         </div>
       </section>
     </Shell>
