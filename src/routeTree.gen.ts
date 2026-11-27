@@ -14,6 +14,7 @@ import { Route as SplatRouteImport } from './routes/$'
 import { Route as AlzheimersRouteImport } from './routes/alzheimers'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as DataRouteImport } from './routes/data'
+import { Route as LabCloudRouteImport } from './routes/lab-cloud'
 import { Route as LabsRouteImport } from './routes/labs'
 import { Route as NewsRouteImport } from './routes/news'
 import { Route as PriceRouteImport } from './routes/price'
@@ -44,6 +45,11 @@ const ContactRoute = ContactRouteImport.update({
 const DataRoute = DataRouteImport.update({
   id: '/data',
   path: '/data',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LabCloudRoute = LabCloudRouteImport.update({
+  id: '/lab-cloud',
+  path: '/lab-cloud',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LabsRoute = LabsRouteImport.update({
@@ -83,6 +89,7 @@ export interface FileRoutesByFullPath {
   '/alzheimers': typeof AlzheimersRoute
   '/contact': typeof ContactRoute
   '/data': typeof DataRoute
+  '/lab-cloud': typeof LabCloudRoute
   '/labs': typeof LabsRoute
   '/news': typeof NewsRouteWithChildren
   '/price': typeof PriceRoute
@@ -96,6 +103,7 @@ export interface FileRoutesByTo {
   '/alzheimers': typeof AlzheimersRoute
   '/contact': typeof ContactRoute
   '/data': typeof DataRoute
+  '/lab-cloud': typeof LabCloudRoute
   '/labs': typeof LabsRoute
   '/price': typeof PriceRoute
   '/science': typeof ScienceRoute
@@ -109,6 +117,7 @@ export interface FileRoutesById {
   '/alzheimers': typeof AlzheimersRoute
   '/contact': typeof ContactRoute
   '/data': typeof DataRoute
+  '/lab-cloud': typeof LabCloudRoute
   '/labs': typeof LabsRoute
   '/news': typeof NewsRouteWithChildren
   '/price': typeof PriceRoute
@@ -124,6 +133,7 @@ export interface FileRouteTypes {
     | '/alzheimers'
     | '/contact'
     | '/data'
+    | '/lab-cloud'
     | '/labs'
     | '/news'
     | '/price'
@@ -137,6 +147,7 @@ export interface FileRouteTypes {
     | '/alzheimers'
     | '/contact'
     | '/data'
+    | '/lab-cloud'
     | '/labs'
     | '/price'
     | '/science'
@@ -149,6 +160,7 @@ export interface FileRouteTypes {
     | '/alzheimers'
     | '/contact'
     | '/data'
+    | '/lab-cloud'
     | '/labs'
     | '/news'
     | '/price'
@@ -163,6 +175,7 @@ export interface RootRouteChildren {
   AlzheimersRoute: typeof AlzheimersRoute
   ContactRoute: typeof ContactRoute
   DataRoute: typeof DataRoute
+  LabCloudRoute: typeof LabCloudRoute
   LabsRoute: typeof LabsRoute
   NewsRoute: typeof NewsRouteWithChildren
   PriceRoute: typeof PriceRoute
@@ -204,6 +217,13 @@ declare module '@tanstack/react-router' {
       path: '/data'
       fullPath: '/data'
       preLoaderRoute: typeof DataRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/lab-cloud': {
+      id: '/lab-cloud'
+      path: '/lab-cloud'
+      fullPath: '/lab-cloud'
+      preLoaderRoute: typeof LabCloudRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/labs': {
@@ -269,6 +289,7 @@ const rootRouteChildren: RootRouteChildren = {
   AlzheimersRoute: AlzheimersRoute,
   ContactRoute: ContactRoute,
   DataRoute: DataRoute,
+  LabCloudRoute: LabCloudRoute,
   LabsRoute: LabsRoute,
   NewsRoute: NewsRouteWithChildren,
   PriceRoute: PriceRoute,
