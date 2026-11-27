@@ -8,6 +8,7 @@ export const Route = createFileRoute("/price")({
     pageMeta(
       "Generics — Incurable?",
       "Design new drugs and mass-produce them as generics. Your margin is my opportunity. The mission is still a cure for Alzheimer’s.",
+      "/price",
     ),
   component: Price,
 });

@@ -8,6 +8,7 @@ export const Route = createFileRoute("/data")({
     pageMeta(
       "Data for frontier labs — Incurable?",
       "Assay records minted in a wet lab that does not close: sequence, edit, phenotype, protocol. Sold to frontier labs. Not patient charts.",
+      "/data",
     ),
   component: Data,
 });

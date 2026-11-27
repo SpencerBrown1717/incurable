@@ -14,6 +14,7 @@ export const Route = createFileRoute("/labs")({
     pageMeta(
       "173.6 halls — Incurable?",
       "Hall 01 is one football field of automated CRISPR and mRNA, lights off, 24/7/365. About 174 of them fit Meta’s Hyperion footprint.",
+      "/labs",
     ),
   component: Labs,
 });

@@ -8,6 +8,7 @@ export const Route = createFileRoute("/science")({
     pageMeta(
       "CRISPR and mRNA — Incurable?",
       "The only two modalities. Fully automated, 24/7/365. Whichever closes a disease first — mRNA or CRISPR — is the one that does it.",
+      "/science",
     ),
   component: Science,
 });
