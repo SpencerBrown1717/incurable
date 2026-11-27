@@ -313,7 +313,17 @@ async function mountModel(host: HTMLDivElement, onUnavailable: () => void) {
       const { clientWidth: width, clientHeight: height } = host;
       if (!width || !height) return;
       const aspect = width / height;
-      const halfHeight = Math.max(2.86, 4.05 / aspect);
+      const cosAzimuth = Math.abs(Math.cos(view.azimuth));
+      const sinAzimuth = Math.abs(Math.sin(view.azimuth));
+      // Project the enclosure bounds so orbiting never crops the roof or base.
+      const halfWidth = 3.21 * cosAzimuth + 1.69 * sinAzimuth;
+      const depth = 3.21 * sinAzimuth + 1.69 * cosAzimuth;
+      const projectedHeight =
+        target.y * Math.cos(view.elevation) + depth * Math.sin(view.elevation);
+      const halfHeight = Math.max(
+        projectedHeight / 0.88,
+        halfWidth / (0.88 * aspect),
+      );
       camera.left = -halfHeight * aspect;
       camera.right = halfHeight * aspect;
       camera.top = halfHeight;
