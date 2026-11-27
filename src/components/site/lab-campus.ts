@@ -1,4 +1,5 @@
 import type * as Three from "three";
+import { createCampusCanvas } from "./lab-campus-canvas";
 
 export type CampusView = { azimuth: number; elevation: number };
 export type CampusMode = "exterior" | "cutaway";
@@ -32,10 +33,28 @@ export async function mountCampus(
   const T = await import("three");
   if (!host.isConnected) return;
 
-  const renderer = new T.WebGLRenderer({ antialias: true, alpha: true });
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.65));
-  renderer.setClearColor(0x05090b, 0);
-  renderer.domElement.setAttribute("aria-hidden", "true");
+  function createWebGLRenderer() {
+    try {
+      const canvas = document.createElement("canvas");
+      const context = canvas.getContext("webgl2", {
+        antialias: true,
+        alpha: true,
+      });
+      if (context) return new T.WebGLRenderer({ canvas, context });
+    } catch {
+      // Continue with the software projection when WebGL cannot initialize.
+    }
+  }
+
+  const renderer = createWebGLRenderer();
+  const software = renderer ? undefined : createCampusCanvas();
+  const element = renderer?.domElement ?? software?.element;
+  if (!element) return;
+  const pixelRatio = Math.min(window.devicePixelRatio || 1, 1.65);
+  renderer?.setPixelRatio(pixelRatio);
+  renderer?.setClearColor(0x05090b, 0);
+  element.setAttribute("aria-hidden", "true");
+  element.dataset.renderer = renderer ? "webgl" : "canvas";
 
   const scene = new T.Scene();
   const camera = new T.OrthographicCamera(-1, 1, 1, -1, 0.1, 180);
@@ -104,7 +123,18 @@ export async function mountCampus(
         group.add(mesh);
       });
     }
-    return { add, build };
+    function describe() {
+      return Array.from(batch, ([finish, parts]) => {
+        const material = finishes[finish];
+        const color = material.color.getHex();
+        return parts.map((part) => ({
+          ...part,
+          color,
+          opacity: material.opacity,
+        }));
+      }).flat();
+    }
+    return { add, build, describe };
   }
 
   const fixed = createBoxBatch(scene);
@@ -417,7 +447,15 @@ export async function mountCampus(
   }
 
   const geometry = new T.BoxGeometry(1, 1, 1);
-  for (const batch of [fixed, closed, cutaway]) batch.build(geometry);
+  if (renderer) {
+    for (const batch of [fixed, closed, cutaway]) batch.build(geometry);
+  }
+  const softwareBoxes = software
+    ? {
+        exterior: [...fixed.describe(), ...closed.describe()],
+        cutaway: [...fixed.describe(), ...cutaway.describe()],
+      }
+    : undefined;
 
   const grid = new T.GridHelper(80, 64, 0x234653, 0x12232c);
   grid.position.y = -0.78;
@@ -447,12 +485,14 @@ export async function mountCampus(
   scene.add(new T.LineSegments(ticksGeometry, ticksMaterial));
 
   let view = initialView;
+  let mode: CampusMode = "cutaway";
   let motion = false;
   let visible = true;
   let frame = 0;
   let motionStart: number | null = null;
   let previousWidth = 0;
   let previousHeight = 0;
+  let lastSoftwareFrame = 0;
 
   function schedule() {
     if (!frame && visible) frame = requestAnimationFrame(draw);
@@ -462,6 +502,10 @@ export async function mountCampus(
     frame = 0;
     const { clientWidth: width, clientHeight: height } = host;
     if (!width || !height) return;
+    if (software && motion && now - lastSoftwareFrame < 40) {
+      schedule();
+      return;
+    }
 
     if (motionStart === null) motionStart = now;
     const drift = motion ? Math.sin((now - motionStart) / 5100) * 0.13 : 0;
@@ -478,27 +522,40 @@ export async function mountCampus(
       modelHalfHeight / 0.96,
       modelHalfWidth / (0.93 * aspect),
     );
-    camera.left = -halfHeight * aspect;
-    camera.right = halfHeight * aspect;
-    camera.top = halfHeight;
-    camera.bottom = -halfHeight;
+    if (renderer) {
+      camera.left = -halfHeight * aspect;
+      camera.right = halfHeight * aspect;
+      camera.top = halfHeight;
+      camera.bottom = -halfHeight;
 
-    const distance = 75;
-    const horizon = distance * Math.cos(elevation);
-    camera.position.set(
-      Math.sin(azimuth) * horizon,
-      center.y + distance * Math.sin(elevation),
-      Math.cos(azimuth) * horizon,
-    );
-    camera.lookAt(center);
-    camera.updateProjectionMatrix();
+      const distance = 75;
+      const horizon = distance * Math.cos(elevation);
+      camera.position.set(
+        Math.sin(azimuth) * horizon,
+        center.y + distance * Math.sin(elevation),
+        Math.cos(azimuth) * horizon,
+      );
+      camera.lookAt(center);
+      camera.updateProjectionMatrix();
 
-    if (width !== previousWidth || height !== previousHeight) {
-      renderer.setSize(width, height, false);
-      previousWidth = width;
-      previousHeight = height;
+      if (width !== previousWidth || height !== previousHeight) {
+        renderer.setSize(width, height, false);
+        previousWidth = width;
+        previousHeight = height;
+      }
+      renderer.render(scene, camera);
+    } else if (software && softwareBoxes) {
+      software.render({
+        width,
+        height,
+        pixelRatio,
+        scale: height / (2 * halfHeight),
+        azimuth,
+        elevation,
+        boxes: softwareBoxes[mode],
+      });
+      lastSoftwareFrame = now;
     }
-    renderer.render(scene, camera);
     if (motion) schedule();
   }
 
@@ -516,7 +573,7 @@ export async function mountCampus(
   visibility.observe(host);
 
   exterior.visible = false;
-  host.append(renderer.domElement);
+  host.append(element);
   function onContextLost(event: Event) {
     event.preventDefault();
     if (frame) cancelAnimationFrame(frame);
@@ -524,7 +581,7 @@ export async function mountCampus(
     visible = false;
     onUnavailable();
   }
-  renderer.domElement.addEventListener("webglcontextlost", onContextLost);
+  renderer?.domElement.addEventListener("webglcontextlost", onContextLost);
   schedule();
 
   return {
@@ -533,6 +590,7 @@ export async function mountCampus(
       schedule();
     },
     setMode(next: CampusMode) {
+      mode = next;
       exterior.visible = next === "exterior";
       interior.visible = next === "cutaway";
       schedule();
@@ -547,7 +605,7 @@ export async function mountCampus(
       resize.disconnect();
       visibility.disconnect();
       cancelAnimationFrame(frame);
-      renderer.domElement.removeEventListener(
+      renderer?.domElement.removeEventListener(
         "webglcontextlost",
         onContextLost,
       );
@@ -560,8 +618,8 @@ export async function mountCampus(
       grid.material.dispose();
       ticksGeometry.dispose();
       ticksMaterial.dispose();
-      renderer.dispose();
-      renderer.domElement.remove();
+      renderer?.dispose();
+      element.remove();
     },
   };
 }
