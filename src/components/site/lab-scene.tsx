@@ -40,20 +40,20 @@ export function LabScene() {
   return (
     <div className="frame campus-sketch">
       <div className="campus-sketch-heading">
-        <h2 className="statement">One hall. Repeated at campus scale.</h2>
+        <h2 className="statement">One lab. Repeated at campus scale.</h2>
         <Link to="/labs" className="nav-link">
           See the scale comparison
         </Link>
       </div>
       <SiteFigure
-        label={`Outline of ${hallCount} hall-sized tiles on an angled grid. One illuminated tile represents Hall 01.`}
+        label={`Outline of ${hallCount} lab-sized tiles on an angled grid. One illuminated tile represents Lab 01.`}
         caption={
           <>
             <span className="campus-sketch-key">
               <span aria-hidden="true" />
-              Hall 01 · {FIELD_SQFT.toLocaleString("en-US")} sq ft
+              Lab 01 · {FIELD_SQFT.toLocaleString("en-US")} sq ft
             </span>
-            <span>≈{hallCount} halls at the Hyperion area reference</span>
+            <span>≈{hallCount} lab modules at the Hyperion scale reference</span>
           </>
         }
         viewBox="25 10 860 360"

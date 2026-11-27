@@ -26,7 +26,7 @@ const steps = [
   {
     n: "03",
     title: "Make it like a generic",
-    body: "Volume, thin margin, no detail force. The hall runs 24/7/365 because a specialty price has to fund shifts, a sales army, and a lit campus. Ours does not.",
+    body: "Volume, thin margin, no detail force. The campus is designed to run 24/7/365 because a specialty price has to fund shifts, a sales army, and a lit campus. Ours does not.",
   },
   {
     n: "04",
@@ -97,14 +97,14 @@ function Price() {
         kicker="incurable.ai · Generics"
         title="Your margin"
         italic="is my opportunity."
-        dek="Jeff Bezos said it about retail. It is the plan for the medicine. Design the drug in a hall that never closes. Manufacture it the way generics are manufactured. The disease does not require the branded margin."
+        dek="Jeff Bezos said it about retail. It is the plan for the medicine. Design the drug in a lab built to run around the clock. Manufacture it the way generics are manufactured. The disease does not require the branded margin."
       />
       <section className="frame section">
         <div className="grid items-center gap-8 lg:grid-cols-2 lg:gap-12">
           <div className="prose">
             <p>
               Incurable? designs drugs and then makes them at generic scale. The business is a fully
-              autonomous CRISPR and mRNA hall, the size of Meta’s largest campus — 173.6 football fields of
+              autonomous CRISPR and mRNA campus, the size of Meta’s largest campus — 173.6 football fields of
               floor — running 24/7/365. Alzheimer’s is the long mission of the firm. It may not be the first
               disease this loop can finish. The records are sold to frontier labs. The medicine is not.
             </p>

@@ -59,7 +59,7 @@ export function DarkFloor() {
   return (
     <div>
       <div className="flex flex-wrap items-end justify-between gap-4">
-        <p className="kicker">Hall 01 · plan · lights off</p>
+        <p className="kicker">Lab 01 · plan · lights off</p>
         <p className="kicker">{running && !reduced ? "Gantry running" : "Gantry held"}</p>
       </div>
       <div className="mt-4 border border-hairline bg-obsidian">
@@ -67,7 +67,7 @@ export function DarkFloor() {
           viewBox="0 0 800 200"
           className="block h-auto w-full text-ash"
           role="img"
-          aria-label="Plan of Hall 01. Eight bays along a gantry, on a floor the proportion of a football field."
+          aria-label="Plan of Lab 01. Eight bays along a gantry, on a floor the proportion of a football field."
         >
           <rect x="16" y="28" width="768" height="148" fill="var(--color-graphite)" stroke="currentColor" strokeOpacity="0.28" />
           <text x="28" y="48" fill="var(--color-pumice)" fontFamily="ui-monospace, monospace" fontSize="11">
@@ -116,7 +116,7 @@ export function DarkFloor() {
         </svg>
       </div>
       <p className="mt-3 text-sm text-pumice">
-        A plan, not a live feed. The hall is what we are building. The gantry here is a model of the loop.
+        A plan, not a live feed. The plan shows our first lab module. The gantry here is a model of the loop.
       </p>
       <div className="mt-6 grid grid-cols-2 gap-px border border-hairline bg-hairline sm:grid-cols-4 lg:grid-cols-8">
         {bays.map((item, index) => (

@@ -19,7 +19,7 @@ function Alzheimers() {
         kicker="Long mission"
         title="Alzheimer’s."
         italic="Not promised first."
-        dek="The firm exists to take diseases off the list. Alzheimer’s is the one we mean when we say that out loud. It may not be the first the hall can finish. A nearer disease may fall to mRNA, or to CRISPR, sooner. We will not pretend we know which."
+        dek="The firm exists to take diseases off the list. Alzheimer’s is the one we mean when we say that out loud. It may not be our first breakthrough. A nearer disease may fall to mRNA, or to CRISPR, sooner. We will not pretend we know which."
       />
       <section className="frame section pt-12">
         <div className="grid items-start gap-8 lg:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)] lg:gap-14">
@@ -58,7 +58,7 @@ function Alzheimers() {
             <dl className="mt-5 grid gap-3 border-t border-hairline pt-4 text-sm sm:grid-cols-2">
               <div>
                 <dt className="kicker">Research stage</dt>
-                <dd className="mt-2">Hall 01 design</dd>
+                <dd className="mt-2">Lab 01 design</dd>
               </div>
               <div>
                 <dt className="kicker">Availability</dt>
@@ -75,7 +75,7 @@ function Alzheimers() {
               not stop the disease, and they do not touch every part of it that matters.
             </p>
             <p>
-              What remains is why a loop can belong here, when the hall is ready for it. Tau continues to
+              What remains is why a loop can belong here, when the lab is ready for it. Tau continues to
               spread. Microglia both clear debris and drive damage, depending on state — TREM2 sits in
               that argument, which is why a guide library can start in that neighborhood. That is an
               example of a CRISPR question, not a decision that Alzheimer’s runs before everything else.
@@ -85,17 +85,17 @@ function Alzheimers() {
           </div>
         </div>
         <div className="prose mt-10">
-          <h2 className="mt-0">What the hall is allowed to say</h2>
+          <h2 className="mt-0">What we can say today</h2>
           <p>
             mRNA is how you deliver a program into a cell: a protein, a signal, a correction at the level of
             expression. CRISPR is how you ask, at industrial count, which edits in which cells move a
             phenotype you would actually recognize as relevant — clearance, inflammation, neuronal survival
-            in a model that deserves the name. The hall runs those questions with the lights off. It does
+            in a model that deserves the name. The lab is designed to investigate those questions. It does
             not skip ahead to a cure because the questions are expensive to ask by hand.
           </p>
           <p>
             We will not offer a date, a compassionate-use story, or a waiting list. There is no waiting
-            list. Hall 01 is a specification. When it runs, the first public sentence will be a method and
+            list. Lab 01 is a specification. When it runs, the first public sentence will be a method and
             a result, not a verb like “cures.”
           </p>
         </div>
@@ -125,7 +125,7 @@ function Alzheimers() {
           </div>
           <p className="mt-4 max-w-2xl text-sm text-pumice">
             “On the list” is not a start date. Alzheimer’s is the long mission of the firm. It is not a
-            promise to be the first disease the hall can finish. Glioblastoma has a standard of care. It is
+            promise to be our first breakthrough. Glioblastoma has a standard of care. It is
             still devastating. Both sentences fit.
           </p>
         </div>

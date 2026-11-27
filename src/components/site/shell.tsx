@@ -114,7 +114,7 @@ export function Shell({ children }: { children: ReactNode }) {
             </p>
             <p className="mt-4 max-w-sm text-pumice">
               CRISPR and mRNA, fully automated, at the scale of Meta’s largest
-              campus — 173.6 halls. The long mission is the incurable list.
+              campus, the equivalent of about 174 football fields. The long mission is the incurable list.
               Alzheimer’s is on it. It is not a promise to be first.
             </p>
           </div>
@@ -136,11 +136,11 @@ export function Shell({ children }: { children: ReactNode }) {
             </ul>
           </div>
           <div className="md:col-span-4">
-            <p className="kicker">The hall</p>
+            <p className="kicker">Discovery Campus</p>
             <dl className="mt-4 space-y-3">
               <div className="flex justify-between gap-4 border-t border-hairline pt-3">
                 <dt className="kicker">Scale</dt>
-                <dd className="kicker text-ash">173.6 halls</dd>
+                <dd className="kicker text-ash">≈174 football fields</dd>
               </div>
               <div className="flex justify-between gap-4 border-t border-hairline pt-3">
                 <dt className="kicker">Duty</dt>

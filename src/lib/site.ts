@@ -19,7 +19,7 @@ export const nav = [
   {
     href: "/labs",
     label: "Labs",
-    note: "Football-field halls. The lights stay off.",
+    note: "Football-field-sized labs. The lights stay off.",
   },
   {
     href: "/science",
@@ -90,18 +90,18 @@ export const darkLab = [
   {
     n: "04",
     title: "Either one can finish first",
-    body: "CRISPR or mRNA. Whichever closes a disease sooner is the one that does it. The hall runs both.",
+    body: "CRISPR or mRNA. Whichever closes a disease sooner is the one that does it. The lab is designed for both.",
   },
 ] as const;
 
 export const specs = [
-  { k: "Hall 01", v: "One football field, 360 × 160 ft" },
+  { k: "Lab 01", v: "One football field, 360 × 160 ft" },
   { k: "Floor", v: "57,600 sq ft, lights off" },
   { k: "People on the floor", v: "None. The stop is a person, off the floor." },
-  { k: "Duty", v: "24/7/365. The hall does not close." },
+  { k: "Duty", v: "Designed for continuous operation, 24/7/365." },
   { k: "Modalities", v: "CRISPR and mRNA. Nothing else on the gantry." },
   { k: "Campus reference", v: "Meta Hyperion — nearly 10 million sq ft" },
-  { k: "That floor, in fields", v: "173.6 halls. About 174." },
+  { k: "That floor, in fields", v: "About 174 football-field-sized lab modules." },
   { k: "Long mission", v: "The incurable list. Alzheimer’s included, not promised first." },
   { k: "What we sell", v: "Assay data, to frontier labs. Not patient records." },
   { k: "What we make", v: "New drugs, mass-produced as generics." },
@@ -111,7 +111,7 @@ export const programs = [
   {
     href: "/labs",
     kicker: "01 — The business",
-    title: "173.6 halls",
+    title: "The Discovery Campus",
     body: "Meta’s Hyperion, nearly ten million square feet, divided by one football field. About 174. That is the floor the automation is drawn to.",
   },
   {
@@ -138,20 +138,20 @@ export const roadmap = [
   {
     n: "01",
     when: "Now",
-    title: "Specify Hall 01",
+    title: "Specify Lab 01",
     body: "One field. Lights off. CRISPR and mRNA, fully automated, 24/7/365. No disease is promised first. No clinical claim attached.",
   },
   {
     n: "02",
     when: "Scale",
     title: "Repeat until it is 173.6",
-    body: "The campus is drawn to Meta’s Hyperion in Richland Parish — nearly ten million square feet. Ten million divided by one field is 173.6 halls. About 174. Biology, not racks.",
+    body: "The campus is drawn to Meta’s Hyperion in Richland Parish — nearly ten million square feet. At that scale, the area would fit about 174 Lab 01 modules. Biology, not racks.",
   },
   {
     n: "03",
     when: "After",
     title: "The long mission",
-    body: "The incurable list, Alzheimer’s included. It may not be the first name the hall can finish. A nearer disease may fall sooner, to mRNA or to CRISPR.",
+    body: "The incurable list, Alzheimer’s included. It may not be our first breakthrough. A nearer disease may fall sooner, to mRNA or to CRISPR.",
   },
 ] as const;
 
@@ -160,7 +160,7 @@ export const bays = [
     id: "01",
     name: "Design",
     kind: "mRNA",
-    line: "A sequence for a microglial program. Written by the loop, not drafted in a meeting and walked down the hall.",
+    line: "A sequence for a microglial program. Written by the loop, not drafted in a meeting and carried from bench to bench.",
   },
   {
     id: "02",
@@ -267,7 +267,7 @@ export const essays: Story[] = [
       },
       {
         type: "p",
-        text: "Incurable? starts from the other end. Hall 01 is a football field — 360 by 160 feet, end zones included — specified with nobody in it. Liquid handlers, a synthesis line, cell rooms, sequencers, and a gantry that is the only thing moving. CRISPR and mRNA are not two departments down a corridor. They are stations on one loop. A sequence is designed, made, put into a particle or a cell, read, and replaced by the next sequence before a person would have finished labeling the first tube.",
+        text: "Incurable? starts from the other end. Lab 01 is a football field — 360 by 160 feet, end zones included — specified with nobody in it. Liquid handlers, a synthesis line, cell rooms, sequencers, and a gantry that is the only thing moving. CRISPR and mRNA are not two departments down a corridor. They are stations on one loop. A sequence is designed, made, put into a particle or a cell, read, and replaced by the next sequence before a person would have finished labeling the first tube.",
       },
       {
         type: "p",
@@ -288,7 +288,7 @@ export const essays: Story[] = [
     blocks: [
       {
         type: "p",
-        text: "A regulation football field, end zones included, is 120 yards by 53 and a third. In feet: 360 by 160. Fifty-seven thousand six hundred square feet. Call that Hall 01. One module. Lights off. CRISPR and mRNA on a single gantry.",
+        text: "A regulation football field, end zones included, is 120 yards by 53 and a third. In feet: 360 by 160. Fifty-seven thousand six hundred square feet. Call that Lab 01. One module. Lights off. CRISPR and mRNA on a single gantry.",
       },
       {
         type: "p",
@@ -300,7 +300,7 @@ export const essays: Story[] = [
       },
       {
         type: "p",
-        text: "Drug discovery has been acting as if it were. A bigger grant. A longer bench. Another core facility down the street that closes at six. Hall 01 is the part you can walk in your head. The campus is the part that makes a disease a throughput problem instead of a pilgrimage. You do not get a medicine by wishing harder inside one room. You get it by running the question so many times that the failures are cheap and a hit has somewhere to go next.",
+        text: "Drug discovery has been acting as if it were. A bigger grant. A longer bench. Another core facility down the street that closes at six. Lab 01 is the part you can walk in your head. The campus is the part that makes a disease a throughput problem instead of a pilgrimage. You do not get a medicine by wishing harder inside one room. You get it by running the question so many times that the failures are cheap and a hit has somewhere to go next.",
       },
       {
         type: "p",
@@ -358,7 +358,7 @@ export const essays: Story[] = [
       },
       {
         type: "p",
-        text: "We will not pretend a building is a readout. Hall 01 does not come with a claim of a cure, a trial slot, or a date, and it does not come with a promise that Alzheimer’s is the first name it can finish. A nearer disease may fall sooner. It may be an mRNA, or it may be a CRISPR edit. The long mission does not change because the first closed disease is a different one. Parkinson’s. ALS. Huntington’s. The diseases families are still told to make peace with. Alzheimer’s is on that list. It is why the firm exists. It is not a run order.",
+        text: "We will not pretend a building is a readout. Lab 01 does not come with a claim of a cure, a trial slot, or a date, and it does not come with a promise that Alzheimer’s is the first name it can finish. A nearer disease may fall sooner. It may be an mRNA, or it may be a CRISPR edit. The long mission does not change because the first closed disease is a different one. Parkinson’s. ALS. Huntington’s. The diseases families are still told to make peace with. Alzheimer’s is on that list. It is why the firm exists. It is not a run order.",
       },
       {
         type: "p",
@@ -383,7 +383,7 @@ export const interests = [
   {
     id: "build",
     label: "The build",
-    note: "Halls, automation, containment, power. You know what a dark factory costs.",
+    note: "Lab modules, automation, containment, power. You know what a dark factory costs.",
   },
   {
     id: "press",

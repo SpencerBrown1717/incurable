@@ -12,8 +12,8 @@ import {
 export const Route = createFileRoute("/labs")({
   head: () =>
     pageMeta(
-      "173.6 halls — Incurable?",
-      "Hall 01 is one football field of automated CRISPR and mRNA, lights off, 24/7/365. About 174 of them fit Meta’s Hyperion footprint.",
+      "The Discovery Campus — Incurable?",
+      "Lab 01 is one football field of automated CRISPR and mRNA, lights off, 24/7/365. About 174 of them fit Meta’s Hyperion footprint.",
     ),
   component: Labs,
 });
@@ -23,8 +23,8 @@ const hallCount = Math.round(HALLS_AT_HYPERION);
 function HallScale() {
   return (
     <SiteFigure
-      label={`An enlarged outline of Hall 01 beside ${hallCount} smaller outlines representing the Hyperion area comparison.`}
-      caption="Hall 01 enlarged beside the area equivalent of Meta’s Hyperion campus."
+      label={`An enlarged outline of Lab 01 beside ${hallCount} smaller outlines representing the Hyperion area comparison.`}
+      caption="Lab 01 enlarged beside the area equivalent of Meta’s Hyperion campus."
       viewBox="0 0 640 260"
     >
       <g className="figure-grid">
@@ -58,7 +58,7 @@ function HallScale() {
       />
       <g className="figure-label">
         <text x="52" y="204">
-          HALL 01
+          LAB 01
         </text>
         <text x="334" y="237">
           AREA EQUIVALENTS
@@ -73,17 +73,17 @@ function Labs() {
     <Shell>
       <PageHero
         kicker="Labs"
-        title="173.6 halls."
-        italic="The size of the reference."
-        dek="A fully autonomous wet lab for CRISPR and mRNA. Hall 01 is one football field, lights off, 24/7/365. Meta’s Hyperion footprint holds about 174 of them. That is the campus the business is drawn to."
+        title="The Discovery Campus."
+        italic="Built around one lab module."
+        dek="A fully autonomous wet lab for CRISPR and mRNA. Lab 01 is one football field, lights off, 24/7/365. Meta’s Hyperion footprint holds about 174 of them. That is the campus the business is drawn to."
       />
       <section className="frame section">
         <div className="grid items-center gap-8 lg:grid-cols-[0.65fr_1.35fr] lg:gap-14">
           <div>
-            <h2 className="idx">One hall at campus scale.</h2>
+            <h2 className="idx">One lab at campus scale.</h2>
             <dl className="mt-5 grid grid-cols-2 gap-4 lg:grid-cols-1">
               <div className="border-t border-hairline pt-3">
-                <dt className="text-sm text-pumice">Hall 01 module</dt>
+                <dt className="text-sm text-pumice">Lab 01</dt>
                 <dd className="mt-1">
                   {FIELD_FT.length} × {FIELD_FT.width} ft
                 </dd>
@@ -95,7 +95,7 @@ function Labs() {
                 <dt className="text-sm text-pumice">Hyperion area reference</dt>
                 <dd className="mt-1">Nearly 10 million sq ft</dd>
                 <dd className="text-sm text-pumice">
-                  About {hallCount} Hall 01 equivalents
+                  About {hallCount} lab modules of that size
                 </dd>
               </div>
             </dl>
@@ -106,7 +106,7 @@ function Labs() {
           A single-person bench is about 24 sq ft in this comparison.{" "}
           {HYPERION_SQFT.toLocaleString("en-US")} ÷{" "}
           {FIELD_SQFT.toLocaleString("en-US")} = {HALLS_AT_HYPERION.toFixed(1)}{" "}
-          halls. Louisiana Economic Development, 13 July 2026, on Meta’s
+          lab modules. Louisiana Economic Development, 13 July 2026, on Meta’s
           Richland Parish campus. An earlier public figure was four million
           square feet. We cite the later one, and we are not claiming the site.
         </p>
@@ -121,7 +121,7 @@ function Labs() {
           <p>
             Drug discovery kept the lights on because the protocol was a walk.
             Hood to incubator to sequencer, with a label in between. Incurable?
-            designs the hall the other way around. The gantry is the walk. mRNA
+            designs the lab the other way around. The gantry is the walk. mRNA
             synthesis, particle formation, cell dosing, CRISPR editing, and the
             readout sit on one spine. The sample does not wait for a shift
             change.
@@ -130,11 +130,11 @@ function Labs() {
           <p>
             Fully autonomous does not mean unsupervised in the moral sense. It
             means no person in the aisle. Air, interlocks, and biosafety are
-            designed as a closed envelope — the default hall at a level a
+            designed as a closed envelope — the default lab at a level a
             competent institutional board would recognize, higher containment in
             sealed rooms off the main gantry, not as an afterthought behind a
             door someone props open. The floor is empty. The stop is not
-            automated. A person, off the floor, can cut the hall.
+            automated. A person, off the floor, can stop the lab.
           </p>
         </div>
       </section>

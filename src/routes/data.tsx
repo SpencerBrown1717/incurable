@@ -14,7 +14,7 @@ export const Route = createFileRoute("/data")({
 
 const record = [
   ["record", "INC-01-004418"],
-  ["hall", "01"],
+  ["lab", "01"],
   ["lights", "off"],
   ["modality", "crispr"],
   ["cell", "ipsc-microglia"],
@@ -23,7 +23,7 @@ const record = [
   ["phenotype", "phagocytosis, direction of change"],
   ["protocol", "attached, replayable"],
   ["patient_record", "none"],
-  ["source", "minted in hall, not scraped"],
+  ["source", "generated in the lab"],
 ];
 
 function RecordTrace() {
@@ -86,8 +86,7 @@ function Data() {
             <p>
               It is not a patient’s chart, a claims database, or a hospital note with the name removed
               badly. We do not buy medical records, and we will not pretend a scraped corpus is the same
-              thing as an experiment we ran. If a record cannot name its protocol, it does not leave the
-              hall.
+              thing as an experiment we ran. If a record cannot name its protocol, it does not leave the lab.
             </p>
           </div>
           <RecordTrace />
@@ -103,12 +102,11 @@ function Data() {
             <p>
               Supervised pairs at a volume a bench will not produce, with the failure modes still in the
               file. Most loops should fail. A dataset of only the pretty successes is how you train a model
-              to flatter you. The dark hall is useful because it can afford the misses.
+              to flatter you. The automated lab is useful because it can afford the misses.
             </p>
             <p>
-              Selling the data to frontier labs pays for the next hall. It does not transfer the long mission.
-              The list stays here. Alzheimer’s is on it, and it is not a promise to be the first disease the
-              hall finishes. A smarter model should make the next hour shorter. The medicine, if the loop
+              Selling the data to frontier labs pays for the next lab module. It does not transfer the long mission.
+              The list stays here. Alzheimer’s is on it, and it is not a promise to be our first breakthrough. A smarter model should make the next hour shorter. The medicine, if the loop
               ever earns one, is not a line item in a data contract.
             </p>
           </div>
@@ -134,7 +132,7 @@ function Data() {
               ))}
             </dl>
             <p className="mt-4 text-sm text-pumice">
-              Illustrative. Hall 01 is specified, not online. Nothing here is a patient, and TREM2 is the
+              Illustrative. Lab 01 is specified, not online. Nothing here is a patient, and TREM2 is the
               kind of locus the library is built to interrogate — not a result we are announcing.
             </p>
           </div>

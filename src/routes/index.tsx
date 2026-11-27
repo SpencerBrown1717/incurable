@@ -8,7 +8,7 @@ export const Route = createFileRoute("/")({
   head: () =>
     pageMeta(
       "Incurable? — Says who.",
-      "Fully automated CRISPR and mRNA, 24/7/365, at the scale of Meta’s Hyperion — 173.6 football-field halls. Data to frontier labs. Drugs at generic scale. Alzheimer’s is the long mission, not a promise to be first.",
+      "Fully automated CRISPR and mRNA, 24/7/365, at the scale of Meta’s Hyperion — about 174 football fields. Data to frontier labs. Drugs at generic scale. Alzheimer’s is the long mission, not a promise to be first.",
     ),
   component: Home,
 });
@@ -18,7 +18,7 @@ function Home() {
     <Shell>
       <section className="frame barrier">
         <div>
-          <p className="kicker">incurable.ai · the business is the hall</p>
+          <p className="kicker">incurable.ai · the discovery campus</p>
           <h1 className="display barrier-title mt-6">
             <span className="block">Incurable?</span>
             <span className="block italic">Says who.</span>
@@ -28,14 +28,14 @@ function Home() {
             hour of the year, drawn to the footprint of Meta’s largest data
             center — 173.6 football fields of floor. Data to frontier labs.
             New drugs, made at generic scale. Alzheimer’s is the long mission.
-            It may not be the first thing the hall finishes.
+            It may not be our first breakthrough.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
             <Link to="/contact" className="btn btn-primary">
               Talk to us
             </Link>
             <a href="#hall" className="btn btn-ghost">
-              See the hall
+              Explore the campus
             </a>
           </div>
         </div>
@@ -43,7 +43,7 @@ function Home() {
           <dl className="spec-rail">
             <div>
               <dt>Scale</dt>
-              <dd>173.6 halls</dd>
+              <dd>≈174 football fields</dd>
             </div>
             <div>
               <dt>Duty</dt>
@@ -59,12 +59,12 @@ function Home() {
             </div>
           </dl>
           <p className="scroll-cue mt-8 hidden lg:block">
-            Scroll to enter the hall
+            Scroll to explore the campus
           </p>
         </div>
       </section>
 
-      <section id="hall" aria-label="The automated wet lab">
+      <section id="hall" aria-label="The Discovery Campus">
         <div className="hall-stage">
           <LabScene />
         </div>
@@ -81,7 +81,7 @@ function Home() {
           <div>
             <p className="dek">
               Alzheimer’s is part of the long mission. There is no treatment or
-              timeline to offer today. The hall is designed to keep research
+              timeline to offer today. The campus is designed to keep research
               moving around the clock.
             </p>
             <Link to="/alzheimers" className="mission-link mt-6">
@@ -95,8 +95,8 @@ function Home() {
         <div className="frame section">
           <div className="grid gap-8 lg:grid-cols-[0.8fr_1.2fr] lg:items-end">
             <div>
-              <p className="kicker">Hall 01</p>
-              <h2 className="title mt-4">Inside the hall.</h2>
+              <p className="kicker">Lab 01</p>
+              <h2 className="title mt-4">Inside Lab 01.</h2>
             </div>
             <p className="dek">
               Explore a floor plan of the proposed autonomous lab. Select a bay
@@ -115,7 +115,7 @@ function Home() {
           <div className="grid gap-10 lg:grid-cols-[0.7fr_1.3fr]">
             <div>
               <p className="kicker">Scale reference</p>
-              <h2 className="title mt-4">The hall, in numbers.</h2>
+              <h2 className="title mt-4">The campus, in numbers.</h2>
               <p className="dek mt-5">
                 Louisiana Economic Development puts Meta’s Hyperion campus at
                 nearly ten million square feet. That is equivalent to 173.6
@@ -139,7 +139,7 @@ function Home() {
 
       <section className="rule">
         <div className="frame section">
-          <h2 className="title">What the hall is for.</h2>
+          <h2 className="title">What the campus is built to do.</h2>
           <div className="program-grid mt-8">
             {programs.map((program) => (
               <Link

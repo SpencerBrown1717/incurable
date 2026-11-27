@@ -72,7 +72,7 @@ function Contact() {
             </p>
             <p>
               If you are a family looking for a treatment: we cannot offer one, a trial, or a timeline.
-              Hall 01 is not online. There is no waiting list to join, and we will not keep your hope on
+              Lab 01 is not online. There is no waiting list to join, and we will not keep your hope on
               file as a lead. The Alzheimer’s page is the long mission, not a treatment and not a promise to
               be first.
             </p>

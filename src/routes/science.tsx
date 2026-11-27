@@ -162,7 +162,7 @@ function Science() {
               lecanemab, donanemab — can slow decline for some people and can
               harm them. Tau, microglia, vasculature, and the blood-brain
               barrier do not retire because amyloid moved. That is why it sits
-              on the long list. It is not a decision that the hall starts there.
+              on the long list. It is not a decision that research starts there.
               A nearer disease may be the one mRNA or CRISPR can finish first.
             </p>
           </div>
@@ -194,7 +194,7 @@ function Science() {
         <div className="frame section">
           <h2 className="statement">No readout is implied by the building.</h2>
           <p className="dek mt-6">
-            A hall is not a clinical result. We will not publish a timeline to a
+            A lab design is still a concept. We will not publish a timeline to a
             patient, because we do not have one we could defend. The loop is the
             business. Alzheimer’s is the long mission of the firm, not a promise
             that this loop starts there.
