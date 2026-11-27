@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { DarkFloor } from "@/components/site/dark-floor";
 import { LabScene } from "@/components/site/lab-scene";
 import { Shell } from "@/components/site/shell";
-import { pageMeta, programs, roadmap, specs, stories } from "@/lib/site";
+import { formatNewsDate, newsEditions, pageMeta, programs, roadmap, specs } from "@/lib/site";
 
 export const Route = createFileRoute("/")({
   head: () =>
@@ -196,11 +196,11 @@ function Home() {
           <div className="flex items-end justify-between gap-6">
             <h2 className="title">From the desk.</h2>
             <Link to="/news" className="nav-link hidden text-sm sm:inline">
-              All essays
+              All news
             </Link>
           </div>
           <ul className="mt-10">
-            {stories.slice(0, 3).map((story) => (
+            {newsEditions[0].stories.map((story) => (
               <li key={story.slug} className="border-t border-hairline">
                 <Link
                   to="/news/$slug"
@@ -209,9 +209,12 @@ function Home() {
                 >
                   <p className="kicker">
                     {story.kicker}
-                    <span className="mt-2 block normal-case tracking-normal text-pumice">
-                      {story.date}
-                    </span>
+                    <time
+                      dateTime={story.date}
+                      className="mt-2 block normal-case tracking-normal text-pumice"
+                    >
+                      {formatNewsDate(story.date)}
+                    </time>
                   </p>
                   <span>
                     <span className="idx block">{story.title}</span>
@@ -227,7 +230,7 @@ function Home() {
             to="/news"
             className="nav-link mt-2 inline-flex min-h-11 items-center text-sm sm:hidden"
           >
-            All essays
+            All news
           </Link>
         </div>
       </section>

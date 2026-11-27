@@ -1,0 +1,92 @@
+[
+  {
+    "publishedAt": "2026-11-27",
+    "stories": [
+      {
+        "slug": "tempus-astrazeneca-oncology-ai-collaboration",
+        "kicker": "AI Drug Discovery",
+        "date": "2026-11-25",
+        "title": "Tempus and AstraZeneca extend their oncology AI collaboration",
+        "dek": "A five-year agreement expands AstraZeneca’s access to de-identified clinical and molecular data for cancer drug discovery and development.",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "Tempus announced that it will extend its oncology research collaboration with AstraZeneca through December 2031. The renewal gives AstraZeneca expanded access to Tempus’s analytics platform and de-identified records that pair clinical histories with molecular data. The partnership also covers biomarker studies and clinical trial matching."
+          },
+          {
+            "type": "h2",
+            "text": "What the agreement could change"
+          },
+          {
+            "type": "p",
+            "text": "Connecting clinical and molecular records can help researchers ask which patients might benefit from an experimental medicine and design studies to test that question. The announcement describes a research agreement. Any benefit for patients would need evidence from clinical studies."
+          }
+        ],
+        "sources": [
+          {
+            "name": "Tempus",
+            "url": "https://www.tempus.com/news/pr/tempus-announces-five-year-extension-of-strategic-oncology-collaboration-with-astra-zeneca/"
+          },
+          {
+            "name": "Tempus investor release (PDF)",
+            "url": "https://investors.tempus.com/files/doc_news/Tempus-Announces-Five-Year-Extension-of-Strategic-Oncology-Collaboration-with-AstraZeneca-2026.pdf"
+          }
+        ]
+      },
+      {
+        "slug": "rsna-knee-mri-ai-benchmark",
+        "kicker": "Magnetic Resonance Imaging",
+        "date": "2026-11-24",
+        "title": "AI teams benchmark detection of 12 abnormalities on knee MRI",
+        "dek": "The Radiological Society of North America announced winners of a challenge that paired knee MRI scans with radiology reports.",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "The Radiological Society of North America evaluated research models on their ability to detect and classify 12 kinds of knee abnormalities. The training data came from more than 5,000 MRI exams at 19 sites around the world, with accompanying radiology reports in 12 languages. More than 6,000 teams entered the challenge."
+          },
+          {
+            "type": "h2",
+            "text": "What a broader benchmark measures"
+          },
+          {
+            "type": "p",
+            "text": "Knee MRI can reveal several types of injury or disease in the same joint. A benchmark that covers a range of findings can help researchers identify where their models perform well and where they struggle. The competition measured performance on a research dataset. Testing in clinical workflows would show how the tools affect care."
+          }
+        ],
+        "sources": [
+          {
+            "name": "Radiological Society of North America",
+            "url": "https://www.rsna.org/news/2026/november/2026-ai-challenge-winners"
+          }
+        ]
+      },
+      {
+        "slug": "anocca-pancreatic-cancer-cell-therapy-trial",
+        "kicker": "Gene Editing",
+        "date": "2026-11-23",
+        "title": "Gene-edited cell therapy advances in pancreatic cancer trial",
+        "dek": "Anocca reported that the first participant in the next group of its Phase 1 pancreatic cancer study received the investigational therapy.",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "The Swedish biotechnology company Anocca reported progress in its early clinical trial of a gene-edited T-cell therapy for pancreatic ductal adenocarcinoma. An independent committee reviewed safety and tolerability data from the earlier group before allowing the study to advance. Eight university hospitals across four European countries are participating in the Phase 1 study."
+          },
+          {
+            "type": "h2",
+            "text": "What Phase 1 can tell us"
+          },
+          {
+            "type": "p",
+            "text": "People with advanced pancreatic cancer have few treatment options. This study is an early step in learning whether a cell therapy could be used for the disease. The company’s update reports a safety review and a trial milestone. Whether the therapy helps patients remains an open question."
+          }
+        ],
+        "sources": [
+          {
+            "name": "Anocca",
+            "url": "https://www.anocca.com/company/news/anocca-announces-dose-escalation-and-advances-multi-product-vidar-1-clinical-programme-in-pancreatic-cancer"
+          }
+        ]
+      }
+    ]
+  }
+]

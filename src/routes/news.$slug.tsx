@@ -1,7 +1,7 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { Fragment } from "react";
 import { NewsFigure } from "@/components/site/news-figure";
-import { pageMeta, storyBySlug, stories } from "@/lib/site";
+import { formatNewsDate, pageMeta, storyBySlug, stories } from "@/lib/site";
 
 export const Route = createFileRoute("/news/$slug")({
   loader: ({ params }) => {
@@ -10,7 +10,7 @@ export const Route = createFileRoute("/news/$slug")({
     return story;
   },
   head: ({ loaderData }) => {
-    if (!loaderData) return pageMeta("Essay — Incurable?", "An essay from Incurable?.");
+    if (!loaderData) return pageMeta("News — Incurable?", "News and essays from Incurable.");
     return pageMeta(`${loaderData.title} — Incurable?`, loaderData.dek);
   },
   component: StoryPage,
@@ -34,7 +34,13 @@ function StoryPage() {
           {story.kicker}
         </p>
         <h1 className="title mt-5 max-w-4xl">{story.title}</h1>
-        <p className="kicker mt-6">{story.date}</p>
+        <p className="kicker mt-6">
+          {story.sources ? (
+            <time dateTime={story.date}>{formatNewsDate(story.date)}</time>
+          ) : (
+            story.date
+          )}
+        </p>
         <p className="dek mt-6">{story.dek}</p>
       </header>
       <div className="frame section">
@@ -48,6 +54,22 @@ function StoryPage() {
             </Fragment>
           ))}
         </div>
+        {story.sources && (
+          <section aria-labelledby="story-sources" className="mt-10">
+            <h2 id="story-sources" className="kicker">
+              Sources
+            </h2>
+            <ul className="mt-3 space-y-2">
+              {story.sources.map(({ name, url }) => (
+                <li key={url}>
+                  <a className="nav-link underline underline-offset-4" href={url}>
+                    {name}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
         {next ? (
           <div className="mt-16 border-t border-hairline pt-8">
             <p className="kicker">Next</p>
@@ -65,9 +87,9 @@ function MissingStory() {
   return (
     <div className="frame section">
       <p className="kicker">News</p>
-      <h1 className="title mt-4">That essay is not on the desk.</h1>
+      <h1 className="title mt-4">Story unavailable.</h1>
       <Link to="/news" className="btn btn-primary mt-8">
-        All essays
+        All news
       </Link>
     </div>
   );

@@ -1,3 +1,5 @@
+import newsEditionData from "./news-editions.json";
+
 export const FIELD_FT = { length: 360, width: 160 } as const;
 export const FIELD_SQFT = FIELD_FT.length * FIELD_FT.width;
 /** Louisiana Economic Development, 13 July 2026: Meta Richland Parish, nearly 10 million sq ft. */
@@ -42,7 +44,7 @@ export const nav = [
   {
     href: "/news",
     label: "News",
-    note: "Essays from the desk. No miracle headlines.",
+    note: "Weekly stories in biotech and medicine, plus essays from Incurable.",
   },
 ] as const;
 
@@ -224,9 +226,26 @@ export type Story = {
   title: string;
   dek: string;
   blocks: StoryBlock[];
+  sources?: { name: string; url: string }[];
 };
 
-export const stories: Story[] = [
+type NewsEdition = {
+  publishedAt: string;
+  stories: Story[];
+};
+
+export const newsEditions = newsEditionData as NewsEdition[];
+
+const newsDateFormat = new Intl.DateTimeFormat("en-US", {
+  dateStyle: "long",
+  timeZone: "UTC",
+});
+
+export function formatNewsDate(date: string) {
+  return newsDateFormat.format(new Date(`${date}T00:00:00Z`));
+}
+
+export const essays: Story[] = [
   {
     slug: "lights-go-off",
     kicker: "Labs",
@@ -348,6 +367,8 @@ export const stories: Story[] = [
     ],
   },
 ];
+
+export const stories = [...newsEditions.flatMap((edition) => edition.stories), ...essays];
 
 export function storyBySlug(slug: string) {
   return stories.find((story) => story.slug === slug);
